@@ -2,6 +2,7 @@
 
 using BLL;
 using QuanLyChamCong.BLL;
+using QuanLyChamCong.THEME;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,7 +10,7 @@ using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
 {
-    public partial class UcThuongPhat : UserControl
+    public partial class UcThuongPhat : BaseUserControl
     {
         ThuongPhatBLL bll =
             new ThuongPhatBLL();

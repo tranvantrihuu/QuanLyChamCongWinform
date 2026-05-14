@@ -1,4 +1,5 @@
 ﻿using QuanLyChamCong.BLL;
+using QuanLyChamCong.THEME;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,7 +9,7 @@ using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
 {
-    public partial class UcPhanCa : UserControl
+    public partial class UcPhanCa : BaseUserControl
     {
         PhanCaBLL bll = new PhanCaBLL();
         NhanVienBLL nvBll = new NhanVienBLL();
@@ -265,6 +266,12 @@ namespace QuanLyChamCong.GUI
             }
 
             return -1;
+        }
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            AppStyles.StyleScheduleGrid(dgvPhanCa);
         }
 
     }

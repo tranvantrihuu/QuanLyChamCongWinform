@@ -2,13 +2,14 @@
 using System;
 using System.Windows.Forms;
 using GUI;
+using QuanLyChamCong.THEME;
 
 namespace QuanLyChamCong
 {
-    public partial class frmMain : Form
+    public partial class frmMain : BaseForm
     {
         public bool DaDangNhapPin = false;
-
+        public int CurrentUserId = 1;
         public frmMain()
         {
             InitializeComponent();
@@ -51,13 +52,22 @@ namespace QuanLyChamCong
 
         private void CapNhatTrangThaiMenu()
         {
+            // luôn cho chấm công
+
             mnuChamCong.Enabled = true;
+
+            // khóa toàn bộ khi chưa nhập PIN
 
             mnuDanhMuc.Enabled =
                 DaDangNhapPin;
 
             mnuLuong.Enabled =
                 DaDangNhapPin;
+
+            mnuHeThong.Enabled =
+                DaDangNhapPin;
+
+            // menu con
 
             mnuQuanLyChamCong.Enabled =
                 DaDangNhapPin;
@@ -67,14 +77,12 @@ namespace QuanLyChamCong
 
             mnuBaoCaoChamCong.Enabled =
                 DaDangNhapPin;
-        }
 
-        private void pnMain_Paint(
-            object sender,
-            PaintEventArgs e
-        )
-        {
+            mnuDoiPIN.Enabled =
+                DaDangNhapPin;
 
+            mnuDangXuat.Enabled =
+                DaDangNhapPin;
         }
 
         private void mnuNhanVien_Click(
@@ -164,19 +172,18 @@ namespace QuanLyChamCong
         {
             LoadControl(new UcBaoCaoChamCong());
         }
-
-        private void mnuDangXuat_Click(
+        private void mnuDoiPIN_Click(
             object sender,
             EventArgs e
         )
         {
-            KhoaChucNang();
+            LoadControl(new UcDoiPin());
         }
 
         private void mnuDangXuat_Click_1(
-    object sender,
-    EventArgs e
-)
+            object sender,
+            EventArgs e
+        )
         {
             DaDangNhapPin = false;
 
@@ -188,5 +195,6 @@ namespace QuanLyChamCong
                 "Đã đăng xuất và khóa chức năng"
             );
         }
+
     }
 }

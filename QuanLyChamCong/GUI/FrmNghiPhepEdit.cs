@@ -2,13 +2,14 @@
 
 using BLL;
 using QuanLyChamCong.DAL;
+using QuanLyChamCong.THEME;
 using System;
 using System.Data;
 using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
 {
-    public partial class FrmNghiPhepEdit : Form
+    public partial class FrmNghiPhepEdit : BaseForm
     {
         NghiPhepBLL bll = new NghiPhepBLL();
 

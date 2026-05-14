@@ -1,4 +1,5 @@
 ﻿using QuanLyChamCong.BLL;
+using QuanLyChamCong.THEME;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,7 +7,7 @@ using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
 {
-    public partial class FrmCaLamEdit : Form
+    public partial class FrmCaLamEdit : BaseForm
     {
         CaLamBLL bll = new CaLamBLL();
         public bool isEdit = false;

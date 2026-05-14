@@ -83,7 +83,7 @@ namespace QuanLyChamCong.GUI
             this.cbNhanVien.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbNhanVien.Location = new System.Drawing.Point(183, 3);
             this.cbNhanVien.Name = "cbNhanVien";
-            this.cbNhanVien.Size = new System.Drawing.Size(314, 24);
+            this.cbNhanVien.Size = new System.Drawing.Size(314, 31);
             this.cbNhanVien.TabIndex = 1;
             // 
             // lblLuongCoBan
@@ -102,7 +102,7 @@ namespace QuanLyChamCong.GUI
             this.numLuongCoBan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numLuongCoBan.Location = new System.Drawing.Point(183, 61);
             this.numLuongCoBan.Name = "numLuongCoBan";
-            this.numLuongCoBan.Size = new System.Drawing.Size(314, 22);
+            this.numLuongCoBan.Size = new System.Drawing.Size(314, 30);
             this.numLuongCoBan.TabIndex = 3;
             // 
             // lblLuongTheoGio
@@ -121,7 +121,7 @@ namespace QuanLyChamCong.GUI
             this.numLuongTheoGio.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numLuongTheoGio.Location = new System.Drawing.Point(183, 119);
             this.numLuongTheoGio.Name = "numLuongTheoGio";
-            this.numLuongTheoGio.Size = new System.Drawing.Size(314, 22);
+            this.numLuongTheoGio.Size = new System.Drawing.Size(314, 30);
             this.numLuongTheoGio.TabIndex = 5;
             // 
             // lblTangCa
@@ -140,7 +140,7 @@ namespace QuanLyChamCong.GUI
             this.numTangCa.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numTangCa.Location = new System.Drawing.Point(183, 177);
             this.numTangCa.Name = "numTangCa";
-            this.numTangCa.Size = new System.Drawing.Size(314, 22);
+            this.numTangCa.Size = new System.Drawing.Size(314, 30);
             this.numTangCa.TabIndex = 7;
             // 
             // lblPhuCap
@@ -159,7 +159,7 @@ namespace QuanLyChamCong.GUI
             this.numPhuCap.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numPhuCap.Location = new System.Drawing.Point(183, 235);
             this.numPhuCap.Name = "numPhuCap";
-            this.numPhuCap.Size = new System.Drawing.Size(314, 22);
+            this.numPhuCap.Size = new System.Drawing.Size(314, 30);
             this.numPhuCap.TabIndex = 9;
             // 
             // pnlButton

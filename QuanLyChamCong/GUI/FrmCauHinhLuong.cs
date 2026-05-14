@@ -1,5 +1,6 @@
 ﻿using QuanLyChamCong.BLL;
 using QuanLyChamCong.DTO;
+using QuanLyChamCong.THEME;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,7 +9,7 @@ using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
 {
-    public partial class FrmCauHinhLuongEdit : Form
+    public partial class FrmCauHinhLuongEdit : BaseForm
     {
         CauHinhLuongBLL bll = new CauHinhLuongBLL();
 

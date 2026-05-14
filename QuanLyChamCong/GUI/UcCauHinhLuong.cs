@@ -1,4 +1,5 @@
 ﻿using QuanLyChamCong.BLL;
+using QuanLyChamCong.THEME;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,7 +8,7 @@ using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
 {
-    public partial class UcCauHinhLuong : UserControl
+    public partial class UcCauHinhLuong : BaseUserControl
     {
         CauHinhLuongBLL bll = new CauHinhLuongBLL();
 

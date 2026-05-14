@@ -1,12 +1,13 @@
-﻿// FrmBangLuongChotChiTiet.cs
-
+﻿
+using QuanLyChamCong.THEME;
 using System;
 using System.Data;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
 {
-    public partial class FrmBangLuongChotChiTiet : Form
+    public partial class FrmBangLuongChotChiTiet : BaseForm
     {
         private DataRow row;
 
@@ -15,10 +16,8 @@ namespace QuanLyChamCong.GUI
         )
         {
             InitializeComponent();
-
             row = r;
         }
-
         private void FrmBangLuongChotChiTiet_Load(
             object sender,
             EventArgs e
@@ -113,16 +112,6 @@ namespace QuanLyChamCong.GUI
         )
         {
             Close();
-        }
-
-        private void lblThuong_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label11_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

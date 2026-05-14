@@ -1,4 +1,5 @@
 ﻿using QuanLyChamCong.BLL;
+using QuanLyChamCong.THEME;
 using System;
 using System.Data;
 using System.Drawing;
@@ -7,7 +8,7 @@ using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
 {
-    public partial class UcChamCong : UserControl
+    public partial class UcChamCong : BaseUserControl
     {
         NhanVienBLL bll = new NhanVienBLL();
         private frmMain frm;
@@ -184,6 +185,7 @@ namespace QuanLyChamCong.GUI
             }
 
         }
+
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {

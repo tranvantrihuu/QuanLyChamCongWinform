@@ -2,6 +2,7 @@
 
 using QuanLyChamCong.BLL;
 using QuanLyChamCong.DTO;
+using QuanLyChamCong.THEME;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,7 +10,7 @@ using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
 {
-    public partial class FrmNghiPhepNamEdit : Form
+    public partial class FrmNghiPhepNamEdit : BaseForm
     {
         NghiPhepNamBLL bll = new NghiPhepNamBLL();
 

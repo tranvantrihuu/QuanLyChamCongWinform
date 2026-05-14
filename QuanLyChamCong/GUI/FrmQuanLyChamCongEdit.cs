@@ -3,13 +3,14 @@
 using BLL;
 using DAL;
 using QuanLyChamCong.DAL;
+using QuanLyChamCong.THEME;
 using System;
 using System.Data;
 using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
 {
-    public partial class FrmQuanLyChamCongEdit : Form
+    public partial class FrmQuanLyChamCongEdit : BaseForm
     {
         QuanLyChamCongBLL bll =
             new QuanLyChamCongBLL();

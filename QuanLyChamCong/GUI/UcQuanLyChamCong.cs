@@ -3,6 +3,7 @@
 using BLL;
 using QuanLyChamCong.BLL;
 using QuanLyChamCong.GUI;
+using QuanLyChamCong.THEME;
 using System;
 using System.Data;
 using System.Drawing;
@@ -10,7 +11,7 @@ using System.Windows.Forms;
 
 namespace GUI
 {
-    public partial class UcQuanLyChamCong : UserControl
+    public partial class UcQuanLyChamCong : BaseUserControl
     {
         QuanLyChamCongBLL bll =
             new QuanLyChamCongBLL();

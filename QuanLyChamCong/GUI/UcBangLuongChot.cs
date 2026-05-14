@@ -1,14 +1,15 @@
 ﻿// UcBangLuongChot.cs
 
+using QuanLyChamCong.BLL;
+using QuanLyChamCong.THEME;
 using System;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using QuanLyChamCong.BLL;
 
 namespace QuanLyChamCong.GUI
 {
-    public partial class UcBangLuongChot : UserControl
+    public partial class UcBangLuongChot : BaseUserControl
     {
         BangLuongChotBLL bll =
             new BangLuongChotBLL();
