@@ -153,7 +153,27 @@ namespace QuanLyChamCong.BLL
 
             return dt;
         }
+        public bool DaChotLuong(
+            int thang,
+            int nam
+        )
+        {
+            return dal.DaChotLuong(
+                thang,
+                nam
+            );
+        }
 
+        public DataTable LayBangLuongDaChot(
+            int thang,
+            int nam
+        )
+        {
+            return dal.LayBangLuongDaChot(
+                thang,
+                nam
+            );
+        }
         public bool ChotLuong(
             string nhanVienId,
             int thang,

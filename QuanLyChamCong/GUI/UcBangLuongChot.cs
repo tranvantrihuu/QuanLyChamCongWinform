@@ -49,11 +49,29 @@ namespace QuanLyChamCong.GUI
                     out nam
                 );
 
-                DataTable dt =
-                    bll.TinhLuongThang(
+                DataTable dt;
+
+                if (
+                    bll.DaChotLuong(
                         thang,
                         nam
-                    );
+                    )
+                )
+                {
+                    dt =
+                        bll.LayBangLuongDaChot(
+                            thang,
+                            nam
+                        );
+                }
+                else
+                {
+                    dt =
+                        bll.TinhLuongThang(
+                            thang,
+                            nam
+                        );
+                }
 
                 dgvDanhSach.DataSource =
                     dt;
@@ -62,7 +80,9 @@ namespace QuanLyChamCong.GUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show((ex.Message));
+                MessageBox.Show(
+                    ex.Message
+                );
             }
         }
 
@@ -76,8 +96,8 @@ namespace QuanLyChamCong.GUI
             }
 
             dgvDanhSach.Columns["nhan_vien_id"]
-    .HeaderText =
-    "Mã nhân viên";
+                .HeaderText =
+                "Mã nhân viên";
 
             dgvDanhSach.Columns["ho_ten"]
                 .HeaderText =
@@ -97,9 +117,27 @@ namespace QuanLyChamCong.GUI
             dgvDanhSach.Columns["tong_gio_lam"]
                 .HeaderText =
                 "Tổng giờ làm";
-            dgvDanhSach.Columns["phu_cap_mac_dinh"]
-                .HeaderText =
-                "Phụ cấp";
+            if (
+                dgvDanhSach.Columns.Contains(
+                    "phu_cap_mac_dinh"
+                )
+            )
+            {
+                dgvDanhSach.Columns["phu_cap_mac_dinh"]
+                    .HeaderText =
+                    "Phụ cấp";
+            }
+
+            if (
+                dgvDanhSach.Columns.Contains(
+                    "phu_cap"
+                )
+            )
+            {
+                dgvDanhSach.Columns["phu_cap"]
+                    .HeaderText =
+                    "Phụ cấp";
+            }
 
             dgvDanhSach.Columns["luong_tang_ca_theo_gio"]
                 .HeaderText =
@@ -155,8 +193,8 @@ namespace QuanLyChamCong.GUI
 
 
             dgvDanhSach.Columns["luong_co_ban"]
-    .DefaultCellStyle.Format =
-    "N0";
+            .DefaultCellStyle.Format =
+            "N0";
 
             dgvDanhSach.Columns["luong_theo_gio"]
                 .DefaultCellStyle.Format =
@@ -198,7 +236,7 @@ namespace QuanLyChamCong.GUI
                 )
             )
             {
-                dgvDanhSach.Columns["phu_cap"]
+                dgvDanhSach.Columns["phu_cap_mac_dinh"]
                     .DefaultCellStyle.Format =
                     "N0";
             }
@@ -256,142 +294,160 @@ namespace QuanLyChamCong.GUI
         }
 
         private void btnChotLuong_Click(
-            object sender,
-            EventArgs e
-        )
+    object sender,
+    EventArgs e
+)
         {
-            if (
-                dgvDanhSach.Rows.Count <= 0
-            )
+            try
             {
-                return;
-            }
-
-            int thanhCong = 0;
-
-            foreach (
-                DataGridViewRow row
-                in dgvDanhSach.Rows
-            )
-            {
-                if (row.IsNewRow)
+                if (
+                    dgvDanhSach.Rows.Count <= 0
+                )
                 {
-                    continue;
-                }
-
-                bool kq =
-                    bll.ChotLuong(
-                        row.Cells["nhan_vien_id"]
-                            .Value
-                            .ToString(),
-
-                        Convert.ToInt32(
-                            cboThang.Text
-                        ),
-
-                        Convert.ToInt32(
-                            cboNam.Text
-                        ),
-
-                        Convert.ToInt32(
-                            row.Cells["tong_ca_duoc_phan"]
-                                .Value
-                        ),
-
-                        Convert.ToInt32(
-                            row.Cells["tong_ca_di_lam"]
-                                .Value
-                        ),
-
-                        Convert.ToInt32(
-                            row.Cells["tong_ca_nghi"]
-                                .Value
-                        ),
-
-                        Convert.ToInt32(
-                            row.Cells["tong_phut_di_tre"]
-                                .Value
-                        ),
-
-                        Convert.ToInt32(
-                            row.Cells["tong_phut_ve_som"]
-                                .Value
-                        ),
-
-                        Convert.ToInt32(
-                            row.Cells["tong_phut_bi_tru"]
-                                .Value
-                        ),
-
-                        Convert.ToInt32(
-                            row.Cells["tong_phut_tang_ca"]
-                                .Value
-                        ),
-
-                        Convert.ToDecimal(
-                            row.Cells["luong_co_ban"]
-                                .Value
-                        ),
-
-                        Convert.ToDecimal(
-                            row.Cells["luong_theo_gio"]
-                                .Value
-                        ),
-
-                        Convert.ToDecimal(
-                            row.Cells["luong_tang_ca_theo_gio"]
-                                .Value
-                        ),
-
-                        Convert.ToDecimal(
-                            row.Cells["tong_luong_chinh"]
-                                .Value
-                        ),
-
-                        Convert.ToDecimal(
-                            row.Cells["tong_luong_tang_ca"]
-                                .Value
-                        ),
-
-                        Convert.ToDecimal(
-                            row.Cells["phu_cap"]
-                                .Value
-                        ),
-
-                        Convert.ToDecimal(
-                            row.Cells["thuong"]
-                                .Value
-                        ),
-
-                        Convert.ToDecimal(
-                            row.Cells["phat"]
-                                .Value
-                        ),
-
-                        Convert.ToDecimal(
-                            row.Cells["tong_luong"]
-                                .Value
-                        ),
-
-                        "",
-
-                        "admin"
+                    MessageBox.Show(
+                        "Không có dữ liệu để chốt"
                     );
 
-                if (kq)
-                {
-                    thanhCong++;
+                    return;
                 }
-            }
 
-            MessageBox.Show(
-                "Đã chốt "
-                + thanhCong
-                + " bảng lương",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-            );
+                int thanhCong = 0;
+
+                foreach (
+                    DataGridViewRow row
+                    in dgvDanhSach.Rows
+                )
+                {
+                    if (row.IsNewRow)
+                    {
+                        continue;
+                    }
+
+                    bool kq =
+                        bll.ChotLuong(
+                            row.Cells["nhan_vien_id"]
+                                .Value
+                                .ToString(),
+
+                            Convert.ToInt32(
+                                cboThang.Text
+                            ),
+
+                            Convert.ToInt32(
+                                cboNam.Text
+                            ),
+
+                            Convert.ToInt32(
+                                row.Cells["tong_ca_duoc_phan"]
+                                    .Value
+                            ),
+
+                            Convert.ToInt32(
+                                row.Cells["tong_ca_di_lam"]
+                                    .Value
+                            ),
+
+                            Convert.ToInt32(
+                                row.Cells["tong_ca_nghi"]
+                                    .Value
+                            ),
+
+                            Convert.ToInt32(
+                                row.Cells["tong_phut_di_tre"]
+                                    .Value
+                            ),
+
+                            Convert.ToInt32(
+                                row.Cells["tong_phut_ve_som"]
+                                    .Value
+                            ),
+
+                            Convert.ToInt32(
+                                row.Cells["tong_phut_bi_tru"]
+                                    .Value
+                            ),
+
+                            Convert.ToInt32(
+                                row.Cells["tong_phut_tang_ca"]
+                                    .Value
+                            ),
+
+                            Convert.ToDecimal(
+                                row.Cells["luong_co_ban"]
+                                    .Value
+                            ),
+
+                            Convert.ToDecimal(
+                                row.Cells["luong_theo_gio"]
+                                    .Value
+                            ),
+
+                            Convert.ToDecimal(
+                                row.Cells["luong_tang_ca_theo_gio"]
+                                    .Value
+                            ),
+
+                            Convert.ToDecimal(
+                                row.Cells["tong_luong_chinh"]
+                                    .Value
+                            ),
+
+                            Convert.ToDecimal(
+                                row.Cells["tong_luong_tang_ca"]
+                                    .Value
+                            ),
+
+                            Convert.ToDecimal(
+                                row.Cells["phu_cap_mac_dinh"]
+                                    .Value
+                            ),
+
+                            Convert.ToDecimal(
+                                row.Cells["thuong"]
+                                    .Value
+                            ),
+
+                            Convert.ToDecimal(
+                                row.Cells["phat"]
+                                    .Value
+                            ),
+
+                            Convert.ToDecimal(
+                                row.Cells["tong_luong"]
+                                    .Value
+                            ),
+
+                            "",
+
+                            "admin"
+                        );
+
+                    if (kq)
+                    {
+                        thanhCong++;
+                    }
+                }
+
+                MessageBox.Show(
+                    "Đã chốt thành công "
+                    + thanhCong
+                    + " bảng lương",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+
+                LoadDuLieu();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
 
         private void dgvDanhSach_CellDoubleClick(
