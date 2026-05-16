@@ -42,9 +42,7 @@ namespace QuanLyChamCong.GUI
             ((System.ComponentModel.ISupportInitialize)(this.numCheckoutTre)).BeginInit();
             this.pnlButton.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tableLayoutPanel1
-            // 
+            
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -77,9 +75,7 @@ namespace QuanLyChamCong.GUI
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(500, 400);
             this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // lblTenCa
-            // 
+            
             this.lblTenCa.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.lblTenCa.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblTenCa.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
@@ -89,17 +85,13 @@ namespace QuanLyChamCong.GUI
             this.lblTenCa.TabIndex = 0;
             this.lblTenCa.Text = "Tên ca";
             this.lblTenCa.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // txtTenCa
-            // 
+           
             this.txtTenCa.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtTenCa.Location = new System.Drawing.Point(183, 3);
             this.txtTenCa.Name = "txtTenCa";
-            this.txtTenCa.Size = new System.Drawing.Size(314, 22);
+            this.txtTenCa.Size = new System.Drawing.Size(314, 30);
             this.txtTenCa.TabIndex = 1;
-            // 
-            // lblBatDau
-            // 
+             
             this.lblBatDau.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.lblBatDau.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBatDau.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
@@ -109,18 +101,13 @@ namespace QuanLyChamCong.GUI
             this.lblBatDau.TabIndex = 2;
             this.lblBatDau.Text = "Giờ bắt đầu";
             this.lblBatDau.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // dtBatDau
-            // 
+            
             this.dtBatDau.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dtBatDau.Location = new System.Drawing.Point(183, 53);
             this.dtBatDau.Name = "dtBatDau";
-            this.dtBatDau.Size = new System.Drawing.Size(314, 22);
+            this.dtBatDau.Size = new System.Drawing.Size(314, 30);
             this.dtBatDau.TabIndex = 3;
-            // 
-            // lblKetThuc
-            // 
-            this.lblKetThuc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+                        this.lblKetThuc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.lblKetThuc.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblKetThuc.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblKetThuc.Location = new System.Drawing.Point(3, 100);
@@ -129,17 +116,13 @@ namespace QuanLyChamCong.GUI
             this.lblKetThuc.TabIndex = 4;
             this.lblKetThuc.Text = "Giờ kết thúc";
             this.lblKetThuc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // dtKetThuc
-            // 
+             
             this.dtKetThuc.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dtKetThuc.Location = new System.Drawing.Point(183, 103);
             this.dtKetThuc.Name = "dtKetThuc";
-            this.dtKetThuc.Size = new System.Drawing.Size(314, 22);
+            this.dtKetThuc.Size = new System.Drawing.Size(314, 30);
             this.dtKetThuc.TabIndex = 5;
-            // 
-            // lblDiTre
-            // 
+            
             this.lblDiTre.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.lblDiTre.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDiTre.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
@@ -149,17 +132,13 @@ namespace QuanLyChamCong.GUI
             this.lblDiTre.TabIndex = 6;
             this.lblDiTre.Text = "Phút đi trễ";
             this.lblDiTre.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // numDiTre
-            // 
+             
             this.numDiTre.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numDiTre.Location = new System.Drawing.Point(183, 153);
             this.numDiTre.Name = "numDiTre";
-            this.numDiTre.Size = new System.Drawing.Size(314, 22);
+            this.numDiTre.Size = new System.Drawing.Size(314, 30);
             this.numDiTre.TabIndex = 7;
-            // 
-            // lblVeSom
-            // 
+             
             this.lblVeSom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.lblVeSom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblVeSom.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
@@ -169,17 +148,13 @@ namespace QuanLyChamCong.GUI
             this.lblVeSom.TabIndex = 8;
             this.lblVeSom.Text = "Phút về sớm";
             this.lblVeSom.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // numVeSom
-            // 
+            
             this.numVeSom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numVeSom.Location = new System.Drawing.Point(183, 203);
             this.numVeSom.Name = "numVeSom";
-            this.numVeSom.Size = new System.Drawing.Size(314, 22);
+            this.numVeSom.Size = new System.Drawing.Size(314, 30);
             this.numVeSom.TabIndex = 9;
-            // 
-            // lblCheckinSom
-            // 
+             
             this.lblCheckinSom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.lblCheckinSom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCheckinSom.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
@@ -189,17 +164,13 @@ namespace QuanLyChamCong.GUI
             this.lblCheckinSom.TabIndex = 10;
             this.lblCheckinSom.Text = "Checkin sớm";
             this.lblCheckinSom.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // numCheckinSom
-            // 
+             
             this.numCheckinSom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numCheckinSom.Location = new System.Drawing.Point(183, 253);
             this.numCheckinSom.Name = "numCheckinSom";
-            this.numCheckinSom.Size = new System.Drawing.Size(314, 22);
+            this.numCheckinSom.Size = new System.Drawing.Size(314, 30);
             this.numCheckinSom.TabIndex = 11;
-            // 
-            // lblCheckoutTre
-            // 
+            
             this.lblCheckoutTre.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.lblCheckoutTre.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCheckoutTre.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
@@ -209,17 +180,13 @@ namespace QuanLyChamCong.GUI
             this.lblCheckoutTre.TabIndex = 12;
             this.lblCheckoutTre.Text = "Checkout trễ";
             this.lblCheckoutTre.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // numCheckoutTre
-            // 
+             
             this.numCheckoutTre.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numCheckoutTre.Location = new System.Drawing.Point(183, 303);
             this.numCheckoutTre.Name = "numCheckoutTre";
-            this.numCheckoutTre.Size = new System.Drawing.Size(314, 22);
+            this.numCheckoutTre.Size = new System.Drawing.Size(314, 30);
             this.numCheckoutTre.TabIndex = 13;
-            // 
-            // pnlButton
-            // 
+            
             this.pnlButton.Controls.Add(this.btnOk);
             this.pnlButton.Controls.Add(this.btnCancel);
             this.pnlButton.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -227,9 +194,7 @@ namespace QuanLyChamCong.GUI
             this.pnlButton.Name = "pnlButton";
             this.pnlButton.Size = new System.Drawing.Size(314, 44);
             this.pnlButton.TabIndex = 14;
-            // 
-            // btnOk
-            // 
+             
             this.btnOk.BackColor = System.Drawing.Color.LightGreen;
             this.btnOk.Location = new System.Drawing.Point(50, 10);
             this.btnOk.Name = "btnOk";
@@ -238,9 +203,7 @@ namespace QuanLyChamCong.GUI
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = false;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
-            // 
-            // btnCancel
-            // 
+             
             this.btnCancel.BackColor = System.Drawing.Color.LightCoral;
             this.btnCancel.Location = new System.Drawing.Point(170, 10);
             this.btnCancel.Name = "btnCancel";
@@ -249,9 +212,7 @@ namespace QuanLyChamCong.GUI
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
-            // FrmCaLamEdit
-            // 
+             
             this.ClientSize = new System.Drawing.Size(500, 400);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "FrmCaLamEdit";

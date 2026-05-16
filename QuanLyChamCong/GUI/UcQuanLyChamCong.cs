@@ -1,30 +1,27 @@
-﻿// UcQuanLyChamCong.cs
-
-using BLL;
-using QuanLyChamCong.BLL;
+﻿using QuanLyChamCong.Models;
+using QuanLyChamCong.Services;
+using System.Collections.Generic;
+using System.Linq;
 using QuanLyChamCong.GUI;
 using QuanLyChamCong.THEME;
 using System;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-
+using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
 namespace GUI
 {
     public partial class UcQuanLyChamCong : BaseUserControl
     {
-        QuanLyChamCongBLL bll =
-            new QuanLyChamCongBLL();
+        QuanLyChamCongService service = new QuanLyChamCongService();
 
-        NhanVienBLL nhanVienBLL =
-            new NhanVienBLL();
-
+        NhanVienService nhanVienService = new NhanVienService();
         public UcQuanLyChamCong()
         {
             InitializeComponent();
         }
 
-        private void UcQuanLyChamCong_Load(
+        private async void UcQuanLyChamCong_Load(
             object sender,
             EventArgs e
         )
@@ -40,23 +37,22 @@ namespace GUI
             LoadData();
         }
 
-        private void LoadNhanVien()
+        private async void LoadNhanVien()
         {
-            DataTable dt =
-                nhanVienBLL.GetAll();
+            var ds =
+                await nhanVienService.GetAll();
 
-            DataRow r =
-                dt.NewRow();
-
-            r["id"] = "";
-
-            r["ho_ten"] =
-                "Tất cả";
-
-            dt.Rows.InsertAt(r, 0);
+            ds.Insert(
+                0,
+                new NhanVien
+                {
+                    id = "",
+                    ho_ten = "Tất cả"
+                }
+            );
 
             cboNhanVien.DataSource =
-                dt;
+                ds;
 
             cboNhanVien.DisplayMember =
                 "ho_ten";
@@ -65,7 +61,7 @@ namespace GUI
                 "id";
         }
 
-        private void LoadData()
+        private async void LoadData()
         {
             string nhanVienId = "";
 
@@ -98,12 +94,25 @@ namespace GUI
                 return;
             }
 
+            List<ChamCong> ds =
+                await service.GetAll();
+
+            if (!string.IsNullOrEmpty(nhanVienId))
+            {
+                ds = ds.Where(x =>
+                    x.nhan_vien_id ==
+                    nhanVienId
+                ).ToList();
+            }
+
+            ds = ds.Where(x =>
+                x.ngay_lam.Value.Date >= tuNgay
+                &&
+                x.ngay_lam.Value.Date <= denNgay
+            ).ToList();
+
             dgvChamCong.DataSource =
-                bll.GetByNgay(
-                    nhanVienId,
-                    tuNgay,
-                    denNgay
-                );
+                ds;
 
             FormatDataGridView();
         }
@@ -129,7 +138,7 @@ namespace GUI
 
             dgvChamCong.RowHeadersVisible = false;
 
-            // HEADER STYLE
+            
             DataGridViewCellStyle headerStyle =
                 new DataGridViewCellStyle();
 
@@ -157,7 +166,7 @@ namespace GUI
 
             dgvChamCong.ColumnHeadersHeight = 45;
 
-            // CELL STYLE
+            
             DataGridViewCellStyle cellStyle =
                 new DataGridViewCellStyle();
 
@@ -173,12 +182,12 @@ namespace GUI
             dgvChamCong.DefaultCellStyle =
                 cellStyle;
 
-            // riêng họ tên căn trái
+            
             dgvChamCong.Columns["ho_ten"]
                 .DefaultCellStyle.Alignment =
                 DataGridViewContentAlignment.MiddleLeft;
 
-            // HEADER TEXT
+            
             dgvChamCong.Columns["id"]
                 .HeaderText = "ID";
 
@@ -227,7 +236,7 @@ namespace GUI
             dgvChamCong.Columns["trang_thai"]
                 .HeaderText = "TRẠNG THÁI";
 
-            // FORMAT DATE
+            
             dgvChamCong.Columns["ngay_lam"]
                 .DefaultCellStyle.Format =
                 "dd/MM/yyyy";
@@ -240,7 +249,7 @@ namespace GUI
                 .DefaultCellStyle.Format =
                 "dd/MM/yyyy HH:mm";
 
-            // HIDE
+            
             dgvChamCong.Columns[
                 "phut_cho_phep_di_tre"
             ].Visible = false;
@@ -340,7 +349,7 @@ namespace GUI
             }
         }
 
-        private void btnXoa_Click(
+        private async void btnXoa_Click(
             object sender,
             EventArgs e
         )
@@ -380,15 +389,24 @@ namespace GUI
                     .Value
                 );
 
-            bll.Delete(id);
+            bool result =
+                await service.Delete(id);
 
-            LoadData();
+            if (result)
+            {
+                LoadData();
 
-            MessageBox.Show(
-                "Xóa thành công"
-            );
+                MessageBox.Show(
+                    "Xóa thành công"
+                );
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Xóa thất bại"
+                );
+            }
         }
-        // Thêm vào UcQuanLyChamCong.cs
 
         private void dtTuNgay_ValueChanged(
             object sender,

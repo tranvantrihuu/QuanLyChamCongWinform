@@ -1,173 +1,271 @@
-﻿using QuanLyChamCong.BLL;
+﻿using QuanLyChamCong.Models;
+using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
 using System;
-using System.Data;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-
+using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
 namespace QuanLyChamCong.GUI
 {
     public partial class UcChamCong : BaseUserControl
     {
-        NhanVienBLL bll = new NhanVienBLL();
+        NhanVienService nhanVienService =
+            new NhanVienService();
+
+        QuanLyChamCongService chamCongService =
+            new QuanLyChamCongService();
+
         private frmMain frm;
-        public UcChamCong(frmMain f)
+
+        public UcChamCong(
+            frmMain f
+        )
         {
             InitializeComponent();
+
             frm = f;
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            lblTime.Text = DateTime.Now.ToString("HH:mm dddd, dd/MM/yyyy");
-        }
-
-        private void UcChamCong_Load(object sender, EventArgs e)
+        private void UcChamCong_Load(
+            object sender,
+            EventArgs e
+        )
         {
             timer1.Start();
-            string placeholder = "Nhập mã PIN/vân tay";
 
-            txtPin.Text = placeholder;
-            txtPin.ForeColor = Color.Gray;
+            txtPin.Text =
+                "Nhập PIN hoặc mã vân tay";
+
+            txtPin.ForeColor =
+                Color.Gray;
 
             txtPin.Enter += (_, __) =>
             {
-                if (txtPin.Text == placeholder)
+                if (
+                    txtPin.Text
+                    == "Nhập PIN hoặc mã vân tay"
+                )
                 {
                     txtPin.Text = "";
-                    txtPin.ForeColor = Color.Black;
+
+                    txtPin.ForeColor =
+                        Color.Black;
                 }
             };
 
             txtPin.Leave += (_, __) =>
             {
-                if (string.IsNullOrWhiteSpace(txtPin.Text))
+                if (
+                    string.IsNullOrWhiteSpace(
+                        txtPin.Text
+                    )
+                )
                 {
-                    txtPin.Text = placeholder;
-                    txtPin.ForeColor = Color.Gray;
+                    txtPin.Text =
+                        "Nhập PIN hoặc mã vân tay";
+
+                    txtPin.ForeColor =
+                        Color.Gray;
                 }
             };
         }
 
-        // 🔥 Validate input
-        private bool IsValidInput(string input)
+        private void timer1_Tick(
+            object sender,
+            EventArgs e
+        )
         {
-            // PIN: 4 số
-            if (Regex.IsMatch(input, @"^\d{4}$"))
-                return true;
+            lblTime.Text =
+                DateTime.Now.ToString(
+                    "HH:mm:ss\ndddd, dd/MM/yyyy"
+                );
+        }
 
-            // Vân tay: IDFA + 4 số
-            if (Regex.IsMatch(input, @"^IDFA\d{4}$"))
+        private bool IsValidInput(
+            string input
+        )
+        {
+            if (
+                Regex.IsMatch(
+                    input,
+                    @"^\d{4}$"
+                )
+            )
+            {
                 return true;
+            }
+
+            if (
+                Regex.IsMatch(
+                    input,
+                    @"^[A-Za-z0-9]+$"
+                )
+            )
+            {
+                return true;
+            }
 
             return false;
         }
 
-        // 🔥 Lấy ID từ input (PIN hoặc vân tay)
-        private string GetNhanVienId(string input)
+        private async void btnCheckIn_Click(
+            object sender,
+            EventArgs e
+        )
         {
-            // PIN
-            if (Regex.IsMatch(input, @"^\d{4}$"))
-                return bll.GetNhanVienIdByPin(input);
+            string input =
+                txtPin.Text.Trim();
 
-            // Vân tay
-            return bll.GetNhanVienId(input);
-        }
-
-        private void btnCheckIn_Click(object sender, EventArgs e)
-        {
-            string input = txtPin.Text.Trim();
-
-            if (input == "")
+            if (
+                input == ""
+                ||
+                input ==
+                "Nhập PIN hoặc mã vân tay"
+            )
             {
-                MessageBox.Show("Vui lòng nhập mã");
+                MessageBox.Show(
+                    "Vui lòng nhập mã"
+                );
+
                 return;
             }
 
-            var nv = bll.GetNhanVien(input);
+            if (!IsValidInput(input))
+            {
+                MessageBox.Show(
+                    "Mã không hợp lệ"
+                );
+
+                return;
+            }
+
+            NhanVien nv =
+                await nhanVienService
+                .GetNhanVien(input);
+
             if (nv == null)
             {
-                MessageBox.Show("Không tìm thấy nhân viên");
+                MessageBox.Show(
+                    "Không tìm thấy nhân viên"
+                );
+
                 return;
             }
 
-            string id = nv["id"].ToString();
-            string ten = nv["ho_ten"].ToString();
-            string ca = "ca 1"; // tạm
+            bool result =
+                await chamCongService
+                .CheckIn(nv.id);
 
-            var cc = bll.GetChamCongHomNay(input);
-
-            // 🔥 ĐÃ CÓ RECORD → KHÔNG CHO CHECK IN
-            if (cc != null && cc["check_in"] != DBNull.Value)
+            if (result)
             {
-                MessageBox.Show("Ca làm đã Check In");
-                return;
+                MessageBox.Show(
+                    $"{nv.ho_ten} check in thành công"
+                );
             }
-
-            // ✅ CHƯA CÓ → CHECK IN
-            bll.CheckIn(input);
-
-            string time = DateTime.Now.ToString("HH:mm dd/MM/yyyy");
-            MessageBox.Show($"{id} - {ten} - {ca} đã check in lúc {time}");
+            else
+            {
+                MessageBox.Show(
+                    "Check in thất bại hoặc đã check in"
+                );
+            }
 
             txtPin.Clear();
+
             txtPin.Focus();
         }
 
-        private void btnCheckOut_Click(object sender, EventArgs e)
+        private async void btnCheckOut_Click(
+            object sender,
+            EventArgs e
+        )
         {
-            string input = txtPin.Text.Trim();
+            string input =
+                txtPin.Text.Trim();
 
-            if (input == "")
+            if (
+                input == ""
+                ||
+                input ==
+                "Nhập PIN hoặc mã vân tay"
+            )
             {
-                MessageBox.Show("Vui lòng nhập mã");
+                MessageBox.Show(
+                    "Vui lòng nhập mã"
+                );
+
                 return;
             }
 
-            var nv = bll.GetNhanVien(input);
+            if (!IsValidInput(input))
+            {
+                MessageBox.Show(
+                    "Mã không hợp lệ"
+                );
+
+                return;
+            }
+
+            NhanVien nv =
+                await nhanVienService
+                .GetNhanVien(input);
+
             if (nv == null)
             {
-                MessageBox.Show("Không tìm thấy nhân viên");
+                MessageBox.Show(
+                    "Không tìm thấy nhân viên"
+                );
+
                 return;
             }
 
-            string id = nv["id"].ToString();
-            string ten = nv["ho_ten"].ToString();
-            string ca = "ca 1";
+            bool result =
+                await chamCongService
+                .CheckOut(nv.id);
 
-            var cc = bll.GetChamCongHomNay(input);
-
-            // ❌ CHƯA CHECK IN
-            if (cc == null || cc["check_in"] == DBNull.Value)
+            if (result)
             {
-                MessageBox.Show("Chưa check in");
-                return;
+                MessageBox.Show(
+                    $"{nv.ho_ten} check out thành công"
+                );
             }
-
-            // ❌ ĐÃ CHECK OUT
-            if (cc["check_out"] != DBNull.Value)
+            else
             {
-                MessageBox.Show("Ca làm đã Check Out");
-                return;
+                MessageBox.Show(
+                    "Check out thất bại"
+                );
             }
-
-            // ✅ OK → CHECK OUT
-            bll.CheckOut(input);
-
-            string time = DateTime.Now.ToString("HH:mm dd/MM/yyyy");
-            MessageBox.Show($"{id} - {ten} - {ca} đã check out lúc {time}");
 
             txtPin.Clear();
+
             txtPin.Focus();
         }
 
-        private void btnLogin_Click(object sender, EventArgs e)
+        private async void btnLogin_Click(
+            object sender,
+            EventArgs e
+        )
         {
-            DataRow admin =
-            bll.KiemTraAdminByPin(
-            txtPin.Text.Trim()
-        );
+            string pin =
+                txtPin.Text.Trim();
+
+            if (
+                pin == ""
+                ||
+                pin ==
+                "Nhập PIN hoặc mã vân tay"
+            )
+            {
+                MessageBox.Show(
+                    "Nhập PIN admin"
+                );
+
+                return;
+            }
+
+            NhanVien admin =
+                await nhanVienService
+                .KiemTraAdminByPin(pin);
 
             if (admin != null)
             {
@@ -183,11 +281,12 @@ namespace QuanLyChamCong.GUI
                     "PIN admin không đúng"
                 );
             }
-
         }
 
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        private void tableLayoutPanel1_Paint(
+            object sender,
+            PaintEventArgs e
+        )
         {
 
         }

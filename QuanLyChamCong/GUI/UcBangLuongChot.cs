@@ -1,19 +1,19 @@
-﻿// UcBangLuongChot.cs
-
-using QuanLyChamCong.BLL;
+﻿
+using QuanLyChamCong.Models;
+using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
 using System;
 using System.Data;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
 namespace QuanLyChamCong.GUI
 {
     public partial class UcBangLuongChot : BaseUserControl
     {
-        BangLuongChotBLL bll =
-            new BangLuongChotBLL();
-
+        BangLuongChotService service =
+            new BangLuongChotService();
         public UcBangLuongChot()
         {
             InitializeComponent();
@@ -33,7 +33,7 @@ namespace QuanLyChamCong.GUI
             LoadDuLieu();
         }
 
-        private void LoadDuLieu()
+        private async Task LoadDuLieu()
         {
             try
             {
@@ -52,26 +52,29 @@ namespace QuanLyChamCong.GUI
 
                 DataTable dt;
 
-                if (
-                    bll.DaChotLuong(
+                bool daChot =
+                    await service.DaChotLuong(
                         thang,
                         nam
-                    )
-                )
+                    );
+
+                if (daChot)
                 {
                     dt =
-                        bll.LayBangLuongDaChot(
-                            thang,
-                            nam
-                        );
+                        await service
+                            .LayBangLuongDaChot(
+                                thang,
+                                nam
+                            );
                 }
                 else
                 {
                     dt =
-                        bll.TinhLuongThang(
-                            thang,
-                            nam
-                        );
+                        await service
+                            .TinhLuongThang(
+                                thang,
+                                nam
+                            );
                 }
 
                 dgvDanhSach.DataSource =
@@ -89,6 +92,7 @@ namespace QuanLyChamCong.GUI
 
         private void FormatGrid()
         {
+            dgvDanhSach.AutoGenerateColumns = false;
             if (
                 dgvDanhSach.Columns.Count <= 0
             )
@@ -286,15 +290,15 @@ namespace QuanLyChamCong.GUI
                 false;
         }
 
-        private void btnTaiLai_Click(
+        private async void btnTaiLai_Click(
             object sender,
             EventArgs e
         )
         {
-            LoadDuLieu();
+            await LoadDuLieu();
         }
 
-        private void btnChotLuong_Click(
+        private async void btnChotLuong_Click(
     object sender,
     EventArgs e
 )
@@ -324,104 +328,133 @@ namespace QuanLyChamCong.GUI
                         continue;
                     }
 
-                    bool kq =
-                        bll.ChotLuong(
-                            row.Cells["nhan_vien_id"]
-                                .Value
-                                .ToString(),
+                    BangLuongChot model =
+                        new BangLuongChot();
 
-                            Convert.ToInt32(
-                                cboThang.Text
-                            ),
+                    model.nhan_vien_id =
+                        row.Cells["nhan_vien_id"]
+                            .Value
+                            .ToString();
 
-                            Convert.ToInt32(
-                                cboNam.Text
-                            ),
-
-                            Convert.ToInt32(
-                                row.Cells["tong_ca_duoc_phan"]
-                                    .Value
-                            ),
-
-                            Convert.ToInt32(
-                                row.Cells["tong_ca_di_lam"]
-                                    .Value
-                            ),
-
-                            Convert.ToInt32(
-                                row.Cells["tong_ca_nghi"]
-                                    .Value
-                            ),
-
-                            Convert.ToInt32(
-                                row.Cells["tong_phut_di_tre"]
-                                    .Value
-                            ),
-
-                            Convert.ToInt32(
-                                row.Cells["tong_phut_ve_som"]
-                                    .Value
-                            ),
-
-                            Convert.ToInt32(
-                                row.Cells["tong_phut_bi_tru"]
-                                    .Value
-                            ),
-
-                            Convert.ToInt32(
-                                row.Cells["tong_phut_tang_ca"]
-                                    .Value
-                            ),
-
-                            Convert.ToDecimal(
-                                row.Cells["luong_co_ban"]
-                                    .Value
-                            ),
-
-                            Convert.ToDecimal(
-                                row.Cells["luong_theo_gio"]
-                                    .Value
-                            ),
-
-                            Convert.ToDecimal(
-                                row.Cells["luong_tang_ca_theo_gio"]
-                                    .Value
-                            ),
-
-                            Convert.ToDecimal(
-                                row.Cells["tong_luong_chinh"]
-                                    .Value
-                            ),
-
-                            Convert.ToDecimal(
-                                row.Cells["tong_luong_tang_ca"]
-                                    .Value
-                            ),
-
-                            Convert.ToDecimal(
-                                row.Cells["phu_cap_mac_dinh"]
-                                    .Value
-                            ),
-
-                            Convert.ToDecimal(
-                                row.Cells["thuong"]
-                                    .Value
-                            ),
-
-                            Convert.ToDecimal(
-                                row.Cells["phat"]
-                                    .Value
-                            ),
-
-                            Convert.ToDecimal(
-                                row.Cells["tong_luong"]
-                                    .Value
-                            ),
-
-                            "",
-
-                            "admin"
+                    model.thang =
+                        Convert.ToInt32(
+                            cboThang.Text
                         );
+
+                    model.nam =
+                        Convert.ToInt32(
+                            cboNam.Text
+                        );
+
+                    model.tong_ca_duoc_phan =
+                        Convert.ToInt32(
+                            row.Cells["tong_ca_duoc_phan"]
+                                .Value
+                        );
+
+                    model.tong_ca_di_lam =
+                        Convert.ToInt32(
+                            row.Cells["tong_ca_di_lam"]
+                                .Value
+                        );
+
+                    model.tong_ca_nghi =
+                        Convert.ToInt32(
+                            row.Cells["tong_ca_nghi"]
+                                .Value
+                        );
+
+                    model.tong_phut_di_tre =
+                        Convert.ToInt32(
+                            row.Cells["tong_phut_di_tre"]
+                                .Value
+                        );
+
+                    model.tong_phut_ve_som =
+                        Convert.ToInt32(
+                            row.Cells["tong_phut_ve_som"]
+                                .Value
+                        );
+
+                    model.tong_phut_bi_tru =
+                        Convert.ToInt32(
+                            row.Cells["tong_phut_bi_tru"]
+                                .Value
+                        );
+
+                    model.tong_phut_tang_ca =
+                        Convert.ToInt32(
+                            row.Cells["tong_phut_tang_ca"]
+                                .Value
+                        );
+
+                    model.luong_co_ban =
+                        Convert.ToDecimal(
+                            row.Cells["luong_co_ban"]
+                                .Value
+                        );
+
+                    model.luong_theo_gio =
+                        Convert.ToDecimal(
+                            row.Cells["luong_theo_gio"]
+                                .Value
+                        );
+
+                    model.luong_tang_ca_theo_gio =
+                        Convert.ToDecimal(
+                            row.Cells["luong_tang_ca_theo_gio"]
+                                .Value
+                        );
+
+                    model.tong_luong_chinh =
+                        Convert.ToDecimal(
+                            row.Cells["tong_luong_chinh"]
+                                .Value
+                        );
+
+                    model.tong_luong_tang_ca =
+                        Convert.ToDecimal(
+                            row.Cells["tong_luong_tang_ca"]
+                                .Value
+                        );
+
+                    model.phu_cap =
+                        Convert.ToDecimal(
+                            row.Cells["phu_cap_mac_dinh"]
+                                .Value
+                        );
+
+                    model.thuong =
+                        Convert.ToDecimal(
+                            row.Cells["thuong"]
+                                .Value
+                        );
+
+                    model.phat =
+                        Convert.ToDecimal(
+                            row.Cells["phat"]
+                                .Value
+                        );
+
+                    model.tong_luong =
+                        Convert.ToDecimal(
+                            row.Cells["tong_luong"]
+                                .Value
+                        );
+
+                    model.ghi_chu = "";
+
+                    model.nguoi_chot = "admin";
+
+                    model.ngay_chot =
+                        DateTime.Now;
+
+                    model.created_at =
+                        DateTime.Now;
+
+                    bool kq =
+                        await service
+                            .ChotLuong(model);
 
                     if (kq)
                     {
@@ -438,7 +471,7 @@ namespace QuanLyChamCong.GUI
                     MessageBoxIcon.Information
                 );
 
-                LoadDuLieu();
+                await LoadDuLieu();
             }
             catch (Exception ex)
             {
@@ -493,20 +526,20 @@ namespace QuanLyChamCong.GUI
             frm.ShowDialog();
         }
 
-        private void cboThang_SelectedIndexChanged(
+        private async void cboThang_SelectedIndexChanged(
             object sender,
             EventArgs e
         )
         {
-            LoadDuLieu();
+            await LoadDuLieu();
         }
 
-        private void cboNam_SelectedIndexChanged(
+        private async void cboNam_SelectedIndexChanged(
             object sender,
             EventArgs e
         )
         {
-            LoadDuLieu();
+            await LoadDuLieu();
         }
     }
 }

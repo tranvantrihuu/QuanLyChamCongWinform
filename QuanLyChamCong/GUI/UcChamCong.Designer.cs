@@ -44,9 +44,7 @@
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // txtPin
-            // 
+           
             this.txtPin.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtPin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtPin.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -56,9 +54,7 @@
             this.txtPin.Size = new System.Drawing.Size(281, 30);
             this.txtPin.TabIndex = 0;
             this.txtPin.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // lblTime
-            // 
+             
             this.lblTime.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblTime.AutoSize = true;
             this.lblTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -68,9 +64,7 @@
             this.lblTime.TabIndex = 1;
             this.lblTime.Text = "--:--";
             this.lblTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // pnDisplay
-            // 
+             
             this.pnDisplay.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pnDisplay.BackColor = System.Drawing.SystemColors.Window;
             this.pnDisplay.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -79,9 +73,7 @@
             this.pnDisplay.Name = "pnDisplay";
             this.pnDisplay.Size = new System.Drawing.Size(502, 223);
             this.pnDisplay.TabIndex = 2;
-            // 
-            // btnCheckIn
-            // 
+            
             this.btnCheckIn.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnCheckIn.BackColor = System.Drawing.Color.Aqua;
             this.btnCheckIn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -93,9 +85,7 @@
             this.btnCheckIn.Text = "CHECK IN";
             this.btnCheckIn.UseVisualStyleBackColor = false;
             this.btnCheckIn.Click += new System.EventHandler(this.btnCheckIn_Click);
-            // 
-            // btnCheckOut
-            // 
+          
             this.btnCheckOut.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnCheckOut.BackColor = System.Drawing.Color.Aqua;
             this.btnCheckOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -107,9 +97,7 @@
             this.btnCheckOut.Text = "CHECK OUT";
             this.btnCheckOut.UseVisualStyleBackColor = false;
             this.btnCheckOut.Click += new System.EventHandler(this.btnCheckOut_Click);
-            // 
-            // btnLogin
-            // 
+            
             this.btnLogin.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnLogin.AutoSize = true;
             this.btnLogin.BackColor = System.Drawing.Color.PaleGreen;
@@ -122,14 +110,10 @@
             this.btnLogin.Text = "ĐĂNG NHẬP";
             this.btnLogin.UseVisualStyleBackColor = false;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
-            // 
-            // timer1
-            // 
+            
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // tableLayoutPanel1
-            // 
+           
             this.tableLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -146,9 +130,7 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(825, 506);
             this.tableLayoutPanel1.TabIndex = 6;
             this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
-            // 
-            // flowLayoutPanel1
-            // 
+             
             this.flowLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.flowLayoutPanel1.AutoSize = true;
             this.flowLayoutPanel1.Controls.Add(this.btnCheckIn);
@@ -158,9 +140,7 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(349, 62);
             this.flowLayoutPanel1.TabIndex = 6;
             this.flowLayoutPanel1.WrapContents = false;
-            // 
-            // flowLayoutPanel2
-            // 
+           
             this.flowLayoutPanel2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.flowLayoutPanel2.AutoSize = true;
             this.flowLayoutPanel2.Controls.Add(this.txtPin);
@@ -170,9 +150,7 @@
             this.flowLayoutPanel2.Size = new System.Drawing.Size(443, 49);
             this.flowLayoutPanel2.TabIndex = 7;
             this.flowLayoutPanel2.WrapContents = false;
-            // 
-            // UcChamCong
-            // 
+            
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveBorder;

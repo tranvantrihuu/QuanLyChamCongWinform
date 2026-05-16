@@ -1,64 +1,87 @@
-﻿using QuanLyChamCong.BLL;
+﻿using QuanLyChamCong.Models;
+using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
 namespace QuanLyChamCong.GUI
 {
     public partial class UcPhanCa : BaseUserControl
     {
-        PhanCaBLL bll = new PhanCaBLL();
-        NhanVienBLL nvBll = new NhanVienBLL();
-        CaLamBLL caBll = new CaLamBLL();
+        PhanCaService service = new PhanCaService();
+
+        NhanVienService nvService =
+            new NhanVienService();
+
+        CaLamService caService =
+            new CaLamService();
 
         DateTime monday;
 
+        Dictionary<string, int> caMap =
+            new Dictionary<string, int>();
 
-        // cache ca
-        Dictionary<string, int> caMap = new Dictionary<string, int>();
+        List<PhanCa> dsPhanCa =
+            new List<PhanCa>();
+
+        List<CaLam> dsCa =
+            new List<CaLam>();
+
+        List<NhanVien> dsNhanVien =
+            new List<NhanVien>();
 
         public UcPhanCa()
         {
             InitializeComponent();
         }
 
-        private void UcPhanCa_Load(object sender, EventArgs e)
+        private async void UcPhanCa_Load(
+            object sender,
+            EventArgs e)
         {
             dtpNgay.Value = DateTime.Now;
 
-            LoadNhanVien();
-            LoadCaMap();
-            LoadWeek();
+            await LoadNhanVien();
 
-            dtpNgay.ValueChanged += dtpNgay_ValueChanged;
+            await LoadCaMap();
+
+            await LoadWeek();
+
+            dtpNgay.ValueChanged +=
+                dtpNgay_ValueChanged;
 
             dgvPhanCa.MultiSelect = true;
-            dgvPhanCa.SelectionMode = DataGridViewSelectionMode.CellSelect;
+
+            dgvPhanCa.SelectionMode =
+                DataGridViewSelectionMode.CellSelect;
         }
 
-        // ================= LOAD CA MAP =================
-        private void LoadCaMap()
+        private async Task LoadCaMap()
         {
-            var dt = caBll.GetAll();
+            dsCa = await caService.GetAll();
+
             caMap.Clear();
 
-            foreach (DataRow r in dt.Rows)
+            foreach (var ca in dsCa)
             {
-                caMap[r["ten_ca"].ToString()] = Convert.ToInt32(r["id"]);
+                caMap[ca.ten_ca] = ca.id;
             }
         }
 
-        // ================= LOAD WEEK =================
-        private void LoadWeek()
+        private async Task LoadWeek()
         {
-            DateTime selected = dtpNgay.Value.Date;
+            DateTime selected =
+                dtpNgay.Value.Date;
 
-            int diff = (7 + (selected.DayOfWeek - DayOfWeek.Monday)) % 7;
-            monday = selected.AddDays(-diff);
+            int diff =
+                (7 + (selected.DayOfWeek -
+                DayOfWeek.Monday)) % 7;
+
+            monday =
+                selected.AddDays(-diff);
 
             dgvPhanCa.Columns.Clear();
             dgvPhanCa.Rows.Clear();
@@ -67,7 +90,9 @@ namespace QuanLyChamCong.GUI
 
             for (int i = 0; i < 7; i++)
             {
-                DateTime d = monday.AddDays(i);
+                DateTime d =
+                    monday.AddDays(i);
+
                 dgvPhanCa.Columns.Add(
                     d.ToString("yyyyMMdd"),
                     d.ToString("dd/MM")
@@ -75,204 +100,308 @@ namespace QuanLyChamCong.GUI
             }
 
             dgvPhanCa.AllowUserToAddRows = false;
-            dgvPhanCa.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            LoadData();
+            dgvPhanCa.AutoSizeColumnsMode =
+                DataGridViewAutoSizeColumnsMode.Fill;
 
+            await LoadData();
         }
 
-        // ================= LOAD DATA =================
-        private void LoadData()
+        private async Task LoadData()
         {
-            DateTime sunday = monday.AddDays(6);
+            dsPhanCa =
+                await service.GetAll();
 
-            DataTable dt = bll.GetByWeek(monday, sunday);
-            DataTable dtCa = caBll.GetAll();
-
-            foreach (DataRow ca in dtCa.Rows)
+            foreach (var ca in dsCa)
             {
-                int caId = Convert.ToInt32(ca["id"]);
-
-                int maxRow = GetMaxNhanVienTrongTuan(dt, caId);
+                int maxRow =
+                    GetMaxNhanVienTrongTuan(ca.id);
 
                 for (int i = 0; i < maxRow; i++)
                 {
-                    int rowIndex = dgvPhanCa.Rows.Add();
+                    int rowIndex =
+                        dgvPhanCa.Rows.Add();
 
                     if (i == 0)
-                        dgvPhanCa.Rows[rowIndex].Cells[0].Value = ca["ten_ca"].ToString();
+                    {
+                        dgvPhanCa.Rows[rowIndex]
+                            .Cells[0]
+                            .Value = ca.ten_ca;
+                    }
                     else
-                        dgvPhanCa.Rows[rowIndex].Cells[0].Value = "";
+                    {
+                        dgvPhanCa.Rows[rowIndex]
+                            .Cells[0]
+                            .Value = "";
+                    }
 
                     for (int d = 0; d < 7; d++)
                     {
-                        DateTime date = monday.AddDays(d);
+                        DateTime date =
+                            monday.AddDays(d);
 
-                        var rows = dt.AsEnumerable()
+                        var rows =
+                            dsPhanCa
                             .Where(r =>
-                                Convert.ToInt32(r["ca_lam_id"]) == caId &&
-                                Convert.ToDateTime(r["ngay_lam"]).Date == date.Date
-                            ).ToArray();
+                                r.ca_lam_id == ca.id
+                                &&
+                                r.ngay_lam.Date ==
+                                date.Date)
+                            .ToList();
 
-                        if (i < rows.Length)
+                        if (i < rows.Count)
                         {
-                            dgvPhanCa.Rows[rowIndex].Cells[d + 1].Value =
-                                rows[i]["ho_ten"].ToString();
+                            var pc = rows[i];
 
-                            // lưu id để xóa nhanh
-                            dgvPhanCa.Rows[rowIndex].Cells[d + 1].Tag =
-                                rows[i]["nhan_vien_id"];
+                            var nv =
+                                dsNhanVien
+                                .FirstOrDefault(
+                                    x =>
+                                    x.id.ToString()
+                                    ==
+                                    pc.nhan_vien_id
+                                );
+
+                            if (nv != null)
+                            {
+                                dgvPhanCa
+                                    .Rows[rowIndex]
+                                    .Cells[d + 1]
+                                    .Value = nv.ho_ten;
+
+                                dgvPhanCa
+                                    .Rows[rowIndex]
+                                    .Cells[d + 1]
+                                    .Tag = nv.id;
+                            }
                         }
                     }
                 }
             }
         }
 
-        // ================= MAX ROW =================
-        private int GetMaxNhanVienTrongTuan(DataTable dt, int caId)
+        private int GetMaxNhanVienTrongTuan(
+            int caId)
         {
             int max = 0;
 
             for (int i = 0; i < 7; i++)
             {
-                DateTime date = monday.AddDays(i);
+                DateTime date =
+                    monday.AddDays(i);
 
-                var rows = dt.AsEnumerable()
-                    .Where(r =>
-                        Convert.ToInt32(r["ca_lam_id"]) == caId &&
-                        Convert.ToDateTime(r["ngay_lam"]).Date == date.Date
-                    ).ToArray();
+                int count =
+                    dsPhanCa.Count(r =>
+                        r.ca_lam_id == caId
+                        &&
+                        r.ngay_lam.Date ==
+                        date.Date);
 
-                if (rows.Length > max)
-                    max = rows.Length;
+                if (count > max)
+                    max = count;
             }
 
             return max == 0 ? 1 : max;
         }
 
-        // ================= LOAD NHÂN VIÊN =================
-        private void LoadNhanVien()
+        private async Task LoadNhanVien()
         {
-            var dt = nvBll.GetAll();
+            dsNhanVien =
+                await nvService.GetAll();
 
-            cbNhanVien.DataSource = dt;
-            cbNhanVien.DisplayMember = "ho_ten";
-            cbNhanVien.ValueMember = "id";
+            cbNhanVien.DataSource =
+                dsNhanVien;
+
+            cbNhanVien.DisplayMember =
+                "ho_ten";
+
+            cbNhanVien.ValueMember =
+                "id";
         }
 
-        private void dtpNgay_ValueChanged(object sender, EventArgs e)
+        private async void dtpNgay_ValueChanged(
+            object sender,
+            EventArgs e)
         {
-            LoadWeek();
+            await LoadWeek();
         }
-
-        // ================= THÊM =================
-        private void btnThem_Click(object sender, EventArgs e)
+        private async void btnThem_Click(
+            object sender,
+            EventArgs e)
         {
             if (cbNhanVien.SelectedValue == null)
             {
-                MessageBox.Show("Chọn nhân viên!");
+                MessageBox.Show(
+                    "Chọn nhân viên!");
+
                 return;
             }
 
             if (dgvPhanCa.SelectedCells.Count == 0)
             {
-                MessageBox.Show("Chọn ô!");
+                MessageBox.Show(
+                    "Chọn ô!");
+
                 return;
             }
 
-            string nvId = cbNhanVien.SelectedValue.ToString();
+            string nvId =
+                cbNhanVien.SelectedValue
+                .ToString();
 
-            foreach (DataGridViewCell cell in dgvPhanCa.SelectedCells)
+            foreach (DataGridViewCell cell
+                in dgvPhanCa.SelectedCells)
             {
-                if (cell.RowIndex < 0 || cell.ColumnIndex <= 0) continue;
+                if (cell.RowIndex < 0
+                    ||
+                    cell.ColumnIndex <= 0)
+                    continue;
 
                 int row = cell.RowIndex;
+
                 int col = cell.ColumnIndex;
 
-                DateTime date = DateTime.ParseExact(
-                    dgvPhanCa.Columns[col].Name,
-                    "yyyyMMdd",
-                    null
-                );
+                DateTime date =
+                    DateTime.ParseExact(
+                        dgvPhanCa.Columns[col].Name,
+                        "yyyyMMdd",
+                        null
+                    );
 
-                int caId = GetCaIdFromRow(row);
-                if (caId == -1) continue;
+                int caId =
+                    GetCaIdFromRow(row);
 
-                if (!bll.Exists(nvId, caId, date))
+                if (caId == -1)
+                    continue;
+
+                bool exists =
+                    dsPhanCa.Any(x =>
+                        x.nhan_vien_id == nvId
+                        &&
+                        x.ca_lam_id == caId
+                        &&
+                        x.ngay_lam.Date ==
+                        date.Date);
+
+                if (!exists)
                 {
-                    bll.Insert(nvId, caId, date);
+                    PhanCa pc =
+                        new PhanCa()
+                        {
+                            nhan_vien_id = nvId,
+                            ca_lam_id = caId,
+                            ngay_lam = date
+                        };
+
+                    await service.Add(pc);
                 }
             }
 
-            LoadWeek();
+            await LoadWeek();
         }
 
-        // ================= XÓA =================
-        private void btnXoa_Click(object sender, EventArgs e)
+        private async void btnXoa_Click(
+            object sender,
+            EventArgs e)
         {
             if (dgvPhanCa.SelectedCells.Count == 0)
             {
                 MessageBox.Show("Chọn ô!");
+
                 return;
             }
 
-            if (MessageBox.Show("Xóa các ô đã chọn?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show(
+                "Xóa các ô đã chọn?",
+                "Xác nhận",
+                MessageBoxButtons.YesNo)
+                == DialogResult.No)
                 return;
 
-            foreach (DataGridViewCell cell in dgvPhanCa.SelectedCells)
+            foreach (DataGridViewCell cell
+                in dgvPhanCa.SelectedCells)
             {
-                if (cell.RowIndex < 0 || cell.ColumnIndex <= 0) continue;
+                if (cell.RowIndex < 0
+                    ||
+                    cell.ColumnIndex <= 0)
+                    continue;
 
                 int row = cell.RowIndex;
+
                 int col = cell.ColumnIndex;
 
-                var val = dgvPhanCa.Rows[row].Cells[col].Value;
-                if (val == null) continue;
+                var tag =
+                    dgvPhanCa.Rows[row]
+                    .Cells[col]
+                    .Tag;
 
-                DateTime date = DateTime.ParseExact(
-                    dgvPhanCa.Columns[col].Name,
-                    "yyyyMMdd",
-                    null
-                );
+                if (tag == null)
+                    continue;
 
-                int caId = GetCaIdFromRow(row);
-                if (caId == -1) continue;
+                string nvId =
+                    tag.ToString();
 
-                var tag = dgvPhanCa.Rows[row].Cells[col].Tag;
-                if (tag == null) continue;
+                DateTime date =
+                    DateTime.ParseExact(
+                        dgvPhanCa.Columns[col].Name,
+                        "yyyyMMdd",
+                        null
+                    );
 
-                string nvId = tag.ToString();
+                int caId =
+                    GetCaIdFromRow(row);
 
-                bll.Delete(nvId, caId, date);
+                var pc =
+                    dsPhanCa.FirstOrDefault(x =>
+                        x.nhan_vien_id == nvId
+                        &&
+                        x.ca_lam_id == caId
+                        &&
+                        x.ngay_lam.Date ==
+                        date.Date);
+
+                if (pc != null)
+                {
+                    await service.Delete(pc.id);
+                }
             }
 
-            LoadWeek();
+            await LoadWeek();
         }
 
-        // ================= MAP CA =================
         private int GetCaIdFromRow(int row)
         {
             for (int i = row; i >= 0; i--)
             {
-                var val = dgvPhanCa.Rows[i].Cells[0].Value;
+                var val =
+                    dgvPhanCa.Rows[i]
+                    .Cells[0]
+                    .Value;
 
-                if (val != null && val.ToString() != "")
+                if (val != null
+                    &&
+                    val.ToString() != "")
                 {
-                    string tenCa = val.ToString();
+                    string tenCa =
+                        val.ToString();
 
                     if (caMap.ContainsKey(tenCa))
+                    {
                         return caMap[tenCa];
+                    }
                 }
             }
 
             return -1;
         }
-        protected override void OnLoad(EventArgs e)
+
+        protected override void OnLoad(
+            EventArgs e)
         {
             base.OnLoad(e);
 
-            AppStyles.StyleScheduleGrid(dgvPhanCa);
+            AppStyles.StyleScheduleGrid(
+                dgvPhanCa);
         }
-
     }
 }

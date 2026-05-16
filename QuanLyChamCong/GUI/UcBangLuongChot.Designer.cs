@@ -1,21 +1,11 @@
-﻿// UcBangLuongChot.Designer.cs
+﻿
 
 namespace QuanLyChamCong.GUI
 {
     partial class UcBangLuongChot
     {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">
-        /// true if managed resources should be disposed;
-        /// otherwise, false.
-        /// </param>
         protected override void Dispose(bool disposing)
         {
             if (
@@ -71,8 +61,6 @@ namespace QuanLyChamCong.GUI
 
             this.SuspendLayout();
 
-            // panelTop
-
             this.panelTop.Controls.Add(
                 this.btnChotLuong
             );
@@ -112,7 +100,6 @@ namespace QuanLyChamCong.GUI
             this.panelTop.TabIndex =
                 0;
 
-            // label1
 
             this.label1.AutoSize =
                 true;
@@ -139,7 +126,6 @@ namespace QuanLyChamCong.GUI
             this.label1.Text =
                 "Tháng";
 
-            // cboThang
 
             this.cboThang.DropDownStyle =
                 System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -188,7 +174,6 @@ namespace QuanLyChamCong.GUI
                     this.cboThang_SelectedIndexChanged
                 );
 
-            // label2
 
             this.label2.AutoSize =
                 true;
@@ -214,8 +199,6 @@ namespace QuanLyChamCong.GUI
 
             this.label2.Text =
                 "Năm";
-
-            // cboNam
 
             this.cboNam.Font =
                 new System.Drawing.Font(
@@ -256,8 +239,6 @@ namespace QuanLyChamCong.GUI
                     this.cboNam_SelectedIndexChanged
                 );
 
-            // btnTaiLai
-
             this.btnTaiLai.BackColor =
                 System.Drawing.Color.White;
 
@@ -293,8 +274,6 @@ namespace QuanLyChamCong.GUI
                 new System.EventHandler(
                     this.btnTaiLai_Click
                 );
-
-            // btnChotLuong
 
             this.btnChotLuong.BackColor =
                 System.Drawing.Color.FromArgb(
@@ -338,8 +317,6 @@ namespace QuanLyChamCong.GUI
                 new System.EventHandler(
                     this.btnChotLuong_Click
                 );
-
-            // dgvDanhSach
 
             this.dgvDanhSach.AllowUserToAddRows =
                 false;
@@ -385,7 +362,6 @@ namespace QuanLyChamCong.GUI
                     this.dgvDanhSach_CellDoubleClick
                 );
 
-            // UcBangLuongChot
 
             this.AutoScaleDimensions =
                 new System.Drawing.SizeF(

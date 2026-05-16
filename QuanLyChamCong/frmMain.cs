@@ -3,7 +3,7 @@ using System;
 using System.Windows.Forms;
 using GUI;
 using QuanLyChamCong.THEME;
-
+using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
 namespace QuanLyChamCong
 {
     public partial class frmMain : BaseForm
@@ -52,22 +52,13 @@ namespace QuanLyChamCong
 
         private void CapNhatTrangThaiMenu()
         {
-            // luôn cho chấm công
-
             mnuChamCong.Enabled = true;
-
-            // khóa toàn bộ khi chưa nhập PIN
 
             mnuDanhMuc.Enabled =
                 DaDangNhapPin;
 
             mnuLuong.Enabled =
                 DaDangNhapPin;
-
-            mnuHeThong.Enabled =
-                DaDangNhapPin;
-
-            // menu con
 
             mnuQuanLyChamCong.Enabled =
                 DaDangNhapPin;
@@ -76,9 +67,6 @@ namespace QuanLyChamCong
                 DaDangNhapPin;
 
             mnuBaoCaoChamCong.Enabled =
-                DaDangNhapPin;
-
-            mnuDoiPIN.Enabled =
                 DaDangNhapPin;
 
             mnuDangXuat.Enabled =
@@ -171,13 +159,6 @@ namespace QuanLyChamCong
         )
         {
             LoadControl(new UcBaoCaoChamCong());
-        }
-        private void mnuDoiPIN_Click(
-            object sender,
-            EventArgs e
-        )
-        {
-            LoadControl(new UcDoiPin());
         }
 
         private void mnuDangXuat_Click_1(

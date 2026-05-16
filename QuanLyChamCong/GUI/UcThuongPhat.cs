@@ -1,40 +1,39 @@
-﻿// UcThuongPhat.cs
-
-using BLL;
-using QuanLyChamCong.BLL;
+﻿using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
+using QuanLyChamCong.Models;
+using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
 using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
 {
     public partial class UcThuongPhat : BaseUserControl
     {
-        ThuongPhatBLL bll =
-            new ThuongPhatBLL();
+        ThuongPhatService service =
+            new ThuongPhatService();
 
         public UcThuongPhat()
         {
             InitializeComponent();
         }
 
-        private void UcThuongPhat_Load(
+        private async void UcThuongPhat_Load(
             object sender,
             EventArgs e
         )
         {
-            LoadData();
+            await LoadData();
         }
 
-        void LoadData()
+        async Task LoadData()
         {
-            DataTable dt =
-                bll.GetAll();
+            List<ThuongPhat> ds =
+                await service.GetAll();
 
             dgvThuongPhat.DataSource =
-                dt;
+                ds;
 
             if (!dgvThuongPhat.Columns.Contains("colCheck"))
             {
@@ -59,10 +58,12 @@ namespace QuanLyChamCong.GUI
 
             dgvThuongPhat.Columns["so_tien"].HeaderText =
                 "SỐ TIỀN";
-            dgvThuongPhat.Columns["so_tien"].DefaultCellStyle.Format =
-                "N0";
 
-            dgvThuongPhat.Columns["so_tien"].DefaultCellStyle.Alignment =
+            dgvThuongPhat.Columns["so_tien"]
+                .DefaultCellStyle.Format = "N0";
+
+            dgvThuongPhat.Columns["so_tien"]
+                .DefaultCellStyle.Alignment =
                 DataGridViewContentAlignment.MiddleRight;
 
             dgvThuongPhat.Columns["ly_do"].HeaderText =
@@ -95,7 +96,7 @@ namespace QuanLyChamCong.GUI
                 false;
         }
 
-        private void btnThem_Click(
+        private async void btnThem_Click(
             object sender,
             EventArgs e
         )
@@ -105,10 +106,10 @@ namespace QuanLyChamCong.GUI
 
             f.ShowDialog();
 
-            LoadData();
+            await LoadData();
         }
 
-        private void btnSua_Click(
+        private async void btnSua_Click(
             object sender,
             EventArgs e
         )
@@ -122,42 +123,42 @@ namespace QuanLyChamCong.GUI
                 return;
             }
 
-            DataGridViewRow row =
-                dgvThuongPhat.CurrentRow;
+            DataGridViewRow row = dgvThuongPhat.CurrentRow;
 
-            FrmThuongPhatEdit f =
-                new FrmThuongPhatEdit();
+            FrmThuongPhatEdit f = new FrmThuongPhatEdit();
 
             f.id = Convert.ToInt32(
                 row.Cells["id"].Value
             );
 
-            f.cbNhanVien.SelectedValue =
-                row.Cells["nhan_vien_id"].Value;
+            f.nhanVienId =
+                row.Cells["nhan_vien_id"]
+                .Value.ToString();
 
-            f.cbLoai.Text =
+            f.loai =
                 row.Cells["loai"]
                 .Value.ToString();
 
-            f.txtSoTien.Text =
-                row.Cells["so_tien"]
-                .Value.ToString();
+            f.soTien =
+                Convert.ToDecimal(
+                    row.Cells["so_tien"].Value
+                );
 
-            f.txtLyDo.Text =
+            f.lyDo =
                 row.Cells["ly_do"]
                 .Value.ToString();
 
-            f.dtNgay.Value =
+            f.ngay =
                 Convert.ToDateTime(
                     row.Cells["ngay"].Value
                 );
 
             f.ShowDialog();
 
-            LoadData();
+            await LoadData();
         }
 
-        private void btnXoa_Click(
+        private async void btnXoa_Click(
             object sender,
             EventArgs e
         )
@@ -204,14 +205,14 @@ namespace QuanLyChamCong.GUI
 
             foreach (int id in ids)
             {
-                bll.Delete(id);
+                await service.Delete(id);
             }
 
             MessageBox.Show(
                 "Xóa thành công!"
             );
 
-            LoadData();
+            await LoadData();
         }
 
         private void dgvThuongPhat_CurrentCellDirtyStateChanged(
@@ -227,7 +228,7 @@ namespace QuanLyChamCong.GUI
             }
         }
 
-        private void dgvThuongPhat_CellDoubleClick(
+        private async void dgvThuongPhat_CellDoubleClick(
             object sender,
             DataGridViewCellEventArgs e
         )
@@ -245,29 +246,31 @@ namespace QuanLyChamCong.GUI
                 row.Cells["id"].Value
             );
 
-            f.cbNhanVien.SelectedValue =
-                row.Cells["nhan_vien_id"].Value;
+            f.nhanVienId =
+                row.Cells["nhan_vien_id"]
+                .Value.ToString();
 
-            f.cbLoai.Text =
+            f.loai =
                 row.Cells["loai"]
                 .Value.ToString();
 
-            f.txtSoTien.Text =
-                row.Cells["so_tien"]
-                .Value.ToString();
+            f.soTien =
+                Convert.ToDecimal(
+                    row.Cells["so_tien"].Value
+                );
 
-            f.txtLyDo.Text =
+            f.lyDo =
                 row.Cells["ly_do"]
                 .Value.ToString();
 
-            f.dtNgay.Value =
+            f.ngay =
                 Convert.ToDateTime(
                     row.Cells["ngay"].Value
                 );
 
             f.ShowDialog();
 
-            LoadData();
+            await LoadData();
         }
     }
 }

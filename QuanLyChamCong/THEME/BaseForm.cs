@@ -42,7 +42,6 @@ namespace QuanLyChamCong.THEME
                 in parent.Controls
             )
             {
-                // BUTTON
 
                 if (
                     c is Button btn
@@ -51,7 +50,6 @@ namespace QuanLyChamCong.THEME
                     AppStyles.StyleButton(btn);
                 }
 
-                // TEXTBOX
 
                 else if (
                     c is TextBox txt
@@ -60,8 +58,6 @@ namespace QuanLyChamCong.THEME
                     AppStyles.StyleTextBox(txt);
                 }
 
-                // LABEL
-
                 else if (
                     c is Label lbl
                 )
@@ -69,7 +65,6 @@ namespace QuanLyChamCong.THEME
                     AppStyles.StyleLabel(lbl);
                 }
 
-                // GRID
 
                 else if (
                     c is DataGridView dgv
@@ -78,8 +73,6 @@ namespace QuanLyChamCong.THEME
                     AppStyles.StyleGrid(dgv);
                 }
 
-                // COMBOBOX
-
                 else if (
                     c is ComboBox cbo
                 )
@@ -87,7 +80,6 @@ namespace QuanLyChamCong.THEME
                     AppStyles.StyleComboBox(cbo);
                 }
 
-                // DATE
 
                 else if (
                     c is DateTimePicker dtp
@@ -96,7 +88,6 @@ namespace QuanLyChamCong.THEME
                     AppStyles.StyleDatePicker(dtp);
                 }
 
-                // PANEL CARD
 
                 else if (
                     c is Panel pnl
@@ -113,7 +104,6 @@ namespace QuanLyChamCong.THEME
                     }
                 }
 
-                // RECURSIVE
 
                 if (
                     c.Controls.Count > 0

@@ -2,15 +2,8 @@
 {
     partial class FrmNhanVienEdit
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -19,13 +12,6 @@
             }
             base.Dispose(disposing);
         }
-
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             this.lblID = new System.Windows.Forms.Label();
@@ -63,9 +49,7 @@
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlButton.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // lblID
-            // 
+           
             this.lblID.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblID.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -75,9 +59,7 @@
             this.lblID.TabIndex = 0;
             this.lblID.Text = "ID Nhân viên";
             this.lblID.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblMaNhanVien
-            // 
+          
             this.lblMaNhanVien.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblMaNhanVien.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblMaNhanVien.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -87,9 +69,7 @@
             this.lblMaNhanVien.TabIndex = 1;
             this.lblMaNhanVien.Text = "Mã vân tay";
             this.lblMaNhanVien.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblHoTen
-            // 
+       
             this.lblHoTen.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblHoTen.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblHoTen.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -99,9 +79,7 @@
             this.lblHoTen.TabIndex = 2;
             this.lblHoTen.Text = "Họ và Tên";
             this.lblHoTen.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblSDT
-            // 
+      
             this.lblSDT.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblSDT.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblSDT.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -111,9 +89,7 @@
             this.lblSDT.TabIndex = 3;
             this.lblSDT.Text = "Số điện thoại";
             this.lblSDT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lvlNgaySinh
-            // 
+         
             this.lvlNgaySinh.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lvlNgaySinh.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lvlNgaySinh.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -123,9 +99,7 @@
             this.lvlNgaySinh.TabIndex = 4;
             this.lvlNgaySinh.Text = "Ngày sinh";
             this.lvlNgaySinh.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblDiaChi
-            // 
+         
             this.lblDiaChi.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblDiaChi.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblDiaChi.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -135,9 +109,7 @@
             this.lblDiaChi.TabIndex = 5;
             this.lblDiaChi.Text = "Địa chỉ";
             this.lblDiaChi.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label1
-            // 
+          
             this.label1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -147,9 +119,7 @@
             this.label1.TabIndex = 6;
             this.label1.Text = "Vị trí";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblNgaySua
-            // 
+        
             this.lblNgaySua.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblNgaySua.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblNgaySua.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -159,9 +129,7 @@
             this.lblNgaySua.TabIndex = 13;
             this.lblNgaySua.Text = "Ngày sửa";
             this.lblNgaySua.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblNgayTao
-            // 
+          
             this.lblNgayTao.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblNgayTao.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblNgayTao.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -171,9 +139,7 @@
             this.lblNgayTao.TabIndex = 12;
             this.lblNgayTao.Text = "Ngày tạo";
             this.lblNgayTao.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblLoaiLuong
-            // 
+       
             this.lblLoaiLuong.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblLoaiLuong.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblLoaiLuong.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -183,9 +149,7 @@
             this.lblLoaiLuong.TabIndex = 11;
             this.lblLoaiLuong.Text = "Loại lương";
             this.lblLoaiLuong.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblNgayVao
-            // 
+        
             this.lblNgayVao.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblNgayVao.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblNgayVao.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -195,9 +159,7 @@
             this.lblNgayVao.TabIndex = 10;
             this.lblNgayVao.Text = "Ngày vào làm";
             this.lblNgayVao.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblPin
-            // 
+           
             this.lblPin.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblPin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblPin.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -207,9 +169,7 @@
             this.lblPin.TabIndex = 9;
             this.lblPin.Text = "PIN";
             this.lblPin.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblTrangThai
-            // 
+        
             this.lblTrangThai.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblTrangThai.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblTrangThai.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -219,9 +179,7 @@
             this.lblTrangThai.TabIndex = 8;
             this.lblTrangThai.Text = "Trạng thái";
             this.lblTrangThai.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblVaiTro
-            // 
+          
             this.lblVaiTro.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblVaiTro.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblVaiTro.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -231,9 +189,7 @@
             this.lblVaiTro.TabIndex = 7;
             this.lblVaiTro.Text = "Vai trò";
             this.lblVaiTro.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // txtIDNhanVien
-            // 
+           
             this.txtIDNhanVien.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtIDNhanVien.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtIDNhanVien.Location = new System.Drawing.Point(168, 2);
@@ -241,9 +197,7 @@
             this.txtIDNhanVien.Name = "txtIDNhanVien";
             this.txtIDNhanVien.Size = new System.Drawing.Size(224, 22);
             this.txtIDNhanVien.TabIndex = 14;
-            // 
-            // txtMaVanTay
-            // 
+           
             this.txtMaVanTay.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtMaVanTay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtMaVanTay.Location = new System.Drawing.Point(168, 53);
@@ -251,9 +205,7 @@
             this.txtMaVanTay.Name = "txtMaVanTay";
             this.txtMaVanTay.Size = new System.Drawing.Size(224, 22);
             this.txtMaVanTay.TabIndex = 15;
-            // 
-            // txtHoTen
-            // 
+          
             this.txtHoTen.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtHoTen.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtHoTen.Location = new System.Drawing.Point(168, 104);
@@ -261,9 +213,7 @@
             this.txtHoTen.Name = "txtHoTen";
             this.txtHoTen.Size = new System.Drawing.Size(224, 22);
             this.txtHoTen.TabIndex = 16;
-            // 
-            // txtSDT
-            // 
+           
             this.txtSDT.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtSDT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSDT.Location = new System.Drawing.Point(168, 155);
@@ -271,9 +221,7 @@
             this.txtSDT.Name = "txtSDT";
             this.txtSDT.Size = new System.Drawing.Size(224, 22);
             this.txtSDT.TabIndex = 17;
-            // 
-            // txtDiaChi
-            // 
+          
             this.txtDiaChi.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtDiaChi.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtDiaChi.Location = new System.Drawing.Point(168, 257);
@@ -281,9 +229,7 @@
             this.txtDiaChi.Name = "txtDiaChi";
             this.txtDiaChi.Size = new System.Drawing.Size(224, 22);
             this.txtDiaChi.TabIndex = 19;
-            // 
-            // txtNgaySua
-            // 
+            
             this.txtNgaySua.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtNgaySua.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtNgaySua.Location = new System.Drawing.Point(563, 308);
@@ -291,9 +237,7 @@
             this.txtNgaySua.Name = "txtNgaySua";
             this.txtNgaySua.Size = new System.Drawing.Size(225, 22);
             this.txtNgaySua.TabIndex = 27;
-            // 
-            // txtNgayTao
-            // 
+           
             this.txtNgayTao.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtNgayTao.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtNgayTao.Location = new System.Drawing.Point(563, 257);
@@ -301,9 +245,7 @@
             this.txtNgayTao.Name = "txtNgayTao";
             this.txtNgayTao.Size = new System.Drawing.Size(225, 22);
             this.txtNgayTao.TabIndex = 26;
-            // 
-            // txtPin
-            // 
+            
             this.txtPin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtPin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtPin.Location = new System.Drawing.Point(563, 104);
@@ -311,27 +253,21 @@
             this.txtPin.Name = "txtPin";
             this.txtPin.Size = new System.Drawing.Size(225, 22);
             this.txtPin.TabIndex = 23;
-            // 
-            // dtNgaySinh
-            // 
+           
             this.dtNgaySinh.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dtNgaySinh.Location = new System.Drawing.Point(168, 206);
             this.dtNgaySinh.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dtNgaySinh.Name = "dtNgaySinh";
             this.dtNgaySinh.Size = new System.Drawing.Size(224, 22);
             this.dtNgaySinh.TabIndex = 29;
-            // 
-            // dtNgayVao
-            // 
+             
             this.dtNgayVao.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dtNgayVao.Location = new System.Drawing.Point(563, 155);
             this.dtNgayVao.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dtNgayVao.Name = "dtNgayVao";
             this.dtNgayVao.Size = new System.Drawing.Size(225, 22);
             this.dtNgayVao.TabIndex = 30;
-            // 
-            // cbVaiTro
-            // 
+          
             this.cbVaiTro.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbVaiTro.FormattingEnabled = true;
             this.cbVaiTro.Location = new System.Drawing.Point(563, 2);
@@ -339,9 +275,7 @@
             this.cbVaiTro.Name = "cbVaiTro";
             this.cbVaiTro.Size = new System.Drawing.Size(225, 24);
             this.cbVaiTro.TabIndex = 32;
-            // 
-            // cbTrangThai
-            // 
+            
             this.cbTrangThai.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbTrangThai.FormattingEnabled = true;
             this.cbTrangThai.Location = new System.Drawing.Point(563, 53);
@@ -349,18 +283,14 @@
             this.cbTrangThai.Name = "cbTrangThai";
             this.cbTrangThai.Size = new System.Drawing.Size(225, 24);
             this.cbTrangThai.TabIndex = 33;
-            // 
-            // txtViTri
-            // 
+            
             this.txtViTri.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtViTri.Location = new System.Drawing.Point(168, 308);
             this.txtViTri.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtViTri.Name = "txtViTri";
             this.txtViTri.Size = new System.Drawing.Size(224, 22);
             this.txtViTri.TabIndex = 34;
-            // 
-            // cbLoaiLuong
-            // 
+            
             this.cbLoaiLuong.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbLoaiLuong.FormattingEnabled = true;
             this.cbLoaiLuong.Location = new System.Drawing.Point(563, 206);
@@ -368,9 +298,7 @@
             this.cbLoaiLuong.Name = "cbLoaiLuong";
             this.cbLoaiLuong.Size = new System.Drawing.Size(225, 24);
             this.cbLoaiLuong.TabIndex = 35;
-            // 
-            // tableLayoutPanel1
-            // 
+           
             this.tableLayoutPanel1.ColumnCount = 4;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 165F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -421,9 +349,7 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(791, 425);
             this.tableLayoutPanel1.TabIndex = 36;
             this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
-            // 
-            // pnlButton
-            // 
+          
             this.pnlButton.Controls.Add(this.btnCancel);
             this.pnlButton.Controls.Add(this.btnOk);
             this.pnlButton.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -432,9 +358,7 @@
             this.pnlButton.Name = "pnlButton";
             this.pnlButton.Size = new System.Drawing.Size(224, 64);
             this.pnlButton.TabIndex = 37;
-            // 
-            // btnCancel
-            // 
+           
             this.btnCancel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnCancel.BackColor = System.Drawing.Color.LightCoral;
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -446,9 +370,7 @@
             this.btnCancel.Text = "CANCEL";
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
-            // btnOk
-            // 
+            
             this.btnOk.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnOk.BackColor = System.Drawing.Color.LightGreen;
             this.btnOk.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -460,9 +382,7 @@
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = false;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
-            // 
-            // FrmNhanVienEdit
-            // 
+          
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(791, 425);
@@ -478,7 +398,6 @@
 
         }
 
-        #endregion
 
         public System.Windows.Forms.Label lblID;
         public System.Windows.Forms.Label lblMaNhanVien;

@@ -1,177 +1,287 @@
-﻿using QuanLyChamCong.BLL;
+﻿using QuanLyChamCong.Models;
+using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
 namespace QuanLyChamCong.GUI
 {
     public partial class UcCaLam : BaseUserControl
     {
-        CaLamBLL bll = new CaLamBLL();
+        CaLamService service =
+            new CaLamService();
+
+        List<CaLam> dsCaLam =
+            new List<CaLam>();
 
         public UcCaLam()
         {
             InitializeComponent();
-            dgvCaLam.CurrentCellDirtyStateChanged += dgvCaLam_CurrentCellDirtyStateChanged;
         }
 
-        private void UcCaLam_Load(object sender, EventArgs e)
+        private async void UcCaLam_Load(
+            object sender,
+            EventArgs e
+        )
         {
-            LoadData();
-
+            await LoadData();
         }
 
-        private void LoadData()
+        async System.Threading.Tasks.Task
+            LoadData()
         {
-            var dt = bll.GetAll();
+            dsCaLam =
+                await service.GetAll();
 
-            dgvCaLam.DataSource = dt;
+            dgvCaLam.DataSource =
+                null;
 
-            // checkbox
-            if (!dgvCaLam.Columns.Contains("colCheck"))
+            dgvCaLam.DataSource =
+                dsCaLam;
+
+            FormatGrid();
+        }
+
+        void FormatGrid()
+        {
+            if (
+                dgvCaLam.Columns.Count == 0
+            )
             {
-                DataGridViewCheckBoxColumn chk = new DataGridViewCheckBoxColumn();
-                chk.Name = "colCheck";
-                chk.Width = 40;
-                dgvCaLam.Columns.Insert(0, chk);
-            }
-
-            dgvCaLam.RowHeadersVisible = false;
-
-            dgvCaLam.ReadOnly = false;
-
-            foreach (DataGridViewColumn col in dgvCaLam.Columns)
-            {
-                col.ReadOnly = true;
-                col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            }
-
-            dgvCaLam.Columns["colCheck"].ReadOnly = false;
-
-            dgvCaLam.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-            // header
-            dgvCaLam.Columns["id"].HeaderText = "ID";
-            dgvCaLam.Columns["ten_ca"].HeaderText = "TÊN CA";
-            dgvCaLam.Columns["gio_bat_dau"].HeaderText = "GIỜ BẮT ĐẦU";
-            dgvCaLam.Columns["gio_ket_thuc"].HeaderText = "GIỜ KẾT THÚC";
-            dgvCaLam.Columns["phut_cho_phep_di_tre"].HeaderText = "ĐI TRỄ";
-            dgvCaLam.Columns["phut_cho_phep_ve_som"].HeaderText = "VỀ SỚM";
-            dgvCaLam.Columns["phut_cho_phep_checkin_som"].HeaderText = "CHECKIN SỚM";
-            dgvCaLam.Columns["phut_cho_phep_checkout_tre"].HeaderText = "CHECKOUT TRỄ";
-
-            // style giống bạn
-
-            dgvCaLam.EnableHeadersVisualStyles = false;
-            dgvCaLam.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 120, 215);
-            dgvCaLam.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgvCaLam.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            dgvCaLam.RowsDefaultCellStyle.BackColor = Color.White;
-            dgvCaLam.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(240, 240, 240);
-
-            dgvCaLam.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCaLam.AllowUserToAddRows = false;
-            dgvCaLam.MultiSelect = false;
-            dgvCaLam.EditMode = DataGridViewEditMode.EditOnEnter;
-        }
-
-        // THÊM
-        private void btnThem_Click(object sender, EventArgs e)
-        {
-            FrmCaLamEdit f = new FrmCaLamEdit(false);
-            f.ShowDialog();
-            LoadData();
-        }
-
-        // SỬA
-        private void dgvCaLam_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0) return;
-
-            var row = dgvCaLam.Rows[e.RowIndex];
-
-            FrmCaLamEdit f = new FrmCaLamEdit(true);
-            f.id = Convert.ToInt32(row.Cells["id"].Value);
-            f.txtTenCa.Text = row.Cells["ten_ca"].Value?.ToString();
-            f.dtBatDau.Value = DateTime.Today + (TimeSpan)row.Cells["gio_bat_dau"].Value;
-            f.dtKetThuc.Value = DateTime.Today + (TimeSpan)row.Cells["gio_ket_thuc"].Value;
-            f.numDiTre.Value = Convert.ToDecimal(row.Cells["phut_cho_phep_di_tre"].Value);
-            f.numVeSom.Value = Convert.ToDecimal(row.Cells["phut_cho_phep_ve_som"].Value);
-            f.numCheckinSom.Value = Convert.ToDecimal(row.Cells["phut_cho_phep_checkin_som"].Value);
-            f.numCheckoutTre.Value = Convert.ToDecimal(row.Cells["phut_cho_phep_checkout_tre"].Value);
-            f.ShowDialog();
-            LoadData();
-        }
-
-        // XÓA
-        private void btnXoa_Click(object sender, EventArgs e)
-        {
-            List<int> ids = new List<int>();
-
-            foreach (DataGridViewRow row in dgvCaLam.Rows)
-            {
-                bool isChecked = row.Cells["colCheck"].Value != null
-                    && Convert.ToBoolean(row.Cells["colCheck"].Value);
-
-                if (isChecked)
-                {
-                    ids.Add(Convert.ToInt32(row.Cells["id"].Value));
-                }
-            }
-
-            if (ids.Count == 0)
-            {
-                MessageBox.Show("Tick chọn dòng muốn xóa!");
                 return;
             }
 
-            var result = MessageBox.Show(
-                "Bạn có chắc muốn xóa?",
-                "Xác nhận",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning
-            );
+            dgvCaLam.Columns["id"]
+                .HeaderText = "ID";
 
-            if (result == DialogResult.No) return;
+            dgvCaLam.Columns["ten_ca"]
+                .HeaderText = "Tên ca";
 
-            bll.Delete(ids);
+            dgvCaLam.Columns["gio_bat_dau"]
+                .HeaderText = "Giờ bắt đầu";
 
-            MessageBox.Show("Xóa thành công!");
-            LoadData();
-        }
+            dgvCaLam.Columns["gio_ket_thuc"]
+                .HeaderText = "Giờ kết thúc";
 
-        private void dgvCaLam_CurrentCellDirtyStateChanged(object sender, EventArgs e)
-        {
-            if (dgvCaLam.IsCurrentCellDirty)
-            {
-                dgvCaLam.CommitEdit(DataGridViewDataErrorContexts.Commit);
-            }
-        }
-        private void btnSua_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Double click dòng muốn sửa!");
-        }
+            dgvCaLam.Columns[
+                "phut_cho_phep_di_tre"]
+                .HeaderText =
+                "Đi trễ";
 
-        private void dgvCaLam_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.ColumnIndex == dgvCaLam.Columns["colCheck"].Index)
-            {
-                var row = dgvCaLam.Rows[e.RowIndex];
+            dgvCaLam.Columns[
+                "phut_cho_phep_ve_som"]
+                .HeaderText =
+                "Về sớm";
 
-                bool isChecked = row.Cells["colCheck"].Value != null &&
-                                 Convert.ToBoolean(row.Cells["colCheck"].Value);
+            dgvCaLam.Columns[
+                "phut_cho_phep_checkin_som"]
+                .HeaderText =
+                "Checkin sớm";
 
-                row.DefaultCellStyle.BackColor = isChecked
-                    ? Color.LightPink
-                    : Color.White;
-            }
+            dgvCaLam.Columns[
+                "phut_cho_phep_checkout_tre"]
+                .HeaderText =
+                "Checkout trễ";
+
+            dgvCaLam.AutoSizeColumnsMode =
+                DataGridViewAutoSizeColumnsMode.Fill;
+
+            dgvCaLam.ColumnHeadersDefaultCellStyle
+                .Font =
+                new Font(
+                    "Segoe UI",
+                    10,
+                    FontStyle.Bold
+                );
         }
 
         
+
+        private async void btnXoa_Click(
+            object sender,
+            EventArgs e
+        )
+        {
+            if (
+                dgvCaLam.CurrentRow
+                == null
+            )
+            {
+                return;
+            }
+
+            int id =
+                Convert.ToInt32(
+                    dgvCaLam
+                    .CurrentRow
+                    .Cells["id"]
+                    .Value
+                );
+
+            var rs =
+                MessageBox.Show(
+                    "Xóa ca làm này?",
+                    "Xác nhận",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+            if (rs != DialogResult.Yes)
+            {
+                return;
+            }
+
+            bool success =
+                await service.Delete(id);
+
+            if (success)
+            {
+                MessageBox.Show(
+                    "Xóa thành công"
+                );
+
+                await LoadData();
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Xóa thất bại"
+                );
+            }
+        }
+
+        private async void btnThem_Click(
+            object sender,
+            EventArgs e
+        )
+        {
+            FrmCaLamEdit f =
+                new FrmCaLamEdit();
+
+            f.ShowDialog();
+
+            await LoadData();
+        }
+
+        private async void btnSua_Click(
+            object sender,
+            EventArgs e
+        )
+        {
+            await OpenEdit();
+        }
+
+        private async void dgvCaLam_CellDoubleClick(
+            object sender,
+            DataGridViewCellEventArgs e
+        )
+        {
+            await OpenEdit();
+        }
+        
+        private async Task OpenEdit()
+        {
+            if (
+                dgvCaLam.CurrentRow
+                == null
+            )
+            {
+                return;
+            }
+
+            int id =
+                Convert.ToInt32(
+                    dgvCaLam
+                    .CurrentRow
+                    .Cells["id"]
+                    .Value
+                );
+
+            FrmCaLamEdit f =
+                new FrmCaLamEdit(true);
+
+            f.id = id;
+
+            f.txtTenCa.Text =
+                dgvCaLam.CurrentRow
+                .Cells["ten_ca"]
+                .Value
+                .ToString();
+
+            f.dtBatDau.Value =
+                DateTime.Today.Add(
+                    TimeSpan.Parse(
+                        dgvCaLam.CurrentRow
+                        .Cells["gio_bat_dau"]
+                        .Value
+                        .ToString()
+                    )
+                );
+
+            f.dtKetThuc.Value =
+                DateTime.Today.Add(
+                    TimeSpan.Parse(
+                        dgvCaLam.CurrentRow
+                        .Cells["gio_ket_thuc"]
+                        .Value
+                        .ToString()
+                    )
+                );
+
+            f.numDiTre.Value =
+                Convert.ToDecimal(
+                    dgvCaLam.CurrentRow
+                    .Cells[
+                        "phut_cho_phep_di_tre"]
+                    .Value
+                );
+
+            f.numVeSom.Value =
+                Convert.ToDecimal(
+                    dgvCaLam.CurrentRow
+                    .Cells[
+                        "phut_cho_phep_ve_som"]
+                    .Value
+                );
+
+            f.numCheckinSom.Value =
+                Convert.ToDecimal(
+                    dgvCaLam.CurrentRow
+                    .Cells[
+                        "phut_cho_phep_checkin_som"]
+                    .Value
+                );
+
+            f.numCheckoutTre.Value =
+                Convert.ToDecimal(
+                    dgvCaLam.CurrentRow
+                    .Cells[
+                        "phut_cho_phep_checkout_tre"]
+                    .Value
+                );
+
+            f.ShowDialog();
+
+            await LoadData();
+        }
+        private void dgvCaLam_CellValueChanged(
+            object sender,
+            DataGridViewCellEventArgs e
+        )
+        {
+
+        }
+
+        private void dgvCaLam_CurrentCellDirtyStateChanged(
+            object sender,
+            EventArgs e
+        )
+        {
+
+        }
     }
 }

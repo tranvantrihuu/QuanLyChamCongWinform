@@ -29,9 +29,7 @@ namespace QuanLyChamCong.GUI
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCaLam)).BeginInit();
             this.SuspendLayout();
-            // 
-            // flowLayoutPanel1
-            // 
+             
             this.flowLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.flowLayoutPanel1.AutoSize = true;
             this.flowLayoutPanel1.Controls.Add(this.btnThem);
@@ -42,9 +40,7 @@ namespace QuanLyChamCong.GUI
             this.flowLayoutPanel1.Size = new System.Drawing.Size(408, 46);
             this.flowLayoutPanel1.TabIndex = 0;
             this.flowLayoutPanel1.WrapContents = false;
-            // 
-            // btnThem
-            // 
+            
             this.btnThem.BackColor = System.Drawing.Color.Pink;
             this.btnThem.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold);
             this.btnThem.Location = new System.Drawing.Point(3, 3);
@@ -54,9 +50,7 @@ namespace QuanLyChamCong.GUI
             this.btnThem.Text = "THÊM";
             this.btnThem.UseVisualStyleBackColor = false;
             this.btnThem.Click += new System.EventHandler(this.btnThem_Click);
-            // 
-            // btnSua
-            // 
+            
             this.btnSua.BackColor = System.Drawing.Color.PaleGreen;
             this.btnSua.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold);
             this.btnSua.Location = new System.Drawing.Point(139, 3);
@@ -66,9 +60,7 @@ namespace QuanLyChamCong.GUI
             this.btnSua.Text = "SỬA";
             this.btnSua.UseVisualStyleBackColor = false;
             this.btnSua.Click += new System.EventHandler(this.btnSua_Click);
-            // 
-            // btnXoa
-            // 
+         
             this.btnXoa.BackColor = System.Drawing.Color.LightCoral;
             this.btnXoa.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold);
             this.btnXoa.Location = new System.Drawing.Point(275, 3);
@@ -78,9 +70,7 @@ namespace QuanLyChamCong.GUI
             this.btnXoa.Text = "XÓA";
             this.btnXoa.UseVisualStyleBackColor = false;
             this.btnXoa.Click += new System.EventHandler(this.btnXoa_Click);
-            // 
-            // tableLayoutPanel1
-            // 
+            
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.dgvCaLam, 0, 0);
@@ -93,9 +83,7 @@ namespace QuanLyChamCong.GUI
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1199, 691);
             this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // dgvCaLam
-            // 
+            
             this.dgvCaLam.BackgroundColor = System.Drawing.Color.GhostWhite;
             this.dgvCaLam.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCaLam.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -108,9 +96,7 @@ namespace QuanLyChamCong.GUI
             this.dgvCaLam.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCaLam_CellDoubleClick);
             this.dgvCaLam.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCaLam_CellValueChanged);
             this.dgvCaLam.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgvCaLam_CurrentCellDirtyStateChanged);
-            // 
-            // UcCaLam
-            // 
+            
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);

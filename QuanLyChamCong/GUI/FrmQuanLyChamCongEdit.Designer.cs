@@ -1,21 +1,10 @@
-﻿// FrmQuanLyChamCongEdit.Designer.cs
-
+﻿
 namespace QuanLyChamCong.GUI
 {
     partial class FrmQuanLyChamCongEdit
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">
-        /// true if managed resources should be disposed;
-        /// otherwise, false.
-        /// </param>
         protected override void Dispose(
             bool disposing
         )
@@ -54,98 +43,76 @@ namespace QuanLyChamCong.GUI
             this.btnLuu = new System.Windows.Forms.Button();
             this.btnDong = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // label1
-            // 
+          
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(30, 31);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(80, 16);
             this.label1.TabIndex = 0;
             this.label1.Text = "NHÂN VIÊN";
-            // 
-            // cboNhanVien
-            // 
+           
             this.cboNhanVien.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboNhanVien.FormattingEnabled = true;
             this.cboNhanVien.Location = new System.Drawing.Point(170, 28);
             this.cboNhanVien.Name = "cboNhanVien";
             this.cboNhanVien.Size = new System.Drawing.Size(300, 24);
             this.cboNhanVien.TabIndex = 1;
-            // 
-            // label2
-            // 
+            
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(30, 74);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(75, 16);
             this.label2.TabIndex = 2;
             this.label2.Text = "NGÀY LÀM";
-            // 
-            // dtpNgayLam
-            // 
+           
             this.dtpNgayLam.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpNgayLam.Location = new System.Drawing.Point(170, 69);
             this.dtpNgayLam.Name = "dtpNgayLam";
             this.dtpNgayLam.Size = new System.Drawing.Size(300, 22);
             this.dtpNgayLam.TabIndex = 3;
-            // 
-            // label3
-            // 
+            
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(30, 117);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(55, 16);
             this.label3.TabIndex = 4;
             this.label3.Text = "CA LÀM";
-            // 
-            // cboCaLam
-            // 
+          
             this.cboCaLam.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboCaLam.FormattingEnabled = true;
             this.cboCaLam.Location = new System.Drawing.Point(170, 114);
             this.cboCaLam.Name = "cboCaLam";
             this.cboCaLam.Size = new System.Drawing.Size(300, 24);
             this.cboCaLam.TabIndex = 5;
-            // 
-            // label4
-            // 
+        
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(30, 160);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(68, 16);
             this.label4.TabIndex = 6;
             this.label4.Text = "CHECK IN";
-            // 
-            // dtpCheckIn
-            // 
+           
             this.dtpCheckIn.CustomFormat = "yyyy-MM-dd HH:mm:ss";
             this.dtpCheckIn.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpCheckIn.Location = new System.Drawing.Point(170, 155);
             this.dtpCheckIn.Name = "dtpCheckIn";
             this.dtpCheckIn.Size = new System.Drawing.Size(300, 22);
             this.dtpCheckIn.TabIndex = 7;
-            // 
-            // label5
-            // 
+          
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(30, 203);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(84, 16);
             this.label5.TabIndex = 8;
             this.label5.Text = "CHECK OUT";
-            // 
-            // dtpCheckOut
-            // 
+         
             this.dtpCheckOut.CustomFormat = "yyyy-MM-dd HH:mm:ss";
             this.dtpCheckOut.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpCheckOut.Location = new System.Drawing.Point(170, 198);
             this.dtpCheckOut.Name = "dtpCheckOut";
             this.dtpCheckOut.Size = new System.Drawing.Size(300, 22);
             this.dtpCheckOut.TabIndex = 9;
-            // 
-            // btnLuu
-            // 
+             
             this.btnLuu.Location = new System.Drawing.Point(126, 256);
             this.btnLuu.Name = "btnLuu";
             this.btnLuu.Size = new System.Drawing.Size(120, 40);
@@ -153,9 +120,7 @@ namespace QuanLyChamCong.GUI
             this.btnLuu.Text = "LƯU";
             this.btnLuu.UseVisualStyleBackColor = true;
             this.btnLuu.Click += new System.EventHandler(this.btnLuu_Click);
-            // 
-            // btnDong
-            // 
+             
             this.btnDong.Location = new System.Drawing.Point(286, 256);
             this.btnDong.Name = "btnDong";
             this.btnDong.Size = new System.Drawing.Size(120, 40);
@@ -163,9 +128,7 @@ namespace QuanLyChamCong.GUI
             this.btnDong.Text = "ĐÓNG";
             this.btnDong.UseVisualStyleBackColor = true;
             this.btnDong.Click += new System.EventHandler(this.btnDong_Click);
-            // 
-            // FrmQuanLyChamCongEdit
-            // 
+           
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(518, 329);

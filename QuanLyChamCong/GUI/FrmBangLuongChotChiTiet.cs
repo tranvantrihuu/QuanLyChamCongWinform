@@ -1,8 +1,7 @@
-﻿
+﻿using MessageBox =QuanLyChamCong.THEME.CustomMessageBox;
 using QuanLyChamCong.THEME;
 using System;
 using System.Data;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI

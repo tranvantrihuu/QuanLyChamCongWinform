@@ -1,70 +1,112 @@
-﻿// FrmNghiPhepEdit.cs
-
-using BLL;
-using QuanLyChamCong.DAL;
+﻿
+using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
+using QuanLyChamCong.Models;
+using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
 using System;
-using System.Data;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
 {
     public partial class FrmNghiPhepEdit : BaseForm
     {
-        NghiPhepBLL bll = new NghiPhepBLL();
+        NghiPhepService service =
+            new NghiPhepService();
+
+        NhanVienService nhanVienService =
+            new NhanVienService();
+
+        CaLamService caLamService =
+            new CaLamService();
 
         public int id = 0;
+
+      
+        public string nhanVienId = "";
+
+        public int caLamId = 0;
+
+        public string loai = "";
+
+        public string lyDo = "";
+
+        public DateTime ngay;
 
         public FrmNghiPhepEdit()
         {
             InitializeComponent();
         }
 
-        public FrmNghiPhepEdit(int id)
-        {
-            InitializeComponent();
-
-            this.id = id;
-        }
-
-        private void FrmNghiPhepEdit_Load(
+        private async void FrmNghiPhepEdit_Load(
             object sender,
             EventArgs e
         )
         {
-            LoadNhanVien();
+            await LoadNhanVien();
 
-            LoadCaLam();
+            await LoadCaLam();
 
+            // loại
             cbLoai.Items.Clear();
 
             cbLoai.Items.Add("Có phép");
+
             cbLoai.Items.Add("Không phép");
 
-            cbLoai.SelectedIndex = 0;
+            cbLoai.FormattingEnabled = true;
 
-            if (id > 0)
+            if (id == 0)
             {
-                LoadDetail();
+                cbLoai.SelectedIndex = 0;
+
+                dtNgay.Value =
+                    DateTime.Now;
+            }
+
+            else
+            {
+                // nhân viên
+                if (!string.IsNullOrEmpty(
+                    nhanVienId))
+                {
+                    cbNhanVien.SelectedValue =
+                        nhanVienId;
+                }
+
+                // ca làm
+                cbCaLam.SelectedValue =
+                    caLamId;
+
+                // loại
+                cbLoai.SelectedItem =
+                    loai;
+
+                // lý do
+                txtLyDo.Text =
+                    lyDo;
+
+                // ngày
+                if (ngay.Year > 1900)
+                {
+                    dtNgay.Value =
+                        ngay;
+                }
+                else
+                {
+                    dtNgay.Value =
+                        DateTime.Now;
+                }
             }
         }
 
-        void LoadNhanVien()
+        async System.Threading.Tasks.Task LoadNhanVien()
         {
-            string sql = @"
-                SELECT 
-                    id,
-                    ho_ten
-                FROM nhan_vien
-                ORDER BY ho_ten";
+            List<NhanVien> ds =
+                await nhanVienService.GetAll();
 
-            DataProvider dp =
-                new DataProvider();
-
-            DataTable dt =
-                dp.ExecuteQuery(sql);
-
-            cbNhanVien.DataSource = dt;
+            cbNhanVien.DataSource =
+                ds;
 
             cbNhanVien.DisplayMember =
                 "ho_ten";
@@ -73,122 +115,122 @@ namespace QuanLyChamCong.GUI
                 "id";
         }
 
-        void LoadCaLam()
+        async System.Threading.Tasks.Task LoadCaLam()
         {
-            string sql = @"
-                SELECT 
-                    id
-                FROM ca_lam
-                ORDER BY id";
+            List<CaLam> ds =
+                await caLamService.GetAll();
 
-            DataProvider dp =
-                new DataProvider();
-
-            DataTable dt =
-                dp.ExecuteQuery(sql);
-
-            cbCaLam.DataSource = dt;
+            cbCaLam.DataSource =
+                ds;
 
             cbCaLam.DisplayMember =
-                "id";
+                "ten_ca";
 
             cbCaLam.ValueMember =
                 "id";
         }
 
-        void LoadDetail()
-        {
-            DataTable dt =
-                bll.GetById(id);
-
-            if (dt.Rows.Count > 0)
-            {
-                DataRow r = dt.Rows[0];
-
-                cbNhanVien.SelectedValue =
-                    r["nhan_vien_id"]
-                    .ToString();
-
-                cbCaLam.SelectedValue =
-                    r["ca_lam_id"];
-
-                dtNgay.Value =
-                    Convert.ToDateTime(
-                        r["ngay"]
-                    );
-
-                string loai =
-                    r["loai"]
-                    .ToString();
-
-                if (loai == "co_phep")
-                {
-                    cbLoai.Text =
-                        "Có phép";
-                }
-                else
-                {
-                    cbLoai.Text =
-                        "Không phép";
-                }
-
-                txtLyDo.Text =
-                    r["ly_do"]
-                    .ToString();
-            }
-        }
-
-        private void btnLuu_Click(
+        private async void btnLuu_Click(
             object sender,
             EventArgs e
         )
         {
-            string nhanVienId =
+            if (cbNhanVien.SelectedValue == null)
+            {
+                MessageBox.Show(
+                    "Chọn nhân viên"
+                );
+
+                return;
+            }
+
+            if (cbCaLam.SelectedValue == null)
+            {
+                MessageBox.Show(
+                    "Chọn ca làm"
+                );
+
+                return;
+            }
+
+            if (cbLoai.SelectedItem == null)
+            {
+                MessageBox.Show(
+                    "Chọn loại nghỉ"
+                );
+
+                return;
+            }
+
+            NghiPhep item =
+                new NghiPhep();
+
+            item.id = id;
+
+            item.nhan_vien_id =
                 cbNhanVien.SelectedValue
                 .ToString();
 
-            int caLamId =
+            item.ca_lam_id =
                 Convert.ToInt32(
                     cbCaLam.SelectedValue
                 );
 
-            DateTime ngay =
+            item.ngay =
                 dtNgay.Value;
 
-            string loai =
-                cbLoai.Text == "Có phép"
-                ? "co_phep"
-                : "khong_phep";
+            item.loai =
+                cbLoai.SelectedItem
+                .ToString();
 
-            string lyDo =
+            item.ly_do =
                 txtLyDo.Text;
+
+            bool result;
 
             if (id == 0)
             {
-                bll.Insert(
-                    nhanVienId,
-                    caLamId,
-                    ngay,
-                    loai,
-                    lyDo
-                );
+                result =
+                    await service.Add(item);
+
+                if (result)
+                {
+                    MessageBox.Show(
+                        "Thêm thành công"
+                    );
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Thêm thất bại"
+                    );
+
+                    return;
+                }
             }
+
             else
             {
-                bll.Update(
-                    id,
-                    nhanVienId,
-                    caLamId,
-                    ngay,
-                    loai,
-                    lyDo
-                );
+                result =
+                    await service.Update(item);
+
+                if (result)
+                {
+                    MessageBox.Show(
+                        "Cập nhật thành công"
+                    );
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Cập nhật thất bại"
+                    );
+
+                    return;
+                }
             }
 
-            DialogResult =
-                DialogResult.OK;
-
-            Close();
+            this.Close();
         }
 
         private void btnDong_Click(
@@ -196,7 +238,7 @@ namespace QuanLyChamCong.GUI
             EventArgs e
         )
         {
-            Close();
+            this.Close();
         }
     }
 }

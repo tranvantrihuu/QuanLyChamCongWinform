@@ -5,9 +5,6 @@ namespace QuanLyChamCong.THEME
 {
     public static class AppStyles
     {
-        // =========================
-        // FORM
-        // =========================
 
         public static void StyleForm(
             Form frm
@@ -23,9 +20,6 @@ namespace QuanLyChamCong.THEME
                 AppColors.Background;
         }
 
-        // =========================
-        // BUTTON
-        // =========================
 
         public static void StyleButton(
             Button btn
@@ -59,9 +53,6 @@ namespace QuanLyChamCong.THEME
                 false;
         }
 
-        // =========================
-        // TEXTBOX
-        // =========================
 
         public static void StyleTextBox(
             TextBox txt
@@ -80,10 +71,6 @@ namespace QuanLyChamCong.THEME
                 AppFonts.Default;
         }
 
-        // =========================
-        // LABEL
-        // =========================
-
         public static void StyleLabel(
             Label lbl
         )
@@ -100,10 +87,6 @@ namespace QuanLyChamCong.THEME
             lbl.AutoSize =
                 true;
         }
-
-        // =========================
-        // TITLE
-        // =========================
 
         public static void StyleTitle(
             Label lbl
@@ -122,9 +105,6 @@ namespace QuanLyChamCong.THEME
                 true;
         }
 
-        // =========================
-        // COMBOBOX
-        // =========================
 
         public static void StyleComboBox(
             ComboBox cbo
@@ -142,10 +122,6 @@ namespace QuanLyChamCong.THEME
             cbo.Font =
                 AppFonts.Default;
         }
-
-        // =========================
-        // DATE PICKER
-        // =========================
 
         public static void StyleDatePicker(
             DateTimePicker dtp
@@ -166,10 +142,6 @@ namespace QuanLyChamCong.THEME
             dtp.CalendarTitleForeColor =
                 Color.White;
         }
-
-        // =========================
-        // GRID
-        // =========================
 
         public static void StyleGrid(
             DataGridView dgv
@@ -193,8 +165,6 @@ namespace QuanLyChamCong.THEME
             dgv.CellBorderStyle =
                 DataGridViewCellBorderStyle.SingleHorizontal;
 
-            // HEADER
-
             dgv.ColumnHeadersDefaultCellStyle.BackColor =
                 AppColors.Primary;
 
@@ -207,7 +177,6 @@ namespace QuanLyChamCong.THEME
             dgv.ColumnHeadersHeight =
                 42;
 
-            // ROW
 
             dgv.DefaultCellStyle.BackColor =
                 Color.White;
@@ -238,10 +207,6 @@ namespace QuanLyChamCong.THEME
                 36;
         }
 
-        // =========================
-        // GRID PHÂN CA
-        // =========================
-
         public static void StyleScheduleGrid(
             DataGridView dgv
         )
@@ -257,10 +222,6 @@ namespace QuanLyChamCong.THEME
             dgv.ReadOnly =
                 false;
         }
-
-        // =========================
-        // PANEL
-        // =========================
 
         public static void StyleCard(
             Panel panel

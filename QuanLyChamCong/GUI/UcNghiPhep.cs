@@ -1,34 +1,41 @@
-﻿// UcNghiPhep.cs
-
-using BLL;
-using QuanLyChamCong.BLL;
+﻿
+using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
+using QuanLyChamCong.Models;
+using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
 using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
 {
     public partial class UcNghiPhep : BaseUserControl
     {
-        NghiPhepBLL bll = new NghiPhepBLL();
+        NghiPhepService service =
+            new NghiPhepService();
 
         public UcNghiPhep()
         {
             InitializeComponent();
         }
 
-        private void UcNghiPhep_Load(object sender, EventArgs e)
+        private async void UcNghiPhep_Load(
+            object sender,
+            EventArgs e
+        )
         {
-            LoadData();
+            await LoadData();
         }
 
-        void LoadData()
+        async Task LoadData()
         {
-            DataTable dt = bll.GetAll();
+            List<NghiPhep> ds =
+                await service.GetAll();
 
-            dgvNghiPhep.DataSource = dt;
+            dgvNghiPhep.DataSource =
+                ds;
 
             if (!dgvNghiPhep.Columns.Contains("colCheck"))
             {
@@ -42,51 +49,139 @@ namespace QuanLyChamCong.GUI
                 dgvNghiPhep.Columns.Insert(0, chk);
             }
 
-            dgvNghiPhep.Columns["id"].HeaderText = "ID";
-            dgvNghiPhep.Columns["ho_ten"].HeaderText = "NHÂN VIÊN";
-            dgvNghiPhep.Columns["ca_lam_id"].HeaderText = "CA LÀM";
-            dgvNghiPhep.Columns["ngay"].HeaderText = "NGÀY";
-            dgvNghiPhep.Columns["loai"].HeaderText = "LOẠI";
-            dgvNghiPhep.Columns["ly_do"].HeaderText = "LÝ DO";
+            dgvNghiPhep.Columns["id"].HeaderText =
+                "ID";
 
-            dgvNghiPhep.Columns["created_at"].Visible = false;
-            dgvNghiPhep.Columns["nhan_vien_id"].Visible = false;
+            dgvNghiPhep.Columns["ho_ten"].HeaderText =
+                "NHÂN VIÊN";
+
+            dgvNghiPhep.Columns["ca_lam_id"].HeaderText =
+                "CA LÀM";
+
+            dgvNghiPhep.Columns["ngay"].HeaderText =
+                "NGÀY";
+
+            dgvNghiPhep.Columns["loai"].HeaderText =
+                "LOẠI";
+
+            dgvNghiPhep.Columns["ly_do"].HeaderText =
+                "LÝ DO";
+
+            dgvNghiPhep.Columns["nhan_vien_id"].Visible =
+                false;
+
+            dgvNghiPhep.Columns["created_at"].Visible =
+                false;
+
             dgvNghiPhep.SelectionMode =
                 DataGridViewSelectionMode.FullRowSelect;
 
-            dgvNghiPhep.AllowUserToAddRows = false;
+            
+            dgvNghiPhep.EditMode =
+                DataGridViewEditMode.EditOnEnter;
+
+            dgvNghiPhep.AllowUserToAddRows =
+                false;
 
             dgvNghiPhep.AutoSizeColumnsMode =
                 DataGridViewAutoSizeColumnsMode.Fill;
 
-            dgvNghiPhep.RowHeadersVisible = false;
-            foreach (DataGridViewColumn col in dgvNghiPhep.Columns)
+            dgvNghiPhep.RowHeadersVisible =
+                false;
+
+            dgvNghiPhep.ReadOnly = false;
+
+            foreach (
+                DataGridViewColumn col
+                in dgvNghiPhep.Columns
+            )
             {
-                col.ReadOnly = true;
+                if (col.Name != "colCheck")
+                {
+                    col.ReadOnly = true;
+                }
             }
 
-            dgvNghiPhep.Columns["colCheck"].ReadOnly = false;
+            dgvNghiPhep.ColumnHeadersDefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleCenter;
+
+            dgvNghiPhep.EnableHeadersVisualStyles =
+                false;
+
+            dgvNghiPhep.ColumnHeadersBorderStyle =
+                DataGridViewHeaderBorderStyle.Single;
+
+            dgvNghiPhep.ColumnHeadersDefaultCellStyle.BackColor =
+                Color.RoyalBlue;
+
+            dgvNghiPhep.ColumnHeadersDefaultCellStyle.ForeColor =
+                Color.White;
+
+            dgvNghiPhep.ColumnHeadersDefaultCellStyle.Font =
+                new Font(
+                    "Segoe UI",
+                    11,
+                    FontStyle.Bold
+                );
+
+            dgvNghiPhep.ColumnHeadersHeight =
+                42;
+
+            foreach (
+                DataGridViewColumn col
+                in dgvNghiPhep.Columns
+            )
+            {
+                col.DefaultCellStyle.Alignment =
+                    DataGridViewContentAlignment.MiddleCenter;
+
+                col.DefaultCellStyle.Font =
+                    new Font(
+                        "Segoe UI",
+                        10
+                    );
+
+                col.HeaderText =
+                    col.HeaderText.ToUpper();
+            }
+
+            dgvNghiPhep.Columns["ho_ten"]
+                .DefaultCellStyle.Alignment =
+                    DataGridViewContentAlignment.MiddleLeft;
+
+            dgvNghiPhep.Columns["colCheck"].ReadOnly =
+                false;
         }
 
-        private void btnThem_Click(object sender, EventArgs e)
+        private async void btnThem_Click(
+            object sender,
+            EventArgs e
+        )
         {
             FrmNghiPhepEdit f =
                 new FrmNghiPhepEdit();
 
             f.ShowDialog();
 
-            LoadData();
+            await LoadData();
         }
 
-        private void btnSua_Click(object sender, EventArgs e)
+        private async void btnSua_Click(
+            object sender,
+            EventArgs e
+        )
         {
             if (dgvNghiPhep.CurrentRow == null)
             {
-                MessageBox.Show("Chọn dòng muốn sửa");
+                MessageBox.Show(
+                    "Chọn dòng muốn sửa"
+                );
+
                 return;
             }
 
-            DataGridViewRow row = dgvNghiPhep.CurrentRow;
+            DataGridViewRow row =
+                dgvNghiPhep.CurrentRow;
 
             FrmNghiPhepEdit f =
                 new FrmNghiPhepEdit();
@@ -95,36 +190,45 @@ namespace QuanLyChamCong.GUI
                 row.Cells["id"].Value
             );
 
-            f.cbNhanVien.Text =
+            f.nhanVienId =
                 row.Cells["nhan_vien_id"]
                 .Value.ToString();
 
-            f.cbCaLam.SelectedValue =
-                row.Cells["ca_lam_id"].Value;
+            f.caLamId =
+                Convert.ToInt32(
+                    row.Cells["ca_lam_id"].Value
+                );
 
-            f.dtNgay.Value =
+            f.loai =
+                row.Cells["loai"]
+                .Value.ToString();
+
+            f.lyDo =
+                row.Cells["ly_do"]
+                .Value.ToString();
+
+            f.ngay =
                 Convert.ToDateTime(
                     row.Cells["ngay"].Value
                 );
 
-            f.cbLoai.Text =
-                row.Cells["loai"]
-                .Value.ToString();
-
-            f.txtLyDo.Text =
-                row.Cells["ly_do"]
-                .Value.ToString();
-
             f.ShowDialog();
 
-            LoadData();
+            await LoadData();
         }
 
-        private void btnXoa_Click(object sender, EventArgs e)
+        private async void btnXoa_Click(
+            object sender,
+            EventArgs e
+        )
         {
-            List<int> ids = new List<int>();
+            List<int> ids =
+                new List<int>();
 
-            foreach (DataGridViewRow row in dgvNghiPhep.Rows)
+            foreach (
+                DataGridViewRow row
+                in dgvNghiPhep.Rows
+            )
             {
                 bool isChecked =
                     row.Cells["colCheck"].Value != null
@@ -163,12 +267,14 @@ namespace QuanLyChamCong.GUI
 
             foreach (int id in ids)
             {
-                bll.Delete(id);
+                await service.Delete(id);
             }
 
-            MessageBox.Show("Xóa thành công!");
+            MessageBox.Show(
+                "Xóa thành công!"
+            );
 
-            LoadData();
+            await LoadData();
         }
 
         private void dgvNghiPhep_CurrentCellDirtyStateChanged(
@@ -189,10 +295,43 @@ namespace QuanLyChamCong.GUI
             DataGridViewCellEventArgs e
         )
         {
+            if (e.RowIndex < 0)
+                return;
 
+            if (
+                dgvNghiPhep.Columns[e.ColumnIndex].Name
+                == "colCheck"
+            )
+            {
+                bool isChecked = false;
+
+                if (
+                    dgvNghiPhep.Rows[e.RowIndex]
+                    .Cells["colCheck"].Value != null
+                )
+                {
+                    isChecked = Convert.ToBoolean(
+                        dgvNghiPhep.Rows[e.RowIndex]
+                        .Cells["colCheck"].Value
+                    );
+                }
+
+                if (isChecked)
+                {
+                    dgvNghiPhep.Rows[e.RowIndex]
+                        .DefaultCellStyle.BackColor =
+                            Color.LightPink;
+                }
+                else
+                {
+                    dgvNghiPhep.Rows[e.RowIndex]
+                        .DefaultCellStyle.BackColor =
+                            Color.White;
+                }
+            }
         }
 
-        private void dgvNghiPhep_CellDoubleClick(
+        private async void dgvNghiPhep_CellDoubleClick(
             object sender,
             DataGridViewCellEventArgs e
         )
@@ -210,29 +349,31 @@ namespace QuanLyChamCong.GUI
                 row.Cells["id"].Value
             );
 
-            f.cbNhanVien.Text =
+            f.nhanVienId =
                 row.Cells["nhan_vien_id"]
                 .Value.ToString();
 
-            f.cbCaLam.SelectedValue =
-                row.Cells["ca_lam_id"].Value;
+            f.caLamId =
+                Convert.ToInt32(
+                    row.Cells["ca_lam_id"].Value
+                );
 
-            f.dtNgay.Value =
+            f.loai =
+                row.Cells["loai"]
+                .Value.ToString();
+
+            f.lyDo =
+                row.Cells["ly_do"]
+                .Value.ToString();
+
+            f.ngay =
                 Convert.ToDateTime(
                     row.Cells["ngay"].Value
                 );
 
-            f.cbLoai.Text =
-                row.Cells["loai"]
-                .Value.ToString();
-
-            f.txtLyDo.Text =
-                row.Cells["ly_do"]
-                .Value.ToString();
-
             f.ShowDialog();
 
-            LoadData();
+            await LoadData();
         }
     }
 }

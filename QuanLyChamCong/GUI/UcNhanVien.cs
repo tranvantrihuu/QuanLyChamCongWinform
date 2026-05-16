@@ -1,16 +1,19 @@
-﻿using QuanLyChamCong.BLL;
+﻿using QuanLyChamCong.Models;
+using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.Threading.Tasks;
+using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
 namespace QuanLyChamCong.GUI
 {
     public partial class UcNhanVien : BaseUserControl
     {
-        NhanVienBLL bll = new NhanVienBLL();
+        NhanVienService service = new NhanVienService();
 
         public UcNhanVien()
         {
@@ -28,7 +31,7 @@ namespace QuanLyChamCong.GUI
                 dgvNhanVien.Columns["colCheck"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                 dgvNhanVien.Columns["colCheck"].Width = 35;
                 dgvNhanVien.Columns["colCheck"].Resizable = DataGridViewTriState.False;
-                // ===== CỘT CỐ ĐỊNH =====
+               
                 dgvNhanVien.Columns["id"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                 dgvNhanVien.Columns["id"].Width = 80;
 
@@ -47,7 +50,7 @@ namespace QuanLyChamCong.GUI
                 dgvNhanVien.Columns["loai_luong"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                 dgvNhanVien.Columns["loai_luong"].Width = 80;
 
-                // ===== CỘT QUAN TRỌNG (FILL) =====
+               
                 dgvNhanVien.Columns["ho_ten"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 dgvNhanVien.Columns["ho_ten"].FillWeight = 200;
 
@@ -65,7 +68,7 @@ namespace QuanLyChamCong.GUI
             }
             else
             {
-                // 👉 form nhỏ → scroll ngang, KHÔNG co
+                
                 dgvNhanVien.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
 
                 foreach (DataGridViewColumn col in dgvNhanVien.Columns)
@@ -78,9 +81,9 @@ namespace QuanLyChamCong.GUI
                 dgvNhanVien.Columns["dia_chi"].Width = 200;
             }
         }
-        private void UcNhanVien_Load(object sender, EventArgs e)
+        private async void UcNhanVien_Load(object sender, EventArgs e)
         {
-            LoadData();
+            await LoadData();
             string placeholderSearch = "Nhập ID Nhân viên/Mã vân tay/tên";
 
             txtSearch.Text = placeholderSearch;
@@ -105,12 +108,13 @@ namespace QuanLyChamCong.GUI
             };
         }
 
-        private void LoadData()
+        private async Task LoadData()
         {
-            var dt = bll.GetAll();
-            dgvNhanVien.DataSource = dt;
+            NhanVienService service = new NhanVienService();
 
-            // ================= CHECKBOX =================
+            dgvNhanVien.DataSource = await service.GetAll();
+
+            
             if (!dgvNhanVien.Columns.Contains("colCheck"))
             {
                 DataGridViewCheckBoxColumn chk = new DataGridViewCheckBoxColumn();
@@ -120,22 +124,15 @@ namespace QuanLyChamCong.GUI
                 dgvNhanVien.Columns.Insert(0, chk);
             }
 
-            // ================= READONLY =================
+            
             foreach (DataGridViewColumn col in dgvNhanVien.Columns)
                 col.ReadOnly = true;
 
             dgvNhanVien.Columns["colCheck"].ReadOnly = false;
-
-            // ================= AUTO SIZE CHUẨN =================
             dgvNhanVien.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-
-            // ❗ QUAN TRỌNG: không wrap để tránh vỡ dòng
             dgvNhanVien.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-
-            // bật scroll ngang
             dgvNhanVien.ScrollBars = ScrollBars.Both;
 
-            // ================= HEADER TEXT =================
             dgvNhanVien.Columns["id"].HeaderText = "ID";
             dgvNhanVien.Columns["ma_van_tay"].HeaderText = "MÃ VÂN TAY";
             dgvNhanVien.Columns["ho_ten"].HeaderText = "HỌ VÀ TÊN";
@@ -151,17 +148,14 @@ namespace QuanLyChamCong.GUI
             dgvNhanVien.Columns["created_at"].HeaderText = "NGÀY TẠO";
             dgvNhanVien.Columns["updated_at"].HeaderText = "NGÀY CHỈNH SỬA";
 
-            // Ẩn cột không cần
             if (dgvNhanVien.Columns.Contains("pin_code"))
                 dgvNhanVien.Columns["pin_code"].Visible = false;
 
-            // ================= FORMAT NGÀY =================
             dgvNhanVien.Columns["ngay_sinh"].DefaultCellStyle.Format = "dd/MM/yyyy";
             dgvNhanVien.Columns["ngay_vao_lam"].DefaultCellStyle.Format = "dd/MM/yyyy";
             dgvNhanVien.Columns["created_at"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
             dgvNhanVien.Columns["updated_at"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
 
-            // ================= STYLE =================
             dgvNhanVien.EnableHeadersVisualStyles = false;
 
             dgvNhanVien.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 120, 215);
@@ -183,13 +177,11 @@ namespace QuanLyChamCong.GUI
 
             dgvNhanVien.RowTemplate.Height = 32;
 
-            // ================= BEHAVIOR =================
             dgvNhanVien.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvNhanVien.MultiSelect = false;
             dgvNhanVien.AllowUserToAddRows = false;
             dgvNhanVien.EditMode = DataGridViewEditMode.EditOnEnter;
 
-            // ================= CĂN GIỮA =================
             foreach (DataGridViewColumn col in dgvNhanVien.Columns)
             {
                 col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -201,18 +193,14 @@ namespace QuanLyChamCong.GUI
             AdjustGrid();
         }
 
-        // THÊM
-        private void btnThem_Click(object sender, EventArgs e)
+        private async void btnThem_Click(object sender, EventArgs e)
         {
             FrmNhanVienEdit f = new FrmNhanVienEdit(false);
             f.ShowDialog();
             LoadData();
         }
 
-
-
-        // SEARCH
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             string key = txtSearch.Text.Trim();
 
@@ -222,7 +210,7 @@ namespace QuanLyChamCong.GUI
                 return;
             }
 
-            dgvNhanVien.DataSource = bll.Search(key);
+            dgvNhanVien.DataSource = await service.Search(key);
         }
 
         private void dgvNhanVien_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -239,20 +227,18 @@ namespace QuanLyChamCong.GUI
             btnSearch.Top = (panel1.Height - btnSearch.Height) / 2;
         }
 
-        private void btnSua_Click(object sender, EventArgs e)
+        private async void btnSua_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Double Click dòng bạn muốn sửa!");
         }
 
-        private void dgvNhanVien_CellDoubleClick_1(object sender, DataGridViewCellEventArgs e)
+        private async void dgvNhanVien_CellDoubleClick_1(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
 
             var row = dgvNhanVien.Rows[e.RowIndex];
 
-            FrmNhanVienEdit f = new FrmNhanVienEdit(true);
-
-            // 🔥 FILL FULL DATA
+            FrmNhanVienEdit f = new FrmNhanVienEdit();
             f.txtIDNhanVien.Text = row.Cells["id"].Value?.ToString();
             f.txtMaVanTay.Text = row.Cells["ma_van_tay"].Value?.ToString();
             f.txtHoTen.Text = row.Cells["ho_ten"].Value?.ToString();
@@ -261,11 +247,9 @@ namespace QuanLyChamCong.GUI
             f.txtViTri.Text = row.Cells["vi_tri"].Value?.ToString();
             f.txtPin.Text = row.Cells["pin_code"].Value?.ToString();
 
-            // DATE
             f.dtNgaySinh.Value = Convert.ToDateTime(row.Cells["ngay_sinh"].Value);
             f.dtNgayVao.Value = Convert.ToDateTime(row.Cells["ngay_vao_lam"].Value);
 
-            // COMBO
             f.cbVaiTro.Text = row.Cells["vai_tro"].Value?.ToString();
             f.cbTrangThai.Text = row.Cells["trang_thai"].Value?.ToString();
             f.cbLoaiLuong.Text = row.Cells["loai_luong"].Value?.ToString();
@@ -273,11 +257,10 @@ namespace QuanLyChamCong.GUI
             f.txtNgaySua.Text = row.Cells["updated_at"].Value?.ToString();
             f.ShowDialog();
 
-            // reload lại data
             LoadData();
         }
 
-        private void btnXoa_Click_1(object sender, EventArgs e)
+        private async void btnXoa_Click_1(object sender, EventArgs e)
         {
             List<string> ids = new List<string>();
 
@@ -298,7 +281,6 @@ namespace QuanLyChamCong.GUI
                 return;
             }
 
-            // 🔥 confirm
             var result = MessageBox.Show(
                 "Bạn có chắc muốn xóa các nhân viên đã chọn?",
                 "Xác nhận",
@@ -307,10 +289,12 @@ namespace QuanLyChamCong.GUI
             );
 
             if (result == DialogResult.No) return;
+            NhanVienService service = new NhanVienService();
 
-            // 🔥 gọi BLL
-            bll.DeleteNhanVien(ids);
-
+            foreach (string id in ids)
+            {
+                await service.Delete(id);
+            }
             MessageBox.Show("Xóa thành công!");
 
             LoadData();

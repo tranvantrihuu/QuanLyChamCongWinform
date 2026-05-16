@@ -1,5 +1,4 @@
-﻿// UcQuanLyChamCong.Designer.cs
-
+﻿
 namespace GUI
 {
     partial class UcQuanLyChamCong
@@ -54,9 +53,7 @@ namespace GUI
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvChamCong)).BeginInit();
             this.SuspendLayout();
-            // 
-            // panelTop
-            // 
+           
             this.panelTop.Controls.Add(this.lblNhanVien);
             this.panelTop.Controls.Add(this.cboNhanVien);
             this.panelTop.Controls.Add(this.lblTuNgay);
@@ -73,63 +70,49 @@ namespace GUI
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(1400, 60);
             this.panelTop.TabIndex = 0;
-            // 
-            // lblNhanVien
-            // 
+            
             this.lblNhanVien.AutoSize = true;
             this.lblNhanVien.Location = new System.Drawing.Point(20, 20);
             this.lblNhanVien.Name = "lblNhanVien";
             this.lblNhanVien.Size = new System.Drawing.Size(67, 16);
             this.lblNhanVien.TabIndex = 0;
             this.lblNhanVien.Text = "Nhân viên";
-            // 
-            // cboNhanVien
-            // 
+          
             this.cboNhanVien.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboNhanVien.FormattingEnabled = true;
             this.cboNhanVien.Location = new System.Drawing.Point(100, 16);
             this.cboNhanVien.Name = "cboNhanVien";
             this.cboNhanVien.Size = new System.Drawing.Size(180, 24);
             this.cboNhanVien.TabIndex = 1;
-            // 
-            // lblTuNgay
-            // 
+            
             this.lblTuNgay.AutoSize = true;
             this.lblTuNgay.Location = new System.Drawing.Point(300, 20);
             this.lblTuNgay.Name = "lblTuNgay";
             this.lblTuNgay.Size = new System.Drawing.Size(56, 16);
             this.lblTuNgay.TabIndex = 2;
             this.lblTuNgay.Text = "Từ ngày";
-            // 
-            // dtTuNgay
-            // 
+            
             this.dtTuNgay.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtTuNgay.Location = new System.Drawing.Point(370, 16);
             this.dtTuNgay.Name = "dtTuNgay";
             this.dtTuNgay.Size = new System.Drawing.Size(120, 22);
             this.dtTuNgay.TabIndex = 3;
             this.dtTuNgay.ValueChanged += new System.EventHandler(this.dtTuNgay_ValueChanged);
-            // 
-            // lblDenNgay
-            // 
+            
             this.lblDenNgay.AutoSize = true;
             this.lblDenNgay.Location = new System.Drawing.Point(510, 20);
             this.lblDenNgay.Name = "lblDenNgay";
             this.lblDenNgay.Size = new System.Drawing.Size(64, 16);
             this.lblDenNgay.TabIndex = 4;
             this.lblDenNgay.Text = "Đến ngày";
-            // 
-            // dtDenNgay
-            // 
+             
             this.dtDenNgay.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtDenNgay.Location = new System.Drawing.Point(590, 16);
             this.dtDenNgay.Name = "dtDenNgay";
             this.dtDenNgay.Size = new System.Drawing.Size(120, 22);
             this.dtDenNgay.TabIndex = 5;
             this.dtDenNgay.ValueChanged += new System.EventHandler(this.dtDenNgay_ValueChanged);
-            // 
-            // btnLoc
-            // 
+             
             this.btnLoc.Location = new System.Drawing.Point(730, 14);
             this.btnLoc.Name = "btnLoc";
             this.btnLoc.Size = new System.Drawing.Size(90, 30);
@@ -137,9 +120,7 @@ namespace GUI
             this.btnLoc.Text = "Lọc";
             this.btnLoc.UseVisualStyleBackColor = true;
             this.btnLoc.Click += new System.EventHandler(this.btnLoc_Click);
-            // 
-            // btnXoa
-            // 
+             
             this.btnXoa.Location = new System.Drawing.Point(1070, 14);
             this.btnXoa.Name = "btnXoa";
             this.btnXoa.Size = new System.Drawing.Size(100, 30);
@@ -147,9 +128,7 @@ namespace GUI
             this.btnXoa.Text = "Xóa";
             this.btnXoa.UseVisualStyleBackColor = true;
             this.btnXoa.Click += new System.EventHandler(this.btnXoa_Click);
-            // 
-            // btnLamMoi
-            // 
+            
             this.btnLamMoi.Location = new System.Drawing.Point(1180, 14);
             this.btnLamMoi.Name = "btnLamMoi";
             this.btnLamMoi.Size = new System.Drawing.Size(100, 30);
@@ -157,9 +136,7 @@ namespace GUI
             this.btnLamMoi.Text = "Làm mới";
             this.btnLamMoi.UseVisualStyleBackColor = true;
             this.btnLamMoi.Click += new System.EventHandler(this.btnLamMoi_Click);
-            // 
-            // dgvChamCong
-            // 
+            
             this.dgvChamCong.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvChamCong.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvChamCong.Location = new System.Drawing.Point(0, 60);
@@ -169,9 +146,7 @@ namespace GUI
             this.dgvChamCong.Size = new System.Drawing.Size(1400, 640);
             this.dgvChamCong.TabIndex = 1;
             this.dgvChamCong.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvChamCong_CellDoubleClick);
-            // 
-            // btnSua
-            // 
+            
             this.btnSua.Location = new System.Drawing.Point(960, 14);
             this.btnSua.Name = "btnSua";
             this.btnSua.Size = new System.Drawing.Size(100, 30);
@@ -179,9 +154,7 @@ namespace GUI
             this.btnSua.Text = "Sửa";
             this.btnSua.UseVisualStyleBackColor = true;
             this.btnSua.Click += new System.EventHandler(this.btnSua_Click);
-            // 
-            // btnThem
-            // 
+            
             this.btnThem.Location = new System.Drawing.Point(850, 14);
             this.btnThem.Name = "btnThem";
             this.btnThem.Size = new System.Drawing.Size(100, 30);
@@ -189,9 +162,7 @@ namespace GUI
             this.btnThem.Text = "Thêm";
             this.btnThem.UseVisualStyleBackColor = true;
             this.btnThem.Click += new System.EventHandler(this.btnThem_Click);
-            // 
-            // UcQuanLyChamCong
-            // 
+            
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dgvChamCong);

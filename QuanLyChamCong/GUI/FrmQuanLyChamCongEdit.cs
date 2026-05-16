@@ -1,180 +1,209 @@
-﻿// FrmQuanLyChamCongEdit.cs
-
-using BLL;
-using DAL;
-using QuanLyChamCong.DAL;
+﻿using QuanLyChamCong.Models;
+using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
 using System;
-using System.Data;
+using System.Collections.Generic;
 using System.Windows.Forms;
-
+using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
 namespace QuanLyChamCong.GUI
 {
     public partial class FrmQuanLyChamCongEdit : BaseForm
     {
-        QuanLyChamCongBLL bll =
-            new QuanLyChamCongBLL();
+        private readonly bool isEdit;
 
-        DataProvider dp =
-            new DataProvider();
+        private readonly int chamCongId;
 
-        int id = 0;
+        QuanLyChamCongService service =
+            new QuanLyChamCongService();
+
+        NhanVienService nhanVienService =
+            new NhanVienService();
+
+        CaLamService caLamService =
+            new CaLamService();
 
         public FrmQuanLyChamCongEdit()
         {
             InitializeComponent();
+
+            isEdit = false;
         }
 
-        public FrmQuanLyChamCongEdit(int _id)
+        public FrmQuanLyChamCongEdit(
+            int id
+        )
         {
             InitializeComponent();
 
-            id = _id;
+            isEdit = true;
+
+            chamCongId = id;
         }
 
-        private void FrmQuanLyChamCongEdit_Load(
+        private async void
+            FrmQuanLyChamCongEdit_Load(
             object sender,
             EventArgs e
         )
         {
-            LoadNhanVien();
-            LoadCaLam();
 
-            if (id > 0)
+            await LoadNhanVien();
+
+            await LoadCaLam();
+
+            if (isEdit)
             {
-                LoadDetail();
+                await LoadData();
             }
         }
 
-        void LoadNhanVien()
+        private async System.Threading.Tasks.Task
+            LoadNhanVien()
         {
-            string sql = @"
-                SELECT
-                    id,
-                    ho_ten
-                FROM nhan_vien
-                ORDER BY ho_ten";
+            List<NhanVien> ds =
+                await nhanVienService
+                .GetAll();
 
-            DataTable dt =
-                dp.ExecuteQuery(sql);
+            cboNhanVien.DataSource =
+                ds;
 
-            cboNhanVien.DataSource = dt;
-            cboNhanVien.DisplayMember = "ho_ten";
-            cboNhanVien.ValueMember = "id";
+            cboNhanVien.DisplayMember =
+                "ho_ten";
+
+            cboNhanVien.ValueMember =
+                "id";
         }
 
-        void LoadCaLam()
+        private async System.Threading.Tasks.Task
+            LoadCaLam()
         {
-            string sql = @"
-                SELECT
-                    id,
-                    ten_ca
-                FROM ca_lam
-                ORDER BY id";
+            List<CaLam> ds =
+                await caLamService
+                .GetAll();
 
-            DataTable dt =
-                dp.ExecuteQuery(sql);
+            cboCaLam.DataSource =
+                ds;
 
-            cboCaLam.DataSource = dt;
-            cboCaLam.DisplayMember = "ten_ca";
-            cboCaLam.ValueMember = "id";
+            cboCaLam.DisplayMember =
+                "ten_ca";
+
+            cboCaLam.ValueMember =
+                "id";
         }
 
-        void LoadDetail()
+        private async System.Threading.Tasks.Task
+            LoadData()
         {
-            DataTable dt =
-                bll.GetById(id);
+            ChamCong item =
+                await service.GetById(
+                    chamCongId
+                );
 
-            if (dt.Rows.Count <= 0)
+            if (item == null)
             {
+                MessageBox.Show(
+                    "Không tìm thấy dữ liệu"
+                );
+
+                Close();
+
                 return;
             }
 
-            DataRow r =
-                dt.Rows[0];
-
             cboNhanVien.SelectedValue =
-                r["nhan_vien_id"].ToString();
-
-            dtpNgayLam.Value =
-                Convert.ToDateTime(
-                    r["ngay_lam"]
-                );
+                item.nhan_vien_id;
 
             cboCaLam.SelectedValue =
-                Convert.ToInt32(
-                    r["ca_lam_id"]
-                );
+                item.ca_lam_id;
 
-            // FIX NULL CHECK_IN
-            if (r["check_in"] != DBNull.Value)
-            {
-                dtpCheckIn.Value =
-                    Convert.ToDateTime(
-                        r["check_in"]
-                    );
-            }
+            dtpNgayLam.Value =
+                item.ngay_lam
+                ?? DateTime.Now;
 
-            // FIX NULL CHECK_OUT
-            if (r["check_out"] != DBNull.Value)
-            {
-                dtpCheckOut.Value =
-                    Convert.ToDateTime(
-                        r["check_out"]
-                    );
-            }
+            dtpCheckIn.Value =
+                item.check_in
+                ?? DateTime.Now;
 
+            dtpCheckOut.Value =
+                item.check_out
+                ?? DateTime.Now;
         }
 
-        private void btnLuu_Click(
+        private async void btnLuu_Click(
             object sender,
             EventArgs e
         )
         {
-            try
+            if (
+                cboNhanVien.SelectedValue
+                == null
+            )
             {
-                string nhanVienId =
-                    cboNhanVien.SelectedValue.ToString();
-
-                DateTime ngayLam =
-                    dtpNgayLam.Value.Date;
-
-                int caLamId =
-                    Convert.ToInt32(
-                        cboCaLam.SelectedValue
-                    );
-
-                DateTime checkIn =
-                    dtpCheckIn.Value;
-
-                DateTime checkOut =
-                    dtpCheckOut.Value;
-
-
-                if (id == 0)
-                {
-                    bll.Insert(
-                        nhanVienId,
-                        ngayLam,
-                        caLamId,
-                        checkIn,
-                        checkOut
-                    );
-                }
-                else
-                {
-                    bll.Update(
-                        id,
-                        nhanVienId,
-                        ngayLam,
-                        caLamId,
-                        checkIn,
-                        checkOut
-                    );
-                }
-
                 MessageBox.Show(
-                    "LƯU THÀNH CÔNG"
+                    "Vui lòng chọn nhân viên"
+                );
+
+                return;
+            }
+
+            if (
+                cboCaLam.SelectedValue
+                == null
+            )
+            {
+                MessageBox.Show(
+                    "Vui lòng chọn ca làm"
+                );
+
+                return;
+            }
+
+            ChamCong item =
+                new ChamCong();
+
+            item.nhan_vien_id =
+                cboNhanVien
+                .SelectedValue
+                .ToString();
+
+            item.ca_lam_id =
+                Convert.ToInt32(
+                    cboCaLam.SelectedValue
+                );
+
+            item.ngay_lam =
+                dtpNgayLam.Value.Date;
+
+            item.check_in =
+                dtpCheckIn.Value;
+
+            item.check_out =
+                dtpCheckOut.Value;
+
+            bool result;
+
+            if (isEdit)
+            {
+                item.id =
+                    chamCongId;
+
+                result =
+                    await service.Update(
+                        item
+                    );
+            }
+            else
+            {
+                result =
+                    await service.Insert(
+                        item
+                    );
+            }
+
+            if (result)
+            {
+                MessageBox.Show(
+                    "Lưu thành công"
                 );
 
                 DialogResult =
@@ -182,10 +211,10 @@ namespace QuanLyChamCong.GUI
 
                 Close();
             }
-            catch (Exception ex)
+            else
             {
                 MessageBox.Show(
-                    ex.Message
+                    "Lưu thất bại"
                 );
             }
         }

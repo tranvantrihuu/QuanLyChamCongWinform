@@ -4,7 +4,6 @@ namespace QuanLyChamCong.THEME
 {
     public static class AppFonts
     {
-        // FONT CHÍNH
         public static Font Default =
             new Font(
                 "Segoe UI",
@@ -12,7 +11,6 @@ namespace QuanLyChamCong.THEME
                 FontStyle.Regular
             );
 
-        // FONT BUTTON
         public static Font Button =
             new Font(
                 "Segoe UI Semibold",
@@ -20,7 +18,6 @@ namespace QuanLyChamCong.THEME
                 FontStyle.Regular
             );
 
-        // FONT TITLE
         public static Font Title =
             new Font(
                 "Segoe UI Semibold",
@@ -28,7 +25,6 @@ namespace QuanLyChamCong.THEME
                 FontStyle.Bold
             );
 
-        // FONT GRID
         public static Font Grid =
             new Font(
                 "Segoe UI",
@@ -36,7 +32,6 @@ namespace QuanLyChamCong.THEME
                 FontStyle.Regular
             );
 
-        // FONT NHỎ
         public static Font Small =
             new Font(
                 "Segoe UI",

@@ -36,9 +36,7 @@ namespace QuanLyChamCong.GUI
             ((System.ComponentModel.ISupportInitialize)(this.numPhuCap)).BeginInit();
             this.pnlButton.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tableLayoutPanel1
-            // 
+            
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -65,9 +63,7 @@ namespace QuanLyChamCong.GUI
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(500, 350);
             this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // lblNhanVien
-            // 
+            
             this.lblNhanVien.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.lblNhanVien.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblNhanVien.Location = new System.Drawing.Point(3, 0);
@@ -76,18 +72,14 @@ namespace QuanLyChamCong.GUI
             this.lblNhanVien.TabIndex = 0;
             this.lblNhanVien.Text = "Nhân viên";
             this.lblNhanVien.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // cbNhanVien
-            // 
+            
             this.cbNhanVien.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbNhanVien.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbNhanVien.Location = new System.Drawing.Point(183, 3);
             this.cbNhanVien.Name = "cbNhanVien";
             this.cbNhanVien.Size = new System.Drawing.Size(314, 31);
             this.cbNhanVien.TabIndex = 1;
-            // 
-            // lblLuongCoBan
-            // 
+            
             this.lblLuongCoBan.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.lblLuongCoBan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblLuongCoBan.Location = new System.Drawing.Point(3, 58);
@@ -96,17 +88,13 @@ namespace QuanLyChamCong.GUI
             this.lblLuongCoBan.TabIndex = 2;
             this.lblLuongCoBan.Text = "Lương cơ bản";
             this.lblLuongCoBan.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // numLuongCoBan
-            // 
+            
             this.numLuongCoBan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numLuongCoBan.Location = new System.Drawing.Point(183, 61);
             this.numLuongCoBan.Name = "numLuongCoBan";
             this.numLuongCoBan.Size = new System.Drawing.Size(314, 30);
             this.numLuongCoBan.TabIndex = 3;
-            // 
-            // lblLuongTheoGio
-            // 
+            
             this.lblLuongTheoGio.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.lblLuongTheoGio.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblLuongTheoGio.Location = new System.Drawing.Point(3, 116);
@@ -115,17 +103,13 @@ namespace QuanLyChamCong.GUI
             this.lblLuongTheoGio.TabIndex = 4;
             this.lblLuongTheoGio.Text = "Lương theo giờ";
             this.lblLuongTheoGio.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // numLuongTheoGio
-            // 
+             
             this.numLuongTheoGio.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numLuongTheoGio.Location = new System.Drawing.Point(183, 119);
             this.numLuongTheoGio.Name = "numLuongTheoGio";
             this.numLuongTheoGio.Size = new System.Drawing.Size(314, 30);
             this.numLuongTheoGio.TabIndex = 5;
-            // 
-            // lblTangCa
-            // 
+            
             this.lblTangCa.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.lblTangCa.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblTangCa.Location = new System.Drawing.Point(3, 174);
@@ -134,17 +118,13 @@ namespace QuanLyChamCong.GUI
             this.lblTangCa.TabIndex = 6;
             this.lblTangCa.Text = "Lương tăng ca";
             this.lblTangCa.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // numTangCa
-            // 
+            
             this.numTangCa.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numTangCa.Location = new System.Drawing.Point(183, 177);
             this.numTangCa.Name = "numTangCa";
             this.numTangCa.Size = new System.Drawing.Size(314, 30);
             this.numTangCa.TabIndex = 7;
-            // 
-            // lblPhuCap
-            // 
+            
             this.lblPhuCap.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.lblPhuCap.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblPhuCap.Location = new System.Drawing.Point(3, 232);
@@ -153,17 +133,13 @@ namespace QuanLyChamCong.GUI
             this.lblPhuCap.TabIndex = 8;
             this.lblPhuCap.Text = "Phụ cấp mặc định";
             this.lblPhuCap.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // numPhuCap
-            // 
+            
             this.numPhuCap.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numPhuCap.Location = new System.Drawing.Point(183, 235);
             this.numPhuCap.Name = "numPhuCap";
             this.numPhuCap.Size = new System.Drawing.Size(314, 30);
             this.numPhuCap.TabIndex = 9;
-            // 
-            // pnlButton
-            // 
+            
             this.pnlButton.Controls.Add(this.btnOk);
             this.pnlButton.Controls.Add(this.btnCancel);
             this.pnlButton.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -171,9 +147,7 @@ namespace QuanLyChamCong.GUI
             this.pnlButton.Name = "pnlButton";
             this.pnlButton.Size = new System.Drawing.Size(314, 54);
             this.pnlButton.TabIndex = 10;
-            // 
-            // btnOk
-            // 
+            
             this.btnOk.BackColor = System.Drawing.Color.LightGreen;
             this.btnOk.Location = new System.Drawing.Point(50, 5);
             this.btnOk.Name = "btnOk";
@@ -182,9 +156,7 @@ namespace QuanLyChamCong.GUI
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = false;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
-            // 
-            // btnCancel
-            // 
+            
             this.btnCancel.BackColor = System.Drawing.Color.LightCoral;
             this.btnCancel.Location = new System.Drawing.Point(170, 5);
             this.btnCancel.Name = "btnCancel";
@@ -193,9 +165,7 @@ namespace QuanLyChamCong.GUI
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
-            // FrmCauHinhLuongEdit
-            // 
+            
             this.ClientSize = new System.Drawing.Size(500, 350);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "FrmCauHinhLuongEdit";
@@ -211,7 +181,6 @@ namespace QuanLyChamCong.GUI
 
         }
 
-        // ===== PUBLIC CONTROL (GIỐNG BẠN) =====
         public ComboBox cbNhanVien;
         public NumericUpDown numLuongCoBan;
         public NumericUpDown numLuongTheoGio;

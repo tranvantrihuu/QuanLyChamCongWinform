@@ -1,67 +1,61 @@
-﻿using QuanLyChamCong.BLL;
-using QuanLyChamCong.DAL;
+﻿using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
 using System;
-using System.Data;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
 namespace QuanLyChamCong.GUI
 {
     public partial class UcBaoCaoChamCong : BaseUserControl
     {
-        private BaoCaoChamCongBLL bll =
-            new BaoCaoChamCongBLL();
+        ChamCongService service =
+            new ChamCongService();
 
-        private DataProvider provider =
-            new DataProvider();
+        NhanVienService nhanVienService =
+            new NhanVienService();
 
         public UcBaoCaoChamCong()
         {
             InitializeComponent();
         }
 
-        private void UcBaoCaoChamCong_Load(
+        private async void UcBaoCaoChamCong_Load(
             object sender,
             EventArgs e
         )
         {
-            LoadNhanVien();
+            await LoadNhanVien();
 
             dtTuNgay.Value =
                 DateTime.Now.AddMonths(-1);
 
             dtDenNgay.Value =
                 DateTime.Now;
+
             dtDenNgay.MinDate =
                 dtTuNgay.Value.Date;
 
-            LoadBaoCao();
+            await LoadBaoCao();
         }
 
-        private void LoadNhanVien()
+        private async Task LoadNhanVien()
         {
-            string sql = @"
-SELECT
-    id,
-    ho_ten
-FROM nhan_vien
-ORDER BY ho_ten
-";
+            var ds =
+                await nhanVienService
+                .GetAll();
 
-            DataTable dt =
-                provider.ExecuteQuery(sql);
+            ds.Insert(
+                0,
+                new Models.NhanVien
+                {
+                    id = "TATCA",
+                    ho_ten = "Tất cả"
+                }
+            );
 
-            DataRow row =
-                dt.NewRow();
-
-            row["id"] = "TATCA";
-
-            row["ho_ten"] = "Tất cả";
-
-            dt.Rows.InsertAt(row, 0);
-
-            cboNhanVien.DataSource = dt;
+            cboNhanVien.DataSource =
+                ds;
 
             cboNhanVien.DisplayMember =
                 "ho_ten";
@@ -69,18 +63,19 @@ ORDER BY ho_ten
             cboNhanVien.ValueMember =
                 "id";
 
-            cboNhanVien.SelectedIndex = 0;
+            cboNhanVien.SelectedIndex =
+                0;
         }
 
-        private void btnLoc_Click(
+        private async void btnLoc_Click(
             object sender,
             EventArgs e
         )
         {
-            LoadBaoCao();
+            await LoadBaoCao();
         }
 
-        private void btnLamMoi_Click(
+        private async void btnLamMoi_Click(
             object sender,
             EventArgs e
         )
@@ -93,26 +88,45 @@ ORDER BY ho_ten
             dtDenNgay.Value =
                 DateTime.Now;
 
-            LoadBaoCao();
+            await LoadBaoCao();
         }
 
-        private void LoadBaoCao()
+        private async Task LoadBaoCao()
         {
-            string nhanVienId =
-                cboNhanVien.SelectedValue
-                .ToString();
+            try
+            {
+                if (
+                    cboNhanVien.SelectedValue
+                    == null
+                )
+                {
+                    return;
+                }
 
-            DataTable dt =
-                bll.BaoCaoTongHop(
-                    nhanVienId,
-                    dtTuNgay.Value.Date,
-                    dtDenNgay.Value.Date
+                string nhanVienId =
+                    cboNhanVien.SelectedValue
+                    .ToString();
+
+                var data =
+                    await service.BaoCaoTongHop(
+                        nhanVienId,
+                        dtTuNgay.Value.Date,
+                        dtDenNgay.Value.Date
+                    );
+
+                dgvBaoCao.DataSource =
+                    data;
+
+                FormatGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message
                 );
-
-            dgvBaoCao.DataSource = dt;
-
-            FormatGrid();
+            }
         }
+
         private void dtTuNgay_ValueChanged(
             object sender,
             EventArgs e
@@ -130,6 +144,7 @@ ORDER BY ho_ten
                     dtTuNgay.Value.Date;
             }
         }
+
         private void FormatGrid()
         {
             dgvBaoCao.AutoSizeColumnsMode =
@@ -164,36 +179,71 @@ ORDER BY ho_ten
                     FontStyle.Bold
                 );
 
-            dgvBaoCao.ColumnHeadersHeight = 40;
+            dgvBaoCao.ColumnHeadersHeight =
+                40;
 
-            dgvBaoCao.RowTemplate.Height = 35;
-
-            if (
-                dgvBaoCao.Columns.Contains(
-                    "Tổng giờ tăng ca"
-                )
-            )
-            {
-                dgvBaoCao.Columns[
-                    "Tổng giờ tăng ca"
-                ].DefaultCellStyle.Format = "N2";
-            }
+            dgvBaoCao.RowTemplate.Height =
+                35;
 
             if (
-                dgvBaoCao.Columns.Contains(
-                    "Tỷ lệ chuyên cần (%)"
-                )
+                dgvBaoCao.Columns.Count > 0
             )
             {
-                dgvBaoCao.Columns[
-                    "Tỷ lệ chuyên cần (%)"
-                ].DefaultCellStyle.Format = "N2";
+                dgvBaoCao.Columns[0]
+                    .HeaderText =
+                    "Mã nhân viên";
+
+                if (
+                    dgvBaoCao.Columns.Count > 1
+                )
+                {
+                    dgvBaoCao.Columns[1]
+                        .HeaderText =
+                        "Họ tên";
+                }
+
+                if (
+                    dgvBaoCao.Columns.Count > 2
+                )
+                {
+                    dgvBaoCao.Columns[2]
+                        .HeaderText =
+                        "Tổng số ca công";
+                }
+
+                if (
+                    dgvBaoCao.Columns.Count > 3
+                )
+                {
+                    dgvBaoCao.Columns[3]
+                        .HeaderText =
+                        "Tổng ca đi trễ";
+                }
+
+                if (
+                    dgvBaoCao.Columns.Count > 4
+                )
+                {
+                    dgvBaoCao.Columns[4]
+                        .HeaderText =
+                        "Tổng ca vắng";
+                }
             }
         }
 
-        private void cboNhanVien_SelectedIndexChanged(object sender, EventArgs e)
+        private async void cboNhanVien_SelectedIndexChanged(
+            object sender,
+            EventArgs e
+        )
         {
-            LoadBaoCao();
+            if (
+                !IsHandleCreated
+            )
+            {
+                return;
+            }
+
+            await LoadBaoCao();
         }
     }
 }

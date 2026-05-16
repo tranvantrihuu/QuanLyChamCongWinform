@@ -1,5 +1,4 @@
-﻿// UcNghiPhep.Designer.cs
-
+﻿
 using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
@@ -35,8 +34,6 @@ namespace QuanLyChamCong.GUI
 
             this.SuspendLayout();
 
-            // flowLayoutPanel1
-
             this.flowLayoutPanel1.Anchor =
                 System.Windows.Forms.AnchorStyles.None;
 
@@ -59,7 +56,6 @@ namespace QuanLyChamCong.GUI
 
             this.flowLayoutPanel1.WrapContents = false;
 
-            // btnThem
 
             this.btnThem.BackColor =
                 System.Drawing.Color.Pink;
@@ -90,8 +86,6 @@ namespace QuanLyChamCong.GUI
                     this.btnThem_Click
                 );
 
-            // btnSua
-
             this.btnSua.BackColor =
                 System.Drawing.Color.PaleGreen;
 
@@ -121,7 +115,6 @@ namespace QuanLyChamCong.GUI
                     this.btnSua_Click
                 );
 
-            // btnXoa
 
             this.btnXoa.BackColor =
                 System.Drawing.Color.LightCoral;
@@ -152,7 +145,6 @@ namespace QuanLyChamCong.GUI
                     this.btnXoa_Click
                 );
 
-            // tableLayoutPanel1
 
             this.tableLayoutPanel1.ColumnCount = 1;
 
@@ -205,8 +197,6 @@ namespace QuanLyChamCong.GUI
 
             this.tableLayoutPanel1.TabIndex = 0;
 
-            // dgvNghiPhep
-
             this.dgvNghiPhep.BackgroundColor =
                 System.Drawing.Color.GhostWhite;
 
@@ -246,8 +236,6 @@ namespace QuanLyChamCong.GUI
                 new System.EventHandler(
                     this.dgvNghiPhep_CurrentCellDirtyStateChanged
                 );
-
-            // UcNghiPhep
 
             this.AutoScaleDimensions =
                 new System.Drawing.SizeF(8F, 16F);

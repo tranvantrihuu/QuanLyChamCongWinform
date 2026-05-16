@@ -1,15 +1,16 @@
-﻿using QuanLyChamCong.BLL;
+﻿using QuanLyChamCong.Models;
+using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
-
+using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
 namespace QuanLyChamCong.GUI
 {
     public partial class FrmNhanVienEdit : BaseForm
     {
-        NhanVienBLL bll = new NhanVienBLL();
         public bool isEdit = false;
 
         public FrmNhanVienEdit(bool edit = false)
@@ -18,7 +19,7 @@ namespace QuanLyChamCong.GUI
             isEdit = edit;
         }
 
-        private void FrmNhanVienEdit_Load(object sender, EventArgs e)
+        private async void FrmNhanVienEdit_Load(object sender, EventArgs e)
         {
             cbVaiTro.Items.AddRange(new string[] { "Nhân viên", "Admin" });
             cbTrangThai.Items.AddRange(new string[] { "Đang làm", "Nghỉ" });
@@ -30,10 +31,38 @@ namespace QuanLyChamCong.GUI
             }
             else
             {
-                int next = bll.GetNextAvailableSoNhanVien();
+                List<NhanVien> ds =
+                await new NhanVienService().GetAll();
 
-                txtIDNhanVien.Text = "ID" + next.ToString("D4");
-                txtMaVanTay.Text = "IDFA" + next.ToString("D4");
+                int max = 0;
+
+                foreach (NhanVien nv in ds)
+                {
+                    if (
+                        !string.IsNullOrEmpty(nv.id)
+                        && nv.id.StartsWith("ID")
+                    )
+                    {
+                        string number =
+                            nv.id.Replace("ID", "");
+
+                        if (int.TryParse(number, out int n))
+                        {
+                            if (n > max)
+                            {
+                                max = n;
+                            }
+                        }
+                    }
+                }
+
+                int next = max + 1;
+
+                txtIDNhanVien.Text =
+                    "ID" + next.ToString("D4");
+
+                txtMaVanTay.Text =
+                    "IDFA" + next.ToString("D4");
             }
             SetupLayout();
             FixUI();
@@ -43,7 +72,6 @@ namespace QuanLyChamCong.GUI
         {
             foreach (Control c in tableLayoutPanel1.Controls)
             {
-                // 🔹 LABEL
                 if (c is Label lb)
                 {
                     lb.TextAlign = ContentAlignment.MiddleLeft;
@@ -52,27 +80,22 @@ namespace QuanLyChamCong.GUI
                     lb.Padding = new Padding(5, 0, 0, 0);
                 }
 
-                // 🔹 TEXTBOX
                 if (c is TextBox tb)
                 {
                     tb.Font = new Font("Segoe UI", 10);
                     tb.BorderStyle = BorderStyle.FixedSingle;
 
-                    // 🔥 FIX CHIỀU CAO GIẢ
                     tb.Margin = new Padding(3, 6, 3, 6);
                 }
 
-                // 🔹 COMBOBOX
                 if (c is ComboBox cb)
                 {
                     cb.Font = new Font("Segoe UI", 10);
                     cb.FlatStyle = FlatStyle.Standard;
 
-                    // 🔥 QUAN TRỌNG
                     cb.Margin = new Padding(3, 6, 3, 6);
                 }
 
-                // 🔹 DATETIME
                 if (c is DateTimePicker dt)
                 {
                     dt.Font = new Font("Segoe UI", 10);
@@ -154,23 +177,47 @@ namespace QuanLyChamCong.GUI
 
             return true;
         }
-        private void btnOk_Click(object sender, EventArgs e)
+        private async void btnOk_Click(object sender, EventArgs e)
         {
-            
-            if (!ValidateInput()) return;
+            NhanVienService service =
+                new NhanVienService();
+
+            if (!ValidateInput())
+                return;
+
             if (!isEdit)
             {
-                if (bll.ExistsID(txtIDNhanVien.Text))
+                List<NhanVien> ds =
+                    await service.GetAll();
+
+                bool trungID =
+                    ds.Any(x =>
+                        x.id == txtIDNhanVien.Text
+                    );
+
+                if (trungID)
                 {
                     MessageBox.Show("ID đã tồn tại");
+
                     txtIDNhanVien.Focus();
+
                     return;
                 }
 
-                if (bll.ExistsMaVanTay(txtMaVanTay.Text))
+                bool trungVanTay =
+                    ds.Any(x =>
+                        x.ma_van_tay ==
+                        txtMaVanTay.Text
+                    );
+
+                if (trungVanTay)
                 {
-                    MessageBox.Show("Mã vân tay đã tồn tại");
+                    MessageBox.Show(
+                        "Mã vân tay đã tồn tại"
+                    );
+
                     txtMaVanTay.Focus();
+
                     return;
                 }
             }
@@ -184,33 +231,89 @@ namespace QuanLyChamCong.GUI
 
             if (result == DialogResult.No)
                 return;
-            var p = new Dictionary<string, object>
-            {
-                { "@id", txtIDNhanVien.Text },
-                { "@ma", txtMaVanTay.Text },
-                { "@ten", txtHoTen.Text },
-                { "@sdt", txtSDT.Text },
-                { "@ngaysinh", dtNgaySinh.Value },
-                { "@diachi", txtDiaChi.Text },
-                { "@vitri", txtViTri.Text },
-                { "@vaitro", cbVaiTro.Text },
-                { "@trangthai", cbTrangThai.Text },
-                { "@pin", txtPin.Text },
-                { "@ngayvao", dtNgayVao.Value },
-                { "@loai", cbLoaiLuong.Text }
-            };
+
+            NhanVien nv =
+                new NhanVien
+                {
+                    id = txtIDNhanVien.Text,
+
+                    ma_van_tay =
+                        txtMaVanTay.Text,
+
+                    ho_ten =
+                        txtHoTen.Text,
+
+                    so_dien_thoai =
+                        txtSDT.Text,
+
+                    ngay_sinh =
+                        dtNgaySinh.Value,
+
+                    dia_chi =
+                        txtDiaChi.Text,
+
+                    vi_tri =
+                        txtViTri.Text,
+
+                    vai_tro =
+                        cbVaiTro.Text,
+
+                    trang_thai =
+                        cbTrangThai.Text,
+
+                    pin_code =
+                        txtPin.Text,
+
+                    ngay_vao_lam =
+                        dtNgayVao.Value,
+
+                    loai_luong =
+                        cbLoaiLuong.Text
+                };
+
+            bool success = false;
 
             if (isEdit)
             {
-                bll.UpdateNhanVien(p);
-                MessageBox.Show("Sửa thành công");
+                success =
+                    await service.Update(nv);
+
+                if (success)
+                {
+                    MessageBox.Show(
+                        "Sửa thành công"
+                    );
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Sửa thất bại"
+                    );
+
+                    return;
+                }
             }
+
             else
             {
-                bll.InsertNhanVien(p);
-                MessageBox.Show("Thêm thành công");
+                success =
+                    await service.Insert(nv);
+
+                if (success)
+                {
+                    MessageBox.Show(
+                        "Thêm thành công"
+                    );
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Thêm thất bại"
+                    );
+
+                    return;
+                }
             }
-            
 
             this.Close();
         }
@@ -219,51 +322,41 @@ namespace QuanLyChamCong.GUI
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel1.Controls.Clear();
 
-            // ================= DATA =================
-            // ROW 0
             tableLayoutPanel1.Controls.Add(lblID, 0, 0);
             tableLayoutPanel1.Controls.Add(txtIDNhanVien, 1, 0);
             tableLayoutPanel1.Controls.Add(lblVaiTro, 2, 0);
             tableLayoutPanel1.Controls.Add(cbVaiTro, 3, 0);
 
-            // ROW 1
             tableLayoutPanel1.Controls.Add(lblMaNhanVien, 0, 1);
             tableLayoutPanel1.Controls.Add(txtMaVanTay, 1, 1);
             tableLayoutPanel1.Controls.Add(lblTrangThai, 2, 1);
             tableLayoutPanel1.Controls.Add(cbTrangThai, 3, 1);
 
-            // ROW 2
             tableLayoutPanel1.Controls.Add(lblHoTen, 0, 2);
             tableLayoutPanel1.Controls.Add(txtHoTen, 1, 2);
             tableLayoutPanel1.Controls.Add(lblPin, 2, 2);
             tableLayoutPanel1.Controls.Add(txtPin, 3, 2);
 
-            // ROW 3
             tableLayoutPanel1.Controls.Add(lblSDT, 0, 3);
             tableLayoutPanel1.Controls.Add(txtSDT, 1, 3);
             tableLayoutPanel1.Controls.Add(lblNgayVao, 2, 3);
             tableLayoutPanel1.Controls.Add(dtNgayVao, 3, 3);
 
-            // ROW 4
             tableLayoutPanel1.Controls.Add(lvlNgaySinh, 0, 4);
             tableLayoutPanel1.Controls.Add(dtNgaySinh, 1, 4);
             tableLayoutPanel1.Controls.Add(lblLoaiLuong, 2, 4);
             tableLayoutPanel1.Controls.Add(cbLoaiLuong, 3, 4);
 
-            // ROW 5
             tableLayoutPanel1.Controls.Add(lblDiaChi, 0, 5);
             tableLayoutPanel1.Controls.Add(txtDiaChi, 1, 5);
             tableLayoutPanel1.Controls.Add(lblNgayTao, 2, 5);
             tableLayoutPanel1.Controls.Add(txtNgayTao, 3, 5);
 
-            // ROW 6
             tableLayoutPanel1.Controls.Add(label1, 0, 6);
             tableLayoutPanel1.Controls.Add(txtViTri, 1, 6);
             tableLayoutPanel1.Controls.Add(lblNgaySua, 2, 6);
             tableLayoutPanel1.Controls.Add(txtNgaySua, 3, 6);
 
-            // ================= BUTTON ROW =================
-            // Layout căn giữa chuẩn (không lệch khi resize)
             TableLayoutPanel centerLayout = new TableLayoutPanel();
             centerLayout.Dock = DockStyle.Fill;
             centerLayout.ColumnCount = 3;
@@ -279,26 +372,22 @@ namespace QuanLyChamCong.GUI
             flow.FlowDirection = FlowDirection.LeftToRight;
             flow.Anchor = AnchorStyles.None;
 
-            // size nút
             btnCancel.Width = 120;
             btnCancel.Height = 40;
             btnOk.Width = 120;
             btnOk.Height = 40;
 
-            // thêm nút
             flow.Controls.Add(btnCancel);
             flow.Controls.Add(btnOk);
 
             centerLayout.Controls.Add(flow, 1, 0);
 
-            // add vào row 7
             tableLayoutPanel1.Controls.Add(centerLayout, 0, 7);
             tableLayoutPanel1.SetColumnSpan(centerLayout, 4);
 
-            // ================= STYLE =================
             foreach (Control c in tableLayoutPanel1.Controls)
             {
-                if (c is TableLayoutPanel) continue; // bỏ qua layout nút
+                if (c is TableLayoutPanel) continue; 
                 c.Dock = DockStyle.Fill;
             }
 

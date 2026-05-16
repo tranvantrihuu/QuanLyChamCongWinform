@@ -1,4 +1,4 @@
-﻿// FrmNghiPhepEdit.Designer.cs
+﻿
 
 namespace QuanLyChamCong.GUI
 {
@@ -62,7 +62,6 @@ namespace QuanLyChamCong.GUI
 
             this.SuspendLayout();
 
-            // label1
 
             this.label1.AutoSize = true;
 
@@ -78,7 +77,6 @@ namespace QuanLyChamCong.GUI
             this.label1.Text =
                 "Nhân viên";
 
-            // cbNhanVien
 
             this.cbNhanVien.DropDownStyle =
                 System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -95,7 +93,6 @@ namespace QuanLyChamCong.GUI
             this.cbNhanVien.Size =
                 new System.Drawing.Size(250, 24);
 
-            // label2
 
             this.label2.AutoSize = true;
 
@@ -111,7 +108,6 @@ namespace QuanLyChamCong.GUI
             this.label2.Text =
                 "Ca làm";
 
-            // cbCaLam
 
             this.cbCaLam.DropDownStyle =
                 System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -128,7 +124,6 @@ namespace QuanLyChamCong.GUI
             this.cbCaLam.Size =
                 new System.Drawing.Size(250, 24);
 
-            // label3
 
             this.label3.AutoSize = true;
 
@@ -144,7 +139,6 @@ namespace QuanLyChamCong.GUI
             this.label3.Text =
                 "Ngày";
 
-            // dtNgay
 
             this.dtNgay.Format =
                 System.Windows.Forms.DateTimePickerFormat.Short;
@@ -158,7 +152,6 @@ namespace QuanLyChamCong.GUI
             this.dtNgay.Size =
                 new System.Drawing.Size(250, 22);
 
-            // label4
 
             this.label4.AutoSize = true;
 
@@ -173,8 +166,6 @@ namespace QuanLyChamCong.GUI
 
             this.label4.Text =
                 "Loại nghỉ";
-
-            // cbLoai
 
             this.cbLoai.DropDownStyle =
                 System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -191,7 +182,6 @@ namespace QuanLyChamCong.GUI
             this.cbLoai.Size =
                 new System.Drawing.Size(250, 24);
 
-            // label5
 
             this.label5.AutoSize = true;
 
@@ -207,7 +197,6 @@ namespace QuanLyChamCong.GUI
             this.label5.Text =
                 "Lý do";
 
-            // txtLyDo
 
             this.txtLyDo.Location =
                 new System.Drawing.Point(170, 237);
@@ -221,7 +210,6 @@ namespace QuanLyChamCong.GUI
             this.txtLyDo.Size =
                 new System.Drawing.Size(250, 90);
 
-            // btnLuu
 
             this.btnLuu.Location =
                 new System.Drawing.Point(170, 360);
@@ -243,7 +231,6 @@ namespace QuanLyChamCong.GUI
                     this.btnLuu_Click
                 );
 
-            // btnDong
 
             this.btnDong.Location =
                 new System.Drawing.Point(320, 360);
@@ -265,7 +252,6 @@ namespace QuanLyChamCong.GUI
                     this.btnDong_Click
                 );
 
-            // FrmNghiPhepEdit
 
             this.AutoScaleDimensions =
                 new System.Drawing.SizeF(

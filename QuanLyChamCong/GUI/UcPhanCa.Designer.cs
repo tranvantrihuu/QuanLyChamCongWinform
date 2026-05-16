@@ -37,9 +37,7 @@ namespace QuanLyChamCong.GUI
             this.panel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tableLayoutPanel1
-            // 
+            
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Controls.Add(this.dgvPhanCa, 0, 0);
@@ -54,9 +52,7 @@ namespace QuanLyChamCong.GUI
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(900, 600);
             this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // dgvPhanCa
-            // 
+            
             this.dgvPhanCa.AllowUserToAddRows = false;
             this.dgvPhanCa.AllowUserToResizeRows = false;
             this.dgvPhanCa.BackgroundColor = System.Drawing.Color.White;
@@ -71,9 +67,7 @@ namespace QuanLyChamCong.GUI
             this.dgvPhanCa.Size = new System.Drawing.Size(894, 474);
             this.dgvPhanCa.TabIndex = 0;
             this.dgvPhanCa.MultiSelect = true;
-            // 
-            // panel1
-            // 
+            
             this.panel1.Controls.Add(this.cbNhanVien);
             this.panel1.Controls.Add(this.dtpNgay);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -81,23 +75,17 @@ namespace QuanLyChamCong.GUI
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(894, 54);
             this.panel1.TabIndex = 1;
-            // 
-            // cbNhanVien
-            // 
+           
             this.cbNhanVien.Location = new System.Drawing.Point(20, 10);
             this.cbNhanVien.Name = "cbNhanVien";
             this.cbNhanVien.Size = new System.Drawing.Size(250, 24);
             this.cbNhanVien.TabIndex = 0;
-            // 
-            // dtpNgay
-            // 
+           
             this.dtpNgay.Location = new System.Drawing.Point(300, 10);
             this.dtpNgay.Name = "dtpNgay";
             this.dtpNgay.Size = new System.Drawing.Size(200, 22);
             this.dtpNgay.TabIndex = 1;
-            // 
-            // flowLayoutPanel1
-            // 
+            
             this.flowLayoutPanel1.Controls.Add(this.btnThem);
             this.flowLayoutPanel1.Controls.Add(this.btnXoa);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -105,9 +93,7 @@ namespace QuanLyChamCong.GUI
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(894, 54);
             this.flowLayoutPanel1.TabIndex = 2;
-            // 
-            // btnThem
-            // 
+           
             this.btnThem.BackColor = System.Drawing.Color.Pink;
             this.btnThem.Location = new System.Drawing.Point(3, 3);
             this.btnThem.Name = "btnThem";
@@ -116,9 +102,7 @@ namespace QuanLyChamCong.GUI
             this.btnThem.Text = "THÊM";
             this.btnThem.UseVisualStyleBackColor = false;
             this.btnThem.Click += new System.EventHandler(this.btnThem_Click);
-            // 
-            // btnXoa
-            // 
+            
             this.btnXoa.BackColor = System.Drawing.Color.LightCoral;
             this.btnXoa.Location = new System.Drawing.Point(109, 3);
             this.btnXoa.Name = "btnXoa";
@@ -127,9 +111,7 @@ namespace QuanLyChamCong.GUI
             this.btnXoa.Text = "XÓA";
             this.btnXoa.UseVisualStyleBackColor = false;
             this.btnXoa.Click += new System.EventHandler(this.btnXoa_Click);
-            // 
-            // UcPhanCa
-            // 
+         
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "UcPhanCa";
             this.Size = new System.Drawing.Size(900, 600);

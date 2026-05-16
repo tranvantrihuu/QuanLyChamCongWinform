@@ -1,5 +1,4 @@
-﻿// UcNghiPhepNam.Designer.cs
-
+﻿
 namespace QuanLyChamCong.GUI
 {
     partial class UcNghiPhepNam
@@ -31,7 +30,6 @@ namespace QuanLyChamCong.GUI
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
 
-            // tableLayoutPanel1
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(
                 new System.Windows.Forms.ColumnStyle(
@@ -66,7 +64,6 @@ namespace QuanLyChamCong.GUI
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1200, 700);
             this.tableLayoutPanel1.TabIndex = 0;
 
-            // dgvNghiPhepNam
             this.dgvNghiPhepNam.BackgroundColor = System.Drawing.Color.White;
             this.dgvNghiPhepNam.ColumnHeadersHeightSizeMode =
                 System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -94,7 +91,6 @@ namespace QuanLyChamCong.GUI
                     this.dgvNghiPhepNam_CurrentCellDirtyStateChanged
                 );
 
-            // flowLayoutPanel1
             this.flowLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.flowLayoutPanel1.Controls.Add(this.btnThem);
             this.flowLayoutPanel1.Controls.Add(this.btnSua);
@@ -105,7 +101,6 @@ namespace QuanLyChamCong.GUI
             this.flowLayoutPanel1.Size = new System.Drawing.Size(450, 50);
             this.flowLayoutPanel1.TabIndex = 1;
 
-            // btnThem
             this.btnThem.BackColor = System.Drawing.Color.LightPink;
             this.btnThem.Font = new System.Drawing.Font(
                 "Segoe UI",
@@ -122,7 +117,6 @@ namespace QuanLyChamCong.GUI
 
             this.btnThem.Click += new System.EventHandler(this.btnThem_Click);
 
-            // btnSua
             this.btnSua.BackColor = System.Drawing.Color.PaleGreen;
             this.btnSua.Font = new System.Drawing.Font(
                 "Segoe UI",
@@ -139,7 +133,6 @@ namespace QuanLyChamCong.GUI
 
             this.btnSua.Click += new System.EventHandler(this.btnSua_Click);
 
-            // btnXoa
             this.btnXoa.BackColor = System.Drawing.Color.LightCoral;
             this.btnXoa.Font = new System.Drawing.Font(
                 "Segoe UI",
@@ -156,7 +149,6 @@ namespace QuanLyChamCong.GUI
 
             this.btnXoa.Click += new System.EventHandler(this.btnXoa_Click);
 
-            // UcNghiPhepNam
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 
