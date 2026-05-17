@@ -334,8 +334,7 @@ namespace QuanLyChamCong.API.Controllers
 
                     blc.tong_luong_tang_ca,
 
-                    CAST(0 AS FLOAT)
-                        AS tong_gio_lam,
+                    blc.tong_gio_lam AS tong_gio_lam,
 
                     blc.thuong,
 
@@ -660,7 +659,7 @@ namespace QuanLyChamCong.API.Controllers
 
                     SUM(
                         CASE
-                            WHEN loai = 'Thuong'
+                            WHEN loai = N'Thưởng'
                             THEN so_tien
                             ELSE 0
                         END
@@ -668,7 +667,7 @@ namespace QuanLyChamCong.API.Controllers
 
                     SUM(
                         CASE
-                            WHEN loai = 'Phat'
+                            WHEN loai = N'Phạt'
                             THEN so_tien
                             ELSE 0
                         END
@@ -890,11 +889,11 @@ namespace QuanLyChamCong.API.Controllers
                     luong_tang_ca_theo_gio,
                     tong_luong_chinh,
                     tong_luong_tang_ca,
+                    tong_gio_lam,
                     phu_cap,
                     thuong,
                     phat,
                     tong_luong,
-                    ghi_chu,
                     nguoi_chot,
                     ngay_chot,
                     created_at
@@ -911,6 +910,7 @@ namespace QuanLyChamCong.API.Controllers
                     @tong_phut_ve_som,
                     @tong_phut_bi_tru,
                     @tong_phut_tang_ca,
+                    @tong_gio_lam,
                     @luong_co_ban,
                     @luong_theo_gio,
                     @luong_tang_ca_theo_gio,
@@ -920,7 +920,6 @@ namespace QuanLyChamCong.API.Controllers
                     @thuong,
                     @phat,
                     @tong_luong,
-                    @ghi_chu,
                     @nguoi_chot,
                     @ngay_chot,
                     @created_at
@@ -986,7 +985,6 @@ namespace QuanLyChamCong.API.Controllers
                             thuong = @thuong,
                             phat = @phat,
                             tong_luong = @tong_luong,
-                            ghi_chu = @ghi_chu,
                             nguoi_chot = @nguoi_chot,
                             ngay_chot = @ngay_chot
                         WHERE id = @id";
@@ -1072,7 +1070,6 @@ namespace QuanLyChamCong.API.Controllers
                 thuong = Convert.ToDecimal(reader["thuong"]),
                 phat = Convert.ToDecimal(reader["phat"]),
                 tong_luong = Convert.ToDecimal(reader["tong_luong"]),
-                ghi_chu = reader["ghi_chu"].ToString(),
                 nguoi_chot = reader["nguoi_chot"].ToString(),
                 ngay_chot = Convert.ToDateTime(reader["ngay_chot"]),
                 created_at = Convert.ToDateTime(reader["created_at"])
@@ -1094,6 +1091,7 @@ namespace QuanLyChamCong.API.Controllers
             cmd.Parameters.AddWithValue("@tong_phut_ve_som", model.tong_phut_ve_som);
             cmd.Parameters.AddWithValue("@tong_phut_bi_tru", model.tong_phut_bi_tru);
             cmd.Parameters.AddWithValue("@tong_phut_tang_ca", model.tong_phut_tang_ca);
+            cmd.Parameters.AddWithValue("@tong_gio_lam",model.tong_gio_lam);
             cmd.Parameters.AddWithValue("@luong_co_ban", model.luong_co_ban);
             cmd.Parameters.AddWithValue("@luong_theo_gio", model.luong_theo_gio);
             cmd.Parameters.AddWithValue("@luong_tang_ca_theo_gio", model.luong_tang_ca_theo_gio);
@@ -1103,7 +1101,6 @@ namespace QuanLyChamCong.API.Controllers
             cmd.Parameters.AddWithValue("@thuong", model.thuong);
             cmd.Parameters.AddWithValue("@phat", model.phat);
             cmd.Parameters.AddWithValue("@tong_luong", model.tong_luong);
-            cmd.Parameters.AddWithValue("@ghi_chu", model.ghi_chu ?? "");
             cmd.Parameters.AddWithValue("@nguoi_chot", model.nguoi_chot ?? "");
             cmd.Parameters.AddWithValue("@ngay_chot", model.ngay_chot);
             cmd.Parameters.AddWithValue("@created_at", model.created_at);

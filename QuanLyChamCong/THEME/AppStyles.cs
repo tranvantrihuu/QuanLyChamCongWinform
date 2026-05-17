@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace QuanLyChamCong.THEME
@@ -172,11 +173,17 @@ namespace QuanLyChamCong.THEME
                 Color.White;
 
             dgv.ColumnHeadersDefaultCellStyle.Font =
-                AppFonts.Button;
+                new Font(
+                    "Segoe UI",
+                    10F,
+                    FontStyle.Bold
+                );
+
+            dgv.ColumnHeadersDefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleCenter;
 
             dgv.ColumnHeadersHeight =
                 42;
-
 
             dgv.DefaultCellStyle.BackColor =
                 Color.White;
@@ -194,6 +201,26 @@ namespace QuanLyChamCong.THEME
             dgv.DefaultCellStyle.SelectionForeColor =
                 AppColors.Text;
 
+            dgv.DefaultCellStyle.Font =
+                new Font(
+                    "Segoe UI",
+                    10F
+                );
+
+            dgv.DefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleLeft;
+
+            dgv.DefaultCellStyle.WrapMode =
+                DataGridViewTriState.False;
+
+            dgv.DefaultCellStyle.Padding =
+                new Padding(
+                    3,
+                    0,
+                    3,
+                    0
+                );
+
             dgv.RowHeadersVisible =
                 false;
 
@@ -205,8 +232,51 @@ namespace QuanLyChamCong.THEME
 
             dgv.RowTemplate.Height =
                 36;
-        }
 
+            dgv.DataBindingComplete += (
+                s,
+                e
+            ) =>
+            {
+                foreach (
+                    DataGridViewColumn col
+                    in dgv.Columns
+                )
+                {
+                    Type type =
+                        col.ValueType;
+
+                    if (
+                        type == null &&
+                        dgv.Rows.Count > 0
+                    )
+                    {
+                        object value =
+                            dgv.Rows[0]
+                               .Cells[col.Index]
+                               .Value;
+
+                        if (value != null)
+                        {
+                            type =
+                                value.GetType();
+                        }
+                    }
+
+                    bool isNumber =
+                        type == typeof(int) ||
+                        type == typeof(long) ||
+                        type == typeof(float) ||
+                        type == typeof(double) ||
+                        type == typeof(decimal);
+
+                    col.DefaultCellStyle.Alignment =
+                        isNumber
+                            ? DataGridViewContentAlignment.MiddleCenter
+                            : DataGridViewContentAlignment.MiddleLeft;
+                }
+            };
+        }
         public static void StyleScheduleGrid(
             DataGridView dgv
         )

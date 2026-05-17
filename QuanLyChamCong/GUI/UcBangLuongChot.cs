@@ -93,191 +93,231 @@ namespace QuanLyChamCong.GUI
         private void FormatGrid()
         {
             dgvDanhSach.AutoGenerateColumns = false;
-            if (
-                dgvDanhSach.Columns.Count <= 0
-            )
+
+            if (dgvDanhSach.Columns.Count <= 0)
             {
                 return;
             }
 
-            dgvDanhSach.Columns["nhan_vien_id"]
-                .HeaderText =
+            // =========================
+            // HEADER TEXT
+            // =========================
+
+            dgvDanhSach.Columns["nhan_vien_id"].HeaderText =
                 "Mã nhân viên";
 
-            dgvDanhSach.Columns["ho_ten"]
-                .HeaderText =
+            dgvDanhSach.Columns["ho_ten"].HeaderText =
                 "Họ tên";
 
-            dgvDanhSach.Columns["loai_luong"]
-                .HeaderText =
+            dgvDanhSach.Columns["loai_luong"].HeaderText =
                 "Loại lương";
 
-            dgvDanhSach.Columns["luong_co_ban"]
-                .HeaderText =
+            dgvDanhSach.Columns["luong_co_ban"].HeaderText =
                 "Lương cơ bản";
 
-            dgvDanhSach.Columns["luong_theo_gio"]
-                .HeaderText =
+            dgvDanhSach.Columns["luong_theo_gio"].HeaderText =
                 "Lương theo giờ";
-            dgvDanhSach.Columns["tong_gio_lam"]
-                .HeaderText =
-                "Tổng giờ làm";
-            if (
-                dgvDanhSach.Columns.Contains(
-                    "phu_cap_mac_dinh"
-                )
-            )
-            {
-                dgvDanhSach.Columns["phu_cap_mac_dinh"]
-                    .HeaderText =
-                    "Phụ cấp";
-            }
 
-            if (
-                dgvDanhSach.Columns.Contains(
-                    "phu_cap"
-                )
-            )
-            {
-                dgvDanhSach.Columns["phu_cap"]
-                    .HeaderText =
-                    "Phụ cấp";
-            }
-
-            dgvDanhSach.Columns["luong_tang_ca_theo_gio"]
-                .HeaderText =
+            dgvDanhSach.Columns["luong_tang_ca_theo_gio"].HeaderText =
                 "Lương tăng ca / giờ";
 
-            dgvDanhSach.Columns["tong_ca_duoc_phan"]
-                .HeaderText =
+            dgvDanhSach.Columns["tong_ca_duoc_phan"].HeaderText =
                 "Ca phân";
 
-            dgvDanhSach.Columns["tong_ca_di_lam"]
-                .HeaderText =
+            dgvDanhSach.Columns["tong_ca_di_lam"].HeaderText =
                 "Ca đi làm";
 
-            dgvDanhSach.Columns["tong_ca_nghi"]
-                .HeaderText =
+            dgvDanhSach.Columns["tong_ca_nghi"].HeaderText =
                 "Ca nghỉ";
 
-            dgvDanhSach.Columns["tong_phut_di_tre"]
-                .HeaderText =
+            dgvDanhSach.Columns["tong_phut_di_tre"].HeaderText =
                 "Đi trễ";
 
-            dgvDanhSach.Columns["tong_phut_ve_som"]
-                .HeaderText =
+            dgvDanhSach.Columns["tong_phut_ve_som"].HeaderText =
                 "Về sớm";
 
-            dgvDanhSach.Columns["tong_phut_bi_tru"]
-                .HeaderText =
+            dgvDanhSach.Columns["tong_phut_bi_tru"].HeaderText =
                 "Tổng phút bị trừ";
 
-            dgvDanhSach.Columns["tong_phut_tang_ca"]
-                .HeaderText =
+            dgvDanhSach.Columns["tong_phut_tang_ca"].HeaderText =
                 "Phút tăng ca";
 
-            dgvDanhSach.Columns["thuong"]
-                .HeaderText =
-                "Thưởng";
+            dgvDanhSach.Columns["tong_gio_lam"].HeaderText =
+                "Tổng giờ làm";
 
-            dgvDanhSach.Columns["phat"]
-                .HeaderText =
-                "Phạt";
-
-            dgvDanhSach.Columns["tong_luong_chinh"]
-                .HeaderText =
+            dgvDanhSach.Columns["tong_luong_chinh"].HeaderText =
                 "Lương chính";
 
-            dgvDanhSach.Columns["tong_luong_tang_ca"]
-                .HeaderText =
+            dgvDanhSach.Columns["tong_luong_tang_ca"].HeaderText =
                 "Lương tăng ca";
 
-            dgvDanhSach.Columns["tong_luong"]
-                .HeaderText =
+            dgvDanhSach.Columns["thuong"].HeaderText =
+                "Thưởng";
+
+            dgvDanhSach.Columns["phat"].HeaderText =
+                "Phạt";
+
+            dgvDanhSach.Columns["tong_luong"].HeaderText =
                 "Tổng lương";
 
+            if (dgvDanhSach.Columns.Contains("phu_cap"))
+            {
+                dgvDanhSach.Columns["phu_cap"].HeaderText =
+                    "Phụ cấp";
+            }
 
-            dgvDanhSach.Columns["luong_co_ban"]
-            .DefaultCellStyle.Format =
-            "N0";
+            if (dgvDanhSach.Columns.Contains("phu_cap_mac_dinh"))
+            {
+                dgvDanhSach.Columns["phu_cap_mac_dinh"].HeaderText =
+                    "Phụ cấp";
+            }
 
-            dgvDanhSach.Columns["luong_theo_gio"]
-                .DefaultCellStyle.Format =
-                "N0";
+            // =========================
+            // FORMAT NUMBER
+            // =========================
 
-            dgvDanhSach.Columns["phu_cap_mac_dinh"]
-                .DefaultCellStyle.Format =
-                "N0";
+            string[] moneyColumns =
+            {
+                "luong_co_ban",
+                "luong_theo_gio",
+                "luong_tang_ca_theo_gio",
+                "phu_cap",
+                "phu_cap_mac_dinh",
+                "thuong",
+                "phat",
+                "tong_luong_chinh",
+                "tong_luong_tang_ca",
+                "tong_luong"
+            };
+
+            foreach (string col in moneyColumns)
+            {
+                if (dgvDanhSach.Columns.Contains(col))
+                {
+                    dgvDanhSach.Columns[col]
+                        .DefaultCellStyle.Format = "N0";
+
+                    dgvDanhSach.Columns[col]
+                        .DefaultCellStyle.Alignment =
+                        DataGridViewContentAlignment.MiddleRight;
+                }
+            }
+
+            if (dgvDanhSach.Columns.Contains("tong_gio_lam"))
+            {
+                dgvDanhSach.Columns["tong_gio_lam"]
+                    .DefaultCellStyle.Format = "N2";
+
+                dgvDanhSach.Columns["tong_gio_lam"]
+                    .DefaultCellStyle.Alignment =
+                    DataGridViewContentAlignment.MiddleRight;
+            }
+
+            // =========================
+            // COLUMN ORDER
+            // =========================
+
+            dgvDanhSach.Columns["nhan_vien_id"].DisplayIndex = 0;
+            dgvDanhSach.Columns["ho_ten"].DisplayIndex = 1;
+            dgvDanhSach.Columns["loai_luong"].DisplayIndex = 2;
+
+            dgvDanhSach.Columns["luong_co_ban"].DisplayIndex = 3;
+            dgvDanhSach.Columns["luong_theo_gio"].DisplayIndex = 4;
+
+            if (dgvDanhSach.Columns.Contains("phu_cap"))
+            {
+                dgvDanhSach.Columns["phu_cap"].DisplayIndex = 5;
+            }
 
             dgvDanhSach.Columns["luong_tang_ca_theo_gio"]
-                .DefaultCellStyle.Format =
-                "N0";
+                .DisplayIndex = 6;
 
-            dgvDanhSach.Columns["thuong"]
-                .DefaultCellStyle.Format =
-                "N0";
+            dgvDanhSach.Columns["tong_ca_duoc_phan"]
+                .DisplayIndex = 7;
 
-            dgvDanhSach.Columns["phat"]
-                .DefaultCellStyle.Format =
-                "N0";
+            dgvDanhSach.Columns["tong_ca_di_lam"]
+                .DisplayIndex = 8;
+
+            dgvDanhSach.Columns["tong_ca_nghi"]
+                .DisplayIndex = 9;
+
+            dgvDanhSach.Columns["tong_phut_di_tre"]
+                .DisplayIndex = 10;
+
+            dgvDanhSach.Columns["tong_phut_ve_som"]
+                .DisplayIndex = 11;
+
+            dgvDanhSach.Columns["tong_phut_bi_tru"]
+                .DisplayIndex = 12;
+
+            dgvDanhSach.Columns["tong_phut_tang_ca"]
+                .DisplayIndex = 13;
+
+            dgvDanhSach.Columns["tong_gio_lam"]
+                .DisplayIndex = 14;
 
             dgvDanhSach.Columns["tong_luong_chinh"]
-                .DefaultCellStyle.Format =
-                "N0";
+                .DisplayIndex = 15;
 
             dgvDanhSach.Columns["tong_luong_tang_ca"]
-                .DefaultCellStyle.Format =
-                "N0";
+                .DisplayIndex = 16;
+
+            dgvDanhSach.Columns["thuong"]
+                .DisplayIndex = 17;
+
+            dgvDanhSach.Columns["phat"]
+                .DisplayIndex = 18;
 
             dgvDanhSach.Columns["tong_luong"]
-                .DefaultCellStyle.Format =
-                "N0";
-            dgvDanhSach.Columns["tong_gio_lam"]
-                .DefaultCellStyle.Format =
-                "N2";
-            if (
-                dgvDanhSach.Columns.Contains(
-                    "phu_cap"
-                )
-            )
-            {
-                dgvDanhSach.Columns["phu_cap_mac_dinh"]
-                    .DefaultCellStyle.Format =
-                    "N0";
-            }
+                .DisplayIndex = 19;
+            dgvDanhSach.Columns["ho_ten"].MinimumWidth = 180;
+            dgvDanhSach.Columns["tong_ca_duoc_phan"].Width = 45;
+            dgvDanhSach.Columns["tong_ca_di_lam"].Width = 45;
+            dgvDanhSach.Columns["tong_ca_nghi"].Width = 45;
+            dgvDanhSach.Columns["tong_phut_di_tre"].Width = 45;
+            dgvDanhSach.Columns["tong_phut_ve_som"].Width = 45;
+            dgvDanhSach.Columns["tong_phut_bi_tru"].Width = 60;
+            dgvDanhSach.Columns["tong_phut_tang_ca"].Width = 45;
+            dgvDanhSach.Columns["tong_luong_chinh"].MinimumWidth = 150;
+            dgvDanhSach.Columns["thuong"].Width = 60;
+            dgvDanhSach.Columns["tong_luong_tang_ca"].Width = 60;
+            dgvDanhSach.Columns["thuong"].Width = 60;
+            dgvDanhSach.Columns["phat"].Width = 60;
+            // =========================
+            // COLOR
+            // =========================
 
-            if (dgvDanhSach.Columns.Contains("thuong"))
-            {
-                dgvDanhSach.Columns["thuong"]
-                    .DefaultCellStyle.Format =
-                    "N0";
-            }
+            dgvDanhSach.Columns["thuong"]
+                .DefaultCellStyle.ForeColor =
+                Color.Green;
 
-            if (dgvDanhSach.Columns.Contains("phat"))
-            {
-                dgvDanhSach.Columns["phat"]
-                    .DefaultCellStyle.Format =
-                    "N0";
-            }
+            dgvDanhSach.Columns["phat"]
+                .DefaultCellStyle.ForeColor =
+                Color.Red;
 
-            if (dgvDanhSach.Columns.Contains("tong_luong"))
-            {
-                dgvDanhSach.Columns["tong_luong"]
-                    .DefaultCellStyle.Format =
-                    "N0";
-            }
+            dgvDanhSach.Columns["tong_luong"]
+                .DefaultCellStyle.ForeColor =
+                Color.Blue;
+
+            dgvDanhSach.Columns["tong_luong"]
+                .DefaultCellStyle.Font =
+                new Font(
+                    "Segoe UI",
+                    10,
+                    FontStyle.Bold
+                );
+
+            // =========================
+            // GRID STYLE
+            // =========================
 
             dgvDanhSach.AutoSizeColumnsMode =
                 DataGridViewAutoSizeColumnsMode.Fill;
 
-            dgvDanhSach.RowTemplate.Height =
-                35;
+            dgvDanhSach.RowTemplate.Height = 35;
 
             dgvDanhSach.DefaultCellStyle.Font =
-                new Font(
-                    "Segoe UI",
-                    10
-                );
+                new Font("Segoe UI", 10);
 
             dgvDanhSach.ColumnHeadersDefaultCellStyle.Font =
                 new Font(
@@ -288,6 +328,21 @@ namespace QuanLyChamCong.GUI
 
             dgvDanhSach.EnableHeadersVisualStyles =
                 false;
+
+            dgvDanhSach.ColumnHeadersDefaultCellStyle.BackColor =
+                Color.FromArgb(0, 122, 204);
+
+            dgvDanhSach.ColumnHeadersDefaultCellStyle.ForeColor =
+                Color.White;
+
+            dgvDanhSach.ColumnHeadersHeight = 45;
+
+            dgvDanhSach.RowHeadersVisible = false;
+
+            dgvDanhSach.AllowUserToResizeRows = false;
+
+            dgvDanhSach.SelectionMode =
+                DataGridViewSelectionMode.FullRowSelect;
         }
 
         private async void btnTaiLai_Click(
@@ -387,7 +442,10 @@ namespace QuanLyChamCong.GUI
                             row.Cells["tong_phut_tang_ca"]
                                 .Value
                         );
-
+                    model.tong_gio_lam =
+                        Convert.ToDecimal(
+                            row.Cells["tong_gio_lam"].Value
+                        );
                     model.luong_co_ban =
                         Convert.ToDecimal(
                             row.Cells["luong_co_ban"]
@@ -441,8 +499,6 @@ namespace QuanLyChamCong.GUI
                             row.Cells["tong_luong"]
                                 .Value
                         );
-
-                    model.ghi_chu = "";
 
                     model.nguoi_chot = "admin";
 

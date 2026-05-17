@@ -25,6 +25,8 @@ namespace QuanLyChamCong.Models
 
         public int tong_phut_tang_ca { get; set; }
 
+        public decimal tong_gio_lam { get; set; }
+
         public decimal luong_co_ban { get; set; }
 
         public decimal luong_theo_gio { get; set; }
@@ -42,8 +44,6 @@ namespace QuanLyChamCong.Models
         public decimal phat { get; set; }
 
         public decimal tong_luong { get; set; }
-
-        public string ghi_chu { get; set; }
 
         public string nguoi_chot { get; set; }
 
