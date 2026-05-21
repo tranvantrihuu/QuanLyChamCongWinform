@@ -44,7 +44,9 @@ namespace QuanLyChamCong.GUI
             ((System.ComponentModel.ISupportInitialize)(this.dgvNhanVien)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
-          
+            // 
+            // flowLayoutPanel1
+            // 
             this.flowLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.flowLayoutPanel1.AutoSize = true;
             this.flowLayoutPanel1.Controls.Add(this.btnThem);
@@ -55,7 +57,9 @@ namespace QuanLyChamCong.GUI
             this.flowLayoutPanel1.Size = new System.Drawing.Size(408, 46);
             this.flowLayoutPanel1.TabIndex = 0;
             this.flowLayoutPanel1.WrapContents = false;
-            
+            // 
+            // btnThem
+            // 
             this.btnThem.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnThem.BackColor = System.Drawing.Color.Pink;
             this.btnThem.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -66,7 +70,9 @@ namespace QuanLyChamCong.GUI
             this.btnThem.Text = "THÊM";
             this.btnThem.UseVisualStyleBackColor = false;
             this.btnThem.Click += new System.EventHandler(this.btnThem_Click);
-           
+            // 
+            // btnSua
+            // 
             this.btnSua.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnSua.BackColor = System.Drawing.Color.PaleGreen;
             this.btnSua.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -77,7 +83,9 @@ namespace QuanLyChamCong.GUI
             this.btnSua.Text = "SỬA";
             this.btnSua.UseVisualStyleBackColor = false;
             this.btnSua.Click += new System.EventHandler(this.btnSua_Click);
-            
+            // 
+            // btnXoa
+            // 
             this.btnXoa.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnXoa.BackColor = System.Drawing.Color.LightCoral;
             this.btnXoa.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -88,7 +96,9 @@ namespace QuanLyChamCong.GUI
             this.btnXoa.Text = "XÓA";
             this.btnXoa.UseVisualStyleBackColor = false;
             this.btnXoa.Click += new System.EventHandler(this.btnXoa_Click_1);
-          
+            // 
+            // tableLayoutPanel1
+            // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.dgvNhanVien, 0, 0);
@@ -103,7 +113,9 @@ namespace QuanLyChamCong.GUI
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1199, 691);
             this.tableLayoutPanel1.TabIndex = 2;
-           
+            // 
+            // dgvNhanVien
+            // 
             this.dgvNhanVien.BackgroundColor = System.Drawing.Color.GhostWhite;
             this.dgvNhanVien.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvNhanVien.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -118,7 +130,9 @@ namespace QuanLyChamCong.GUI
             this.dgvNhanVien.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvNhanVien_CellDoubleClick_1);
             this.dgvNhanVien.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvNhanVien_CellValueChanged);
             this.dgvNhanVien.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgvNhanVien_CurrentCellDirtyStateChanged);
-           
+            // 
+            // panel1
+            // 
             this.panel1.AutoSize = true;
             this.panel1.Controls.Add(this.txtSearch);
             this.panel1.Controls.Add(this.btnSearch);
@@ -128,7 +142,9 @@ namespace QuanLyChamCong.GUI
             this.panel1.Size = new System.Drawing.Size(1193, 63);
             this.panel1.TabIndex = 2;
             this.panel1.Resize += new System.EventHandler(this.panel1_Resize);
-    
+            // 
+            // txtSearch
+            // 
             this.txtSearch.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -136,7 +152,10 @@ namespace QuanLyChamCong.GUI
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(354, 30);
             this.txtSearch.TabIndex = 0;
-             
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            // 
+            // btnSearch
+            // 
             this.btnSearch.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnSearch.BackColor = System.Drawing.Color.Aqua;
             this.btnSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -147,7 +166,9 @@ namespace QuanLyChamCong.GUI
             this.btnSearch.Text = "TÌM KIẾM";
             this.btnSearch.UseVisualStyleBackColor = false;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
-            
+            // 
+            // UcNhanVien
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);

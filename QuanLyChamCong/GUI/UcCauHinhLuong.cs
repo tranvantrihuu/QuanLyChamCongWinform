@@ -1,27 +1,25 @@
 ﻿using QuanLyChamCong.Models;
 using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
-using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
 {
-    public partial class UcCauHinhLuong : BaseUserControl
+    public partial class UcCauHinhLuong :
+        BaseUserControl
     {
-        CauHinhLuongService service =
-            new CauHinhLuongService();
+        private bool _sortAsc = true;
+        private readonly
+            CauHinhLuongService _service =
+                new CauHinhLuongService();
 
         public UcCauHinhLuong()
         {
             InitializeComponent();
-
-            dgvCauHinhLuong.CurrentCellDirtyStateChanged +=
-                dgvCauHinhLuong_CurrentCellDirtyStateChanged;
-
         }
 
         private async void UcCauHinhLuong_Load(
@@ -34,207 +32,189 @@ namespace QuanLyChamCong.GUI
 
         private async Task LoadData()
         {
-            var dt = await service.GetAll();
-
-            dgvCauHinhLuong.DataSource = dt;
-
-            if (!dgvCauHinhLuong.Columns.Contains("colCheck"))
+            try
             {
-                DataGridViewCheckBoxColumn chk =
-                    new DataGridViewCheckBoxColumn();
+                List<CauHinhLuong> data =
+                    (await _service.GetAll())
+                    .OrderBy(x => x.nhan_vien_id)
+                    .ToList();
 
-                chk.Name = "colCheck";
-                chk.Width = 40;
+                dgvCauHinhLuong.DataSource =
+                    null;
 
-                dgvCauHinhLuong.Columns.Insert(0, chk);
+                dgvCauHinhLuong.DataSource =
+                    data;
+                dgvCauHinhLuong.ColumnHeaderMouseClick +=
+                dgvCauHinhLuong_ColumnHeaderMouseClick;
+                FormatGrid();
             }
-
-            if (!dgvCauHinhLuong.Columns.Contains("stt"))
+            catch (Exception ex)
             {
-                DataGridViewTextBoxColumn stt =
-                    new DataGridViewTextBoxColumn();
-
-                stt.Name = "stt";
-                stt.HeaderText = "STT";
-                stt.Width = 50;
-
-                dgvCauHinhLuong.Columns.Insert(1, stt);
+                MessageBox.Show(
+                    "Lỗi load dữ liệu:\n"
+                    + ex.Message
+                );
             }
-
-            dgvCauHinhLuong.RowPostPaint +=
-                (s, e) =>
-                {
-                    dgvCauHinhLuong.Rows[e.RowIndex]
-                        .Cells["stt"].Value =
-                        (e.RowIndex + 1).ToString();
-                };
-
-            dgvCauHinhLuong.RowHeadersVisible = false;
-
-            foreach (DataGridViewColumn col
-                in dgvCauHinhLuong.Columns)
-            {
-                col.ReadOnly = true;
-
-                col.DefaultCellStyle.Alignment =
-                    DataGridViewContentAlignment.MiddleCenter;
-
-                col.HeaderCell.Style.Alignment =
-                    DataGridViewContentAlignment.MiddleCenter;
-            }
-
-            dgvCauHinhLuong.Columns["colCheck"]
-                .ReadOnly = false;
-
-            dgvCauHinhLuong.Columns["stt"]
-                .DisplayIndex = 1;
-
-            dgvCauHinhLuong.Columns["nhan_vien_id"]
-                .DisplayIndex = 2;
-
-            dgvCauHinhLuong.Columns["ho_ten"]
-                .DisplayIndex = 3;
-
-            dgvCauHinhLuong.Columns["vi_tri"]
-                .DisplayIndex = 4;
-
-            dgvCauHinhLuong.Columns["loai_luong"]
-                .DisplayIndex = 5;
-
-            dgvCauHinhLuong.Columns["luong_co_ban"]
-                .DisplayIndex = 6;
-
-            dgvCauHinhLuong.Columns["luong_theo_gio"]
-                .DisplayIndex = 7;
-
-            dgvCauHinhLuong.Columns["luong_tang_ca"]
-                .DisplayIndex = 8;
-
-            dgvCauHinhLuong.Columns["phu_cap_mac_dinh"]
-                .DisplayIndex = 9;
-
-            dgvCauHinhLuong.RowHeadersVisible = false;
-            dgvCauHinhLuong.ReadOnly = false;
-
-            foreach (DataGridViewColumn col
-                in dgvCauHinhLuong.Columns)
-            {
-                col.ReadOnly = true;
-
-                col.DefaultCellStyle.Alignment =
-                    DataGridViewContentAlignment.MiddleCenter;
-
-                col.HeaderCell.Style.Alignment =
-                    DataGridViewContentAlignment.MiddleCenter;
-            }
-
-            dgvCauHinhLuong.Columns["colCheck"]
-                .ReadOnly = false;
-
-            dgvCauHinhLuong.AutoSizeColumnsMode =
-                DataGridViewAutoSizeColumnsMode.Fill;
-
-            dgvCauHinhLuong.Columns["nhan_vien_id"]
-                .HeaderText = "ID NHÂN VIÊN";
-
-            dgvCauHinhLuong.Columns["ho_ten"]
-                .HeaderText = "HỌ VÀ TÊN";
-
-            dgvCauHinhLuong.Columns["vi_tri"]
-                .HeaderText = "VỊ TRÍ";
-
-            dgvCauHinhLuong.Columns["loai_luong"]
-                .HeaderText = "LOẠI LƯƠNG";
-
-            dgvCauHinhLuong.Columns["luong_co_ban"]
-                .HeaderText = "LƯƠNG CƠ BẢN";
-
-            dgvCauHinhLuong.Columns["luong_theo_gio"]
-                .HeaderText = "LƯƠNG GIỜ";
-
-            dgvCauHinhLuong.Columns["luong_tang_ca"]
-                .HeaderText = "TĂNG CA 1 GIỜ";
-
-            dgvCauHinhLuong.Columns["phu_cap_mac_dinh"]
-                .HeaderText = "PHỤ CẤP";
-
-            if (dgvCauHinhLuong.Columns.Contains("nv_id"))
-                dgvCauHinhLuong.Columns["nv_id"]
-                    .Visible = false;
-
-            if (dgvCauHinhLuong.Columns.Contains("ma_van_tay"))
-                dgvCauHinhLuong.Columns["ma_van_tay"]
-                    .Visible = false;
-
-            if (dgvCauHinhLuong.Columns.Contains("id"))
-                dgvCauHinhLuong.Columns["id"]
-                    .Visible = false;
-
-            var culture =
-                new System.Globalization.CultureInfo("vi-VN");
-
-            if (dgvCauHinhLuong.Columns.Contains("luong_co_ban"))
-            {
-                dgvCauHinhLuong.Columns["luong_co_ban"]
-                    .DefaultCellStyle.Format = "N0";
-
-                dgvCauHinhLuong.Columns["luong_co_ban"]
-                    .DefaultCellStyle.FormatProvider = culture;
-            }
-
-            if (dgvCauHinhLuong.Columns.Contains("luong_theo_gio"))
-            {
-                dgvCauHinhLuong.Columns["luong_theo_gio"]
-                    .DefaultCellStyle.Format = "N0";
-
-                dgvCauHinhLuong.Columns["luong_theo_gio"]
-                    .DefaultCellStyle.FormatProvider = culture;
-            }
-
-            if (dgvCauHinhLuong.Columns.Contains("luong_tang_ca"))
-            {
-                dgvCauHinhLuong.Columns["luong_tang_ca"]
-                    .DefaultCellStyle.Format = "N0";
-
-                dgvCauHinhLuong.Columns["luong_tang_ca"]
-                    .DefaultCellStyle.FormatProvider = culture;
-            }
-
-            if (dgvCauHinhLuong.Columns.Contains("phu_cap_mac_dinh"))
-            {
-                dgvCauHinhLuong.Columns["phu_cap_mac_dinh"]
-                    .DefaultCellStyle.Format = "N0";
-
-                dgvCauHinhLuong.Columns["phu_cap_mac_dinh"]
-                    .DefaultCellStyle.FormatProvider = culture;
-            }
-
-            dgvCauHinhLuong.EnableHeadersVisualStyles = false;
-
-            dgvCauHinhLuong.ColumnHeadersDefaultCellStyle.BackColor =
-                Color.FromArgb(0, 120, 215);
-
-            dgvCauHinhLuong.ColumnHeadersDefaultCellStyle.ForeColor =
-                Color.White;
-
-            dgvCauHinhLuong.ColumnHeadersDefaultCellStyle.Font =
-                new Font("Segoe UI", 10, FontStyle.Bold);
-
-            dgvCauHinhLuong.RowsDefaultCellStyle.BackColor =
-                Color.White;
-
-            dgvCauHinhLuong.AlternatingRowsDefaultCellStyle.BackColor =
-                Color.FromArgb(240, 240, 240);
+        }
+        private void FormatGrid()
+        {
+            dgvCauHinhLuong.AutoGenerateColumns =
+                true;
 
             dgvCauHinhLuong.SelectionMode =
-                DataGridViewSelectionMode.FullRowSelect;
+                DataGridViewSelectionMode
+                .FullRowSelect;
 
-            dgvCauHinhLuong.AllowUserToAddRows = false;
+            dgvCauHinhLuong.MultiSelect =
+                false;
 
-            dgvCauHinhLuong.MultiSelect = false;
+            dgvCauHinhLuong.ReadOnly =
+                true;
 
-            dgvCauHinhLuong.EditMode =
-                DataGridViewEditMode.EditOnEnter;
+            dgvCauHinhLuong.AllowUserToAddRows =
+                false;
+
+            /*
+             * HEADER
+             */
+
+            dgvCauHinhLuong.Columns["id"]
+                .HeaderText =
+                "ID";
+
+            dgvCauHinhLuong.Columns["nhan_vien_id"]
+                .HeaderText =
+                "Mã NV";
+
+            dgvCauHinhLuong.Columns["ho_ten"]
+                .HeaderText =
+                "Họ tên";
+
+            dgvCauHinhLuong.Columns["vi_tri"]
+                .HeaderText =
+                "Vị trí";
+
+            dgvCauHinhLuong.Columns["loai_luong"]
+                .HeaderText =
+                "Loại lương";
+
+            dgvCauHinhLuong.Columns["luong_co_ban"]
+                .HeaderText =
+                "Lương cơ bản";
+
+            dgvCauHinhLuong.Columns["luong_theo_gio"]
+                .HeaderText =
+                "Lương giờ";
+
+            dgvCauHinhLuong.Columns["luong_tang_ca"]
+                .HeaderText =
+                "Tăng ca";
+
+            dgvCauHinhLuong.Columns["phu_cap_mac_dinh"]
+                .HeaderText =
+                "Phụ cấp";
+
+            /*
+             * FORMAT MONEY
+             */
+
+            dgvCauHinhLuong.Columns["luong_co_ban"]
+                .DefaultCellStyle.Format =
+                "N0";
+
+            dgvCauHinhLuong.Columns["luong_theo_gio"]
+                .DefaultCellStyle.Format =
+                "N0";
+
+            dgvCauHinhLuong.Columns["luong_tang_ca"]
+                .DefaultCellStyle.Format =
+                "N0";
+
+            dgvCauHinhLuong.Columns["phu_cap_mac_dinh"]
+                .DefaultCellStyle.Format =
+                "N0";
+
+            dgvCauHinhLuong.AutoSizeColumnsMode =
+                DataGridViewAutoSizeColumnsMode
+                .Fill;
+
+            /*
+             * SORT
+             */
+
+            foreach (
+                DataGridViewColumn col
+                in dgvCauHinhLuong.Columns
+            )
+            {
+                col.SortMode =
+                    DataGridViewColumnSortMode
+                    .Automatic;
+            }
+        }
+
+        private void dgvCauHinhLuong_ColumnHeaderMouseClick(
+            object sender,
+            DataGridViewCellMouseEventArgs e
+        )
+        {
+            string columnName =
+                dgvCauHinhLuong
+                .Columns[e.ColumnIndex]
+                .DataPropertyName;
+
+            List<CauHinhLuong> data =
+                dgvCauHinhLuong.DataSource
+                as List<CauHinhLuong>;
+
+            if (data == null)
+            {
+                return;
+            }
+
+            if (_sortAsc)
+            {
+                data = data
+                    .OrderBy(x =>
+                        x.GetType()
+                         .GetProperty(columnName)
+                         .GetValue(x, null)
+                    )
+                    .ToList();
+            }
+            else
+            {
+                data = data
+                    .OrderByDescending(x =>
+                        x.GetType()
+                         .GetProperty(columnName)
+                         .GetValue(x, null)
+                    )
+                    .ToList();
+            }
+
+            _sortAsc = !_sortAsc;
+
+            dgvCauHinhLuong.DataSource =
+                null;
+
+            dgvCauHinhLuong.DataSource =
+                data;
+        }
+        private CauHinhLuong GetCurrentRow()
+        {
+            if (
+                dgvCauHinhLuong.CurrentRow
+                == null
+            )
+            {
+                return null;
+            }
+
+            return dgvCauHinhLuong
+                .CurrentRow
+                .DataBoundItem
+                as CauHinhLuong;
         }
 
         private async void btnThem_Click(
@@ -242,12 +222,103 @@ namespace QuanLyChamCong.GUI
             EventArgs e
         )
         {
-            FrmCauHinhLuongEdit f =
-                new FrmCauHinhLuongEdit(false);
+            FrmCauHinhLuongEdit frm =
+                new FrmCauHinhLuongEdit();
 
-            f.ShowDialog();
+            frm.IsEdit = false;
 
-            await LoadData();
+            if (
+                frm.ShowDialog()
+                == DialogResult.OK
+            )
+            {
+                await LoadData();
+            }
+        }
+
+        private async void btnSua_Click(
+            object sender,
+            EventArgs e
+        )
+        {
+            CauHinhLuong item =
+                GetCurrentRow();
+
+            if (item == null)
+            {
+                MessageBox.Show(
+                    "Vui lòng chọn dữ liệu"
+                );
+
+                return;
+            }
+
+            FrmCauHinhLuongEdit frm =
+                new FrmCauHinhLuongEdit();
+
+            frm.IsEdit = true;
+
+            frm.CauHinhLuongEdit =
+                item;
+
+            if (
+                frm.ShowDialog()
+                == DialogResult.OK
+            )
+            {
+                await LoadData();
+            }
+        }
+
+        private async void btnXoa_Click(
+            object sender,
+            EventArgs e
+        )
+        {
+            CauHinhLuong item =
+                GetCurrentRow();
+
+            if (item == null)
+            {
+                MessageBox.Show(
+                    "Vui lòng chọn dữ liệu"
+                );
+
+                return;
+            }
+
+            DialogResult rs =
+                MessageBox.Show(
+                    "Bạn có chắc muốn xóa?",
+                    "Xác nhận",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+            if (rs != DialogResult.Yes)
+            {
+                return;
+            }
+
+            bool result =
+                await _service.Delete(
+                    item.id
+                );
+
+            if (result)
+            {
+                MessageBox.Show(
+                    "Xóa thành công"
+                );
+
+                await LoadData();
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Xóa thất bại"
+                );
+            }
         }
 
         private async void dgvCauHinhLuong_CellDoubleClick(
@@ -256,126 +327,25 @@ namespace QuanLyChamCong.GUI
         )
         {
             if (e.RowIndex < 0)
+            {
                 return;
+            }
 
-            var row =
-                dgvCauHinhLuong.Rows[e.RowIndex];
+            await Task.Delay(1);
 
-            FrmCauHinhLuongEdit f =
-                new FrmCauHinhLuongEdit(true);
-
-            f.id =
-                Convert.ToInt32(
-                    row.Cells["id"].Value
-                );
-
-            f.nhanVienId =
-                row.Cells["nhan_vien_id"]
-                .Value
-                .ToString();
-
-            f.numLuongCoBan.Value =
-                row.Cells["luong_co_ban"].Value
-                == DBNull.Value
-                ? 0
-                : Convert.ToDecimal(
-                    row.Cells["luong_co_ban"].Value
-                );
-
-            f.numLuongTheoGio.Value =
-                row.Cells["luong_theo_gio"].Value
-                == DBNull.Value
-                ? 0
-                : Convert.ToDecimal(
-                    row.Cells["luong_theo_gio"].Value
-                );
-
-            f.numTangCa.Value =
-                row.Cells["luong_tang_ca"].Value
-                == DBNull.Value
-                ? 0
-                : Convert.ToDecimal(
-                    row.Cells["luong_tang_ca"].Value
-                );
-
-            f.numPhuCap.Value =
-                row.Cells["phu_cap_mac_dinh"].Value
-                == DBNull.Value
-                ? 0
-                : Convert.ToDecimal(
-                    row.Cells["phu_cap_mac_dinh"].Value
-                );
-
-            f.ShowDialog();
-
-            await LoadData();
+            btnSua.PerformClick();
         }
 
-        private async void btnXoa_Click(
+        /*
+         * DESIGNER ĐANG BIND EVENT
+         */
+
+        private void dgvCauHinhLuong_CellValueChanged(
             object sender,
-            EventArgs e
+            DataGridViewCellEventArgs e
         )
         {
-            List<int> ids =
-                new List<int>();
 
-            foreach (DataGridViewRow row
-                in dgvCauHinhLuong.Rows)
-            {
-                if (row.Cells["colCheck"].Value != null
-                    &&
-                    Convert.ToBoolean(
-                        row.Cells["colCheck"].Value
-                    ))
-                {
-                    ids.Add(
-                        Convert.ToInt32(
-                            row.Cells["id"].Value
-                        )
-                    );
-                }
-            }
-
-            if (ids.Count == 0)
-            {
-                MessageBox.Show(
-                    "Tick chọn dòng muốn xóa!"
-                );
-
-                return;
-            }
-
-            var result =
-                MessageBox.Show(
-                    "Bạn có chắc muốn xóa?",
-                    "Xác nhận",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Warning
-                );
-
-            if (result == DialogResult.No)
-                return;
-
-            foreach (int item in ids)
-            {
-                await service.Delete(item);
-            }
-
-            MessageBox.Show(
-                "Xóa thành công!"
-            );
-
-            await LoadData();
-        }
-
-        private void btnSua_Click(
-            object sender,
-            EventArgs e
-        )
-        {
-            MessageBox.Show(
-                "Double click dòng muốn sửa!"
-            );
         }
 
         private void dgvCauHinhLuong_CurrentCellDirtyStateChanged(
@@ -383,37 +353,7 @@ namespace QuanLyChamCong.GUI
             EventArgs e
         )
         {
-            if (dgvCauHinhLuong.IsCurrentCellDirty)
-            {
-                dgvCauHinhLuong.CommitEdit(
-                    DataGridViewDataErrorContexts.Commit
-                );
-            }
-        }
 
-        private void dgvCauHinhLuong_CellValueChanged(
-            object sender,
-            DataGridViewCellEventArgs e
-        )
-        {
-            if (e.ColumnIndex ==
-                dgvCauHinhLuong.Columns["colCheck"].Index)
-            {
-                var row =
-                    dgvCauHinhLuong.Rows[e.RowIndex];
-
-                bool isChecked =
-                    row.Cells["colCheck"].Value != null
-                    &&
-                    Convert.ToBoolean(
-                        row.Cells["colCheck"].Value
-                    );
-
-                row.DefaultCellStyle.BackColor =
-                    isChecked
-                    ? Color.LightPink
-                    : Color.White;
-            }
         }
     }
 }

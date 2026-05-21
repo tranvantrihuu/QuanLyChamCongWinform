@@ -1,19 +1,24 @@
-﻿using QuanLyChamCong.Services;
+﻿using QuanLyChamCong.Models;
+using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
 using System;
-using System.Drawing;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
+
 namespace QuanLyChamCong.GUI
 {
-    public partial class UcBaoCaoChamCong : BaseUserControl
+    public partial class UcBaoCaoChamCong :
+        BaseUserControl
     {
-        ChamCongService service =
-            new ChamCongService();
+        private readonly
+            ChamCongService chamCongService =
+                new ChamCongService();
 
-        NhanVienService nhanVienService =
-            new NhanVienService();
+        private readonly
+            NhanVienService nhanVienService =
+                new NhanVienService();
 
         public UcBaoCaoChamCong()
         {
@@ -25,97 +30,74 @@ namespace QuanLyChamCong.GUI
             EventArgs e
         )
         {
-            await LoadNhanVien();
-
             dtTuNgay.Value =
-                DateTime.Now.AddMonths(-1);
+                DateTime.Now.AddDays(-7);
 
             dtDenNgay.Value =
                 DateTime.Now;
 
-            dtDenNgay.MinDate =
-                dtTuNgay.Value.Date;
+            await LoadNhanVien();
 
             await LoadBaoCao();
         }
 
         private async Task LoadNhanVien()
         {
-            var ds =
-                await nhanVienService
-                .GetAll();
+            try
+            {
+                List<NhanVien> ds =
+                    await nhanVienService
+                    .GetAll();
 
-            ds.Insert(
-                0,
-                new Models.NhanVien
-                {
-                    id = "TATCA",
-                    ho_ten = "Tất cả"
-                }
-            );
+                ds.Insert(
+                    0,
+                    new NhanVien
+                    {
+                        id = "",
+                        ho_ten =
+                            "-- Tất cả --"
+                    }
+                );
 
-            cboNhanVien.DataSource =
-                ds;
+                cboNhanVien.DataSource =
+                    ds;
 
-            cboNhanVien.DisplayMember =
-                "ho_ten";
+                cboNhanVien.DisplayMember =
+                    "ho_ten";
 
-            cboNhanVien.ValueMember =
-                "id";
-
-            cboNhanVien.SelectedIndex =
-                0;
-        }
-
-        private async void btnLoc_Click(
-            object sender,
-            EventArgs e
-        )
-        {
-            await LoadBaoCao();
-        }
-
-        private async void btnLamMoi_Click(
-            object sender,
-            EventArgs e
-        )
-        {
-            cboNhanVien.SelectedIndex = 0;
-
-            dtTuNgay.Value =
-                DateTime.Now.AddMonths(-1);
-
-            dtDenNgay.Value =
-                DateTime.Now;
-
-            await LoadBaoCao();
+                cboNhanVien.ValueMember =
+                    "id";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message
+                );
+            }
         }
 
         private async Task LoadBaoCao()
         {
             try
             {
-                if (
-                    cboNhanVien.SelectedValue
-                    == null
-                )
-                {
-                    return;
-                }
-
-                string nhanVienId =
-                    cboNhanVien.SelectedValue
-                    .ToString();
-
-                var data =
-                    await service.BaoCaoTongHop(
-                        nhanVienId,
-                        dtTuNgay.Value.Date,
-                        dtDenNgay.Value.Date
-                    );
+                List<BaoCaoChamCong> ds =
+                    await chamCongService
+                    .GetAll();
 
                 dgvBaoCao.DataSource =
-                    data;
+                    null;
+
+                dgvBaoCao.DataSource =
+                    ds;
+
+                dgvBaoCao.AutoSizeColumnsMode =
+                    DataGridViewAutoSizeColumnsMode
+                    .Fill;
+
+                dgvBaoCao.AllowUserToAddRows =
+                    false;
+
+                dgvBaoCao.ReadOnly = true;
 
                 FormatGrid();
             }
@@ -127,123 +109,139 @@ namespace QuanLyChamCong.GUI
             }
         }
 
-        private void dtTuNgay_ValueChanged(
-            object sender,
-            EventArgs e
-        )
-        {
-            dtDenNgay.MinDate =
-                dtTuNgay.Value.Date;
-
-            if (
-                dtDenNgay.Value.Date
-                < dtTuNgay.Value.Date
-            )
-            {
-                dtDenNgay.Value =
-                    dtTuNgay.Value.Date;
-            }
-        }
-
         private void FormatGrid()
         {
-            dgvBaoCao.AutoSizeColumnsMode =
-                DataGridViewAutoSizeColumnsMode.Fill;
-
-            dgvBaoCao.AllowUserToAddRows =
-                false;
-
-            dgvBaoCao.RowHeadersVisible =
-                false;
-
-            dgvBaoCao.SelectionMode =
-                DataGridViewSelectionMode
-                .FullRowSelect;
-
-            dgvBaoCao.MultiSelect =
-                false;
-
-            dgvBaoCao.ReadOnly =
-                true;
-
-            dgvBaoCao.DefaultCellStyle.Font =
-                new Font(
-                    "Segoe UI",
-                    10
-                );
-
-            dgvBaoCao.ColumnHeadersDefaultCellStyle.Font =
-                new Font(
-                    "Segoe UI",
-                    10,
-                    FontStyle.Bold
-                );
-
-            dgvBaoCao.ColumnHeadersHeight =
-                40;
-
-            dgvBaoCao.RowTemplate.Height =
-                35;
-
             if (
-                dgvBaoCao.Columns.Count > 0
-            )
-            {
-                dgvBaoCao.Columns[0]
-                    .HeaderText =
-                    "Mã nhân viên";
-
-                if (
-                    dgvBaoCao.Columns.Count > 1
-                )
-                {
-                    dgvBaoCao.Columns[1]
-                        .HeaderText =
-                        "Họ tên";
-                }
-
-                if (
-                    dgvBaoCao.Columns.Count > 2
-                )
-                {
-                    dgvBaoCao.Columns[2]
-                        .HeaderText =
-                        "Tổng số ca công";
-                }
-
-                if (
-                    dgvBaoCao.Columns.Count > 3
-                )
-                {
-                    dgvBaoCao.Columns[3]
-                        .HeaderText =
-                        "Tổng ca đi trễ";
-                }
-
-                if (
-                    dgvBaoCao.Columns.Count > 4
-                )
-                {
-                    dgvBaoCao.Columns[4]
-                        .HeaderText =
-                        "Tổng ca vắng";
-                }
-            }
-        }
-
-        private async void cboNhanVien_SelectedIndexChanged(
-            object sender,
-            EventArgs e
-        )
-        {
-            if (
-                !IsHandleCreated
+                dgvBaoCao.Columns.Count <= 0
             )
             {
                 return;
             }
 
+            dgvBaoCao.Columns["id"]
+                .HeaderText = "ID";
+
+            dgvBaoCao.Columns["nhan_vien_id"]
+                .HeaderText = "Mã NV";
+
+            dgvBaoCao.Columns["ho_ten"]
+                .HeaderText = "Họ tên";
+
+            dgvBaoCao.Columns["ten_ca"]
+                .HeaderText = "Ca làm";
+
+            dgvBaoCao.Columns["ngay_lam"]
+                .HeaderText = "Ngày làm";
+
+            dgvBaoCao.Columns["check_in"]
+                .HeaderText = "Check In";
+
+            dgvBaoCao.Columns["check_out"]
+                .HeaderText = "Check Out";
+
+            dgvBaoCao.Columns["so_gio_lam"]
+                .HeaderText = "Số giờ làm";
+
+            dgvBaoCao.Columns["so_phut_di_tre"]
+                .HeaderText = "Đi trễ";
+
+            dgvBaoCao.Columns["so_phut_ve_som"]
+                .HeaderText = "Về sớm";
+
+            dgvBaoCao.Columns["so_phut_tang_ca"]
+                .HeaderText = "Tăng ca";
+
+            dgvBaoCao.Columns["trang_thai"]
+                .HeaderText = "Trạng thái";
+        }
+
+        private async void btnLoc_Click(
+            object sender,
+            EventArgs e
+        )
+        {
+            try
+            {
+                List<BaoCaoChamCong> ds =
+                    await chamCongService
+                    .GetAll();
+
+                string nhanVienId =
+                    cboNhanVien.SelectedValue?
+                    .ToString();
+
+                DateTime tuNgay = dtTuNgay.Value.Date;
+                DateTime denNgay = dtDenNgay.Value.Date;
+
+                var result =
+                    ds.Where(x =>
+                        (
+                            string.IsNullOrEmpty(
+                                nhanVienId
+                            )
+                            ||
+                            x.nhan_vien_id ==
+                            nhanVienId
+                        )
+                        &&
+                        x.ngay_lam.HasValue
+                        &&
+                        x.ngay_lam.Value.Date
+                        >= tuNgay
+                        &&
+                        x.ngay_lam.Value.Date
+                        <= denNgay
+                    )
+                    .OrderByDescending(
+                        x => x.ngay_lam
+                    )
+                    .ToList();
+
+                dgvBaoCao.DataSource =
+                    null;
+
+                dgvBaoCao.DataSource =
+                    result;
+
+                FormatGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message
+                );
+            }
+        }
+
+        private async void btnLamMoi_Click(
+            object sender,
+            EventArgs e
+        )
+        {
+            cboNhanVien.SelectedIndex =
+                0;
+
+            dtTuNgay.Value =
+                DateTime.Now.AddDays(-7);
+
+            dtDenNgay.Value =
+                DateTime.Now;
+
             await LoadBaoCao();
+        }
+
+        private void cboNhanVien_SelectedIndexChanged(
+            object sender,
+            EventArgs e)
+        {
+
+        }
+
+        private void dtTuNgay_ValueChanged(
+            object sender,
+            EventArgs e)
+        {
+
         }
     }
 }

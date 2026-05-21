@@ -1,193 +1,178 @@
-﻿using QuanLyChamCong.Models;
+﻿using QuanLyChamCong.GUI;
+using QuanLyChamCong.Models;
 using QuanLyChamCong.Services;
-using System.Collections.Generic;
-using System.Linq;
-using QuanLyChamCong.GUI;
 using QuanLyChamCong.THEME;
 using System;
-using System.Data;
-using System.Drawing;
+using QuanLyChamCong.Models.ViewModels;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
+
 namespace GUI
 {
     public partial class UcQuanLyChamCong : BaseUserControl
     {
-        QuanLyChamCongService service = new QuanLyChamCongService();
+        private readonly QuanLyChamCongService _service =
+            new QuanLyChamCongService();
 
-        NhanVienService nhanVienService = new NhanVienService();
+        private readonly NhanVienService _nhanVienService =
+            new NhanVienService();
+
         public UcQuanLyChamCong()
         {
             InitializeComponent();
         }
 
         private async void UcQuanLyChamCong_Load(
-            object sender,
-            EventArgs e
-        )
+    object sender,
+    EventArgs e
+)
         {
-            LoadNhanVien();
-
             dtTuNgay.Value =
-                DateTime.Now.AddDays(-30);
+                DateTime.Now.AddMonths(-1);
 
             dtDenNgay.Value =
                 DateTime.Now;
 
-            LoadData();
-        }
+            /*
+             * CHẶN CHỌN NGƯỢC NGÀY
+             */
 
-        private async void LoadNhanVien()
-        {
-            var ds =
-                await nhanVienService.GetAll();
-
-            ds.Insert(
-                0,
-                new NhanVien
-                {
-                    id = "",
-                    ho_ten = "Tất cả"
-                }
-            );
-
-            cboNhanVien.DataSource =
-                ds;
-
-            cboNhanVien.DisplayMember =
-                "ho_ten";
-
-            cboNhanVien.ValueMember =
-                "id";
-        }
-
-        private async void LoadData()
-        {
-            string nhanVienId = "";
-
-            if (
-                cboNhanVien.SelectedValue
-                != null
-            )
-            {
-                nhanVienId =
-                    cboNhanVien
-                    .SelectedValue
-                    .ToString();
-            }
-
-            DateTime tuNgay =
+            dtDenNgay.MinDate =
                 dtTuNgay.Value.Date;
 
-            DateTime denNgay =
-                dtDenNgay.Value.Date;
+            /*
+             * FORMAT DATE
+             */
 
-            if (
-                (denNgay - tuNgay)
-                .TotalDays > 31
-            )
-            {
-                MessageBox.Show(
-                    "Chỉ được xem tối đa 31 ngày"
-                );
+            dtTuNgay.Format =
+                DateTimePickerFormat.Custom;
 
-                return;
-            }
+            dtTuNgay.CustomFormat =
+                "dd/MM/yyyy";
 
-            List<ChamCong> ds =
-                await service.GetAll();
+            dtDenNgay.Format =
+                DateTimePickerFormat.Custom;
 
-            if (!string.IsNullOrEmpty(nhanVienId))
-            {
-                ds = ds.Where(x =>
-                    x.nhan_vien_id ==
-                    nhanVienId
-                ).ToList();
-            }
+            dtDenNgay.CustomFormat =
+                "dd/MM/yyyy";
 
-            ds = ds.Where(x =>
-                x.ngay_lam.Value.Date >= tuNgay
-                &&
-                x.ngay_lam.Value.Date <= denNgay
-            ).ToList();
+            /*
+             * EVENT
+             */
 
-            dgvChamCong.DataSource =
-                ds;
+            dtTuNgay.ValueChanged +=
+                dtTuNgay_ValueChanged;
+            dtDenNgay.ValueChanged +=
+                dtDenNgay_ValueChanged;
+            await LoadNhanVien();
 
-            FormatDataGridView();
+            await LoadData();
         }
 
-        private void FormatDataGridView()
+        private async Task LoadNhanVien()
         {
-            if (dgvChamCong.Columns.Count <= 0)
-                return;
+            try
+            {
+                var ds =
+                    await _nhanVienService.GetAll();
 
-            dgvChamCong.EnableHeadersVisualStyles = false;
+                List<dynamic> list =
+                    new List<dynamic>();
+
+                list.Add(
+                    new
+                    {
+                        id = "",
+                        ho_ten = "TẤT CẢ"
+                    }
+                );
+
+                foreach (var item in ds)
+                {
+                    list.Add(
+                        new
+                        {
+                            id = item.id,
+                            ho_ten =
+                                item.id
+                                + " - "
+                                + item.ho_ten
+                        }
+                    );
+                }
+
+                cboNhanVien.DataSource = list;
+
+                cboNhanVien.DisplayMember =
+                    "ho_ten";
+
+                cboNhanVien.ValueMember =
+                    "id";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message
+                );
+            }
+        }
+
+        private async Task LoadData()
+        {
+            try
+            {
+                List<VwDanhSachChamCong> ds =
+                    await _service.LocChamCong(
+                        null,
+                        dtTuNgay.Value.Date,
+                        dtDenNgay.Value.Date
+                    );
+
+                dgvChamCong.AutoGenerateColumns =
+                    true;
+
+                dgvChamCong.DataSource =
+                    null;
+
+                dgvChamCong.DataSource =
+                    ds;
+
+                FormatGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.ToString()
+                );
+            }
+        }
+
+        private void FormatGrid()
+        {
+            if (
+                dgvChamCong.Columns.Count <= 0
+            )
+            {
+                return;
+            }
+
+            dgvChamCong.RowHeadersVisible = false;
 
             dgvChamCong.AutoSizeColumnsMode =
                 DataGridViewAutoSizeColumnsMode.Fill;
 
-            dgvChamCong.AllowUserToAddRows = false;
-
-            dgvChamCong.ReadOnly = true;
-
             dgvChamCong.SelectionMode =
                 DataGridViewSelectionMode.FullRowSelect;
 
-            dgvChamCong.MultiSelect = false;
+            dgvChamCong.MultiSelect = true;
 
-            dgvChamCong.RowHeadersVisible = false;
+            dgvChamCong.ReadOnly = true;
 
-            
-            DataGridViewCellStyle headerStyle =
-                new DataGridViewCellStyle();
+            dgvChamCong.AllowUserToAddRows =
+                false;
 
-            headerStyle.BackColor =
-                Color.RoyalBlue;
-
-            headerStyle.ForeColor =
-                Color.White;
-
-            headerStyle.Font =
-                new Font(
-                    "Segoe UI",
-                    11,
-                    FontStyle.Bold
-                );
-
-            headerStyle.Alignment =
-                DataGridViewContentAlignment.MiddleCenter;
-
-            headerStyle.WrapMode =
-                DataGridViewTriState.True;
-
-            dgvChamCong.ColumnHeadersDefaultCellStyle =
-                headerStyle;
-
-            dgvChamCong.ColumnHeadersHeight = 45;
-
-            
-            DataGridViewCellStyle cellStyle =
-                new DataGridViewCellStyle();
-
-            cellStyle.Alignment =
-                DataGridViewContentAlignment.MiddleCenter;
-
-            cellStyle.Font =
-                new Font(
-                    "Segoe UI",
-                    10
-                );
-
-            dgvChamCong.DefaultCellStyle =
-                cellStyle;
-
-            
-            dgvChamCong.Columns["ho_ten"]
-                .DefaultCellStyle.Alignment =
-                DataGridViewContentAlignment.MiddleLeft;
-
-            
             dgvChamCong.Columns["id"]
                 .HeaderText = "ID";
 
@@ -201,13 +186,7 @@ namespace GUI
                 .HeaderText = "NGÀY LÀM";
 
             dgvChamCong.Columns["ten_ca"]
-                .HeaderText = "CA LÀM";
-
-            dgvChamCong.Columns["gio_bat_dau"]
-                .HeaderText = "GIỜ BẮT ĐẦU";
-
-            dgvChamCong.Columns["gio_ket_thuc"]
-                .HeaderText = "GIỜ KẾT THÚC";
+                .HeaderText = "CA";
 
             dgvChamCong.Columns["check_in"]
                 .HeaderText = "CHECK IN";
@@ -227,6 +206,9 @@ namespace GUI
             dgvChamCong.Columns["so_phut_ve_tre"]
                 .HeaderText = "VỀ TRỄ";
 
+            dgvChamCong.Columns["so_gio_lam"]
+                .HeaderText = "SỐ GIỜ";
+
             dgvChamCong.Columns["so_phut_tang_ca"]
                 .HeaderText = "TĂNG CA";
 
@@ -236,63 +218,126 @@ namespace GUI
             dgvChamCong.Columns["trang_thai"]
                 .HeaderText = "TRẠNG THÁI";
 
-            
-            dgvChamCong.Columns["ngay_lam"]
-                .DefaultCellStyle.Format =
-                "dd/MM/yyyy";
+            /*
+             * ẨN CỘT
+             */
 
-            dgvChamCong.Columns["check_in"]
-                .DefaultCellStyle.Format =
-                "dd/MM/yyyy HH:mm";
+            if (
+                dgvChamCong.Columns[
+                    "ca_lam_id"
+                ] != null
+            )
+            {
+                dgvChamCong.Columns[
+                    "ca_lam_id"
+                ].Visible = false;
+            }
 
-            dgvChamCong.Columns["check_out"]
-                .DefaultCellStyle.Format =
-                "dd/MM/yyyy HH:mm";
+            if (
+                dgvChamCong.Columns[
+                    "gio_bat_dau"
+                ] != null
+            )
+            {
+                dgvChamCong.Columns[
+                    "gio_bat_dau"
+                ].Visible = false;
+            }
 
-            
-            dgvChamCong.Columns[
-                "phut_cho_phep_di_tre"
-            ].Visible = false;
+            if (
+                dgvChamCong.Columns[
+                    "gio_ket_thuc"
+                ] != null
+            )
+            {
+                dgvChamCong.Columns[
+                    "gio_ket_thuc"
+                ].Visible = false;
+            }
 
-            dgvChamCong.Columns[
-                "phut_cho_phep_ve_som"
-            ].Visible = false;
 
-            dgvChamCong.Columns[
-                "phut_cho_phep_checkin_som"
-            ].Visible = false;
 
-            dgvChamCong.Columns[
-                "phut_cho_phep_checkout_tre"
-            ].Visible = false;
+            if (
+                dgvChamCong.Columns[
+                    "phut_cho_phep_di_tre"
+                ] != null
+            )
+            {
+                dgvChamCong.Columns[
+                    "phut_cho_phep_di_tre"
+                ].Visible = false;
+            }
 
-            dgvChamCong.Columns[
-                "ca_lam_id"
-            ].Visible = false;
+            if (
+                dgvChamCong.Columns[
+                    "phut_cho_phep_ve_som"
+                ] != null
+            )
+            {
+                dgvChamCong.Columns[
+                    "phut_cho_phep_ve_som"
+                ].Visible = false;
+            }
+
+            if (
+                dgvChamCong.Columns[
+                    "phut_cho_phep_checkin_som"
+                ] != null
+            )
+            {
+                dgvChamCong.Columns[
+                    "phut_cho_phep_checkin_som"
+                ].Visible = false;
+            }
+
+            if (
+                dgvChamCong.Columns[
+                    "phut_cho_phep_checkout_tre"
+                ] != null
+            )
+            {
+                dgvChamCong.Columns[
+                    "phut_cho_phep_checkout_tre"
+                ].Visible = false;
+            }
         }
 
-        private void btnLoc_Click(
+        private async void btnLoc_Click(
+    object sender,
+    EventArgs e
+)
+        {
+            try
+            {
+                string nhanVienId =
+                    cboNhanVien.SelectedValue
+                    ?.ToString();
+
+                List<VwDanhSachChamCong> ds =
+                    await _service.LocChamCong(
+                        nhanVienId,
+                        dtTuNgay.Value.Date,
+                        dtDenNgay.Value.Date
+                    );
+
+                dgvChamCong.DataSource = null;
+
+                dgvChamCong.DataSource = ds;
+
+                FormatGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private async void btnLamMoi_Click(
             object sender,
             EventArgs e
         )
         {
-            LoadData();
-        }
-
-        private void btnLamMoi_Click(
-            object sender,
-            EventArgs e
-        )
-        {
-            cboNhanVien.SelectedIndex = 0;
-
-            dtTuNgay.Value =
-                DateTime.Now.AddDays(-30);
-
-            dtDenNgay.Value =
-                DateTime.Now;
-
-            LoadData();
+            await LoadData();
         }
 
         private void btnThem_Click(
@@ -308,7 +353,7 @@ namespace GUI
                 == DialogResult.OK
             )
             {
-                LoadData();
+                _ = LoadData();
             }
         }
 
@@ -318,8 +363,7 @@ namespace GUI
         )
         {
             if (
-                dgvChamCong.CurrentRow
-                == null
+                dgvChamCong.CurrentRow == null
             )
             {
                 MessageBox.Show(
@@ -329,34 +373,37 @@ namespace GUI
                 return;
             }
 
-            int id =
-                Convert.ToInt32(
-                    dgvChamCong
-                    .CurrentRow
-                    .Cells["id"]
-                    .Value
-                );
+            VwDanhSachChamCong cc =
+                dgvChamCong.CurrentRow
+                .DataBoundItem
+                as VwDanhSachChamCong;
+
+            if (cc == null)
+            {
+                return;
+            }
 
             FrmQuanLyChamCongEdit f =
-                new FrmQuanLyChamCongEdit(id);
+                new FrmQuanLyChamCongEdit(
+                    cc.id
+                );
 
             if (
                 f.ShowDialog()
                 == DialogResult.OK
             )
             {
-                LoadData();
+                _ = LoadData();
             }
         }
 
         private async void btnXoa_Click(
-            object sender,
-            EventArgs e
-        )
+    object sender,
+    EventArgs e
+)
         {
             if (
-                dgvChamCong.CurrentRow
-                == null
+                dgvChamCong.SelectedRows.Count <= 0
             )
             {
                 MessageBox.Show(
@@ -368,44 +415,66 @@ namespace GUI
 
             DialogResult rs =
                 MessageBox.Show(
-                    "Bạn có chắc muốn xóa?",
-                    "Thông báo",
+                    $"Xóa {dgvChamCong.SelectedRows.Count} dòng chấm công?",
+                    "XÁC NHẬN",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question
                 );
 
-            if (
-                rs != DialogResult.Yes
-            )
+            if (rs != DialogResult.Yes)
             {
                 return;
             }
 
-            int id =
-                Convert.ToInt32(
-                    dgvChamCong
-                    .CurrentRow
-                    .Cells["id"]
-                    .Value
-                );
+            int thanhCong = 0;
 
-            bool result =
-                await service.Delete(id);
+            int thatBai = 0;
 
-            if (result)
+            foreach (
+                DataGridViewRow row
+                in dgvChamCong.SelectedRows
+            )
             {
-                LoadData();
+                VwDanhSachChamCong cc =
+                    row.DataBoundItem
+                    as VwDanhSachChamCong;
 
-                MessageBox.Show(
-                    "Xóa thành công"
-                );
+                if (cc == null)
+                {
+                    thatBai++;
+
+                    continue;
+                }
+
+                bool result =
+                    await _service.Delete(
+                        cc.id
+                    );
+
+                if (result)
+                {
+                    thanhCong++;
+                }
+                else
+                {
+                    thatBai++;
+                }
             }
-            else
-            {
-                MessageBox.Show(
-                    "Xóa thất bại"
-                );
-            }
+
+            MessageBox.Show(
+                $"Xóa thành công: {thanhCong}\n" +
+                $"Xóa thất bại: {thatBai}"
+            );
+
+            await LoadData();
+        }
+
+        private void dgvChamCong_CellDoubleClick(
+            object sender,
+            DataGridViewCellEventArgs e
+        )
+        {
+            btnSua.PerformClick();
         }
 
         private void dtTuNgay_ValueChanged(
@@ -413,6 +482,12 @@ namespace GUI
             EventArgs e
         )
         {
+            
+            dtDenNgay.MinDate =
+                dtTuNgay.Value.Date;
+
+          
+
             if (
                 dtDenNgay.Value.Date
                 < dtTuNgay.Value.Date
@@ -429,47 +504,13 @@ namespace GUI
         )
         {
             if (
-                dtDenNgay.Value.Date
-                < dtTuNgay.Value.Date
-            )
+        dtDenNgay.Value.Date
+        < dtTuNgay.Value.Date
+    )
             {
-                MessageBox.Show(
-                    "Đến ngày không được nhỏ hơn từ ngày"
-                );
-
                 dtDenNgay.Value =
                     dtTuNgay.Value.Date;
             }
         }
-
-        private void dgvChamCong_CellDoubleClick(
-            object sender,
-            DataGridViewCellEventArgs e
-        )
-                {
-                    if (e.RowIndex < 0)
-                    {
-                        return;
-                    }
-
-                    int id =
-                        Convert.ToInt32(
-                            dgvChamCong
-                            .Rows[e.RowIndex]
-                            .Cells["id"]
-                            .Value
-                        );
-
-                    FrmQuanLyChamCongEdit f =
-                        new FrmQuanLyChamCongEdit(id);
-
-                    if (
-                        f.ShowDialog()
-                        == DialogResult.OK
-                    )
-                    {
-                        LoadData();
-                    }
-                }
-            }
+    }
 }

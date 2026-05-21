@@ -1,9 +1,12 @@
 ﻿using Newtonsoft.Json;
 using QuanLyChamCong.Models;
+
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace QuanLyChamCong.Services
 {
@@ -26,92 +29,123 @@ namespace QuanLyChamCong.Services
         public async Task<List<CaLam>>
             GetAll()
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                string json =
-                    await client.GetStringAsync(
-                        url
-                    );
+                using (HttpClient client =
+                    GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.GetAsync(url);
 
-                return JsonConvert
-                    .DeserializeObject
-                    <List<CaLam>>(json);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new List<CaLam>();
+                    }
+
+                    string json =
+                        await response.Content
+                        .ReadAsStringAsync();
+                    return JsonConvert
+                        .DeserializeObject<List<CaLam>>(json)
+                        ?? new List<CaLam>();
+                }
+            }
+            catch
+            {
+                return new List<CaLam>();
             }
         }
 
-        public async Task<bool> Add(
-            CaLam ca
-        )
+        public async Task<bool>
+            Add(CaLam ca)
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                string json =
-                    JsonConvert
-                    .SerializeObject(ca);
+                using (HttpClient client =
+                    GetClient())
+                {
+                    string json =
+                        JsonConvert
+                        .SerializeObject(ca);
 
-                StringContent content =
-                    new StringContent(
-                        json,
-                        Encoding.UTF8,
-                        "application/json"
-                    );
+                    StringContent content =
+                        new StringContent(
+                            json,
+                            Encoding.UTF8,
+                            "application/json"
+                        );
 
-                var response =
-                    await client.PostAsync(
-                        url,
-                        content
-                    );
+                    HttpResponseMessage response =
+                        await client.PostAsync(
+                            url,
+                            content
+                        );
 
-                return response
-                    .IsSuccessStatusCode;
+                    return response
+                        .IsSuccessStatusCode;
+                }
+            }
+            catch
+            {
+                return false;
             }
         }
 
-        public async Task<bool> Update(
-            CaLam ca
-        )
+        public async Task<bool>
+            Update(CaLam ca)
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                string json =
-                    JsonConvert
-                    .SerializeObject(ca);
+                using (HttpClient client =
+                    GetClient())
+                {
+                    string json =
+                        JsonConvert
+                        .SerializeObject(ca);
 
-                StringContent content =
-                    new StringContent(
-                        json,
-                        Encoding.UTF8,
-                        "application/json"
-                    );
+                    StringContent content =
+                        new StringContent(
+                            json,
+                            Encoding.UTF8,
+                            "application/json"
+                        );
 
-                var response =
-                    await client.PutAsync(
-                        $"{url}/{ca.id}",
-                        content
-                    );
+                    HttpResponseMessage response =
+                        await client.PutAsync(
+                            $"{url}/{ca.id}",
+                            content
+                        );
 
-                return response
-                    .IsSuccessStatusCode;
+                    return response
+                        .IsSuccessStatusCode;
+                }
+            }
+            catch
+            {
+                return false;
             }
         }
 
-        public async Task<bool> Delete(
-            int id
-        )
+        public async Task<bool>
+            Delete(int id)
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                var response =
-                    await client.DeleteAsync(
-                        $"{url}/{id}"
-                    );
+                using (HttpClient client =
+                    GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.DeleteAsync(
+                            $"{url}/{id}"
+                        );
 
-                return response
-                    .IsSuccessStatusCode;
+                    return response
+                        .IsSuccessStatusCode;
+                }
+            }
+            catch
+            {
+                return false;
             }
         }
     }

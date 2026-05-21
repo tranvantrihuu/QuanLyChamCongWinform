@@ -1,336 +1,356 @@
 ﻿using Newtonsoft.Json;
 using QuanLyChamCong.Models;
+using QuanLyChamCong.Models.ViewModels;
+
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data;
+using System.Windows.Forms;
 
 namespace QuanLyChamCong.Services
 {
     public class BangLuongChotService
     {
-        private readonly HttpClient _httpClient;
-
-        private string baseUrl =
+        private readonly string baseUrl =
             "https://localhost:7133/api/BangLuongChot";
 
-        public BangLuongChotService()
+        private HttpClient GetClient()
         {
-            _httpClient = new HttpClient();
+            HttpClientHandler handler =
+                new HttpClientHandler();
+
+            handler.ServerCertificateCustomValidationCallback =
+                (a, b, c, d) => true;
+
+            return new HttpClient(handler);
         }
 
-        public async Task<List<BangLuongChot>> GetAll()
+        /*
+         * GET ALL
+         */
+
+        public async Task<List<VwBangLuongChot>>
+            GetAll()
         {
             try
             {
-                HttpResponseMessage response =
-                    await _httpClient.GetAsync(baseUrl);
-
-                if (response.IsSuccessStatusCode)
+                using (HttpClient client = GetClient())
                 {
-                    string json =
-                        await response.Content.ReadAsStringAsync();
+                    HttpResponseMessage response =
+                        await client.GetAsync(baseUrl);
 
-                    return JsonConvert.DeserializeObject<List<BangLuongChot>>(json);
-                }
-            }
-            catch
-            {
-            }
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new List<VwBangLuongChot>();
+                    }
 
-            return new List<BangLuongChot>();
-        }
-
-        public async Task<BangLuongChot> GetById(int id)
-        {
-            try
-            {
-                HttpResponseMessage response =
-                    await _httpClient.GetAsync(
-                        $"{baseUrl}/{id}"
-                    );
-
-                if (response.IsSuccessStatusCode)
-                {
-                    string json =
-                        await response.Content.ReadAsStringAsync();
-
-                    return JsonConvert.DeserializeObject<BangLuongChot>(json);
-                }
-            }
-            catch
-            {
-            }
-
-            return null;
-        }
-
-        public async Task<bool> Insert(BangLuongChot model)
-        {
-            try
-            {
-                string json =
-                    JsonConvert.SerializeObject(model);
-
-                StringContent content =
-                    new StringContent(
-                        json,
-                        Encoding.UTF8,
-                        "application/json"
-                    );
-
-                HttpResponseMessage response =
-                    await _httpClient.PostAsync(
-                        baseUrl,
-                        content
-                    );
-
-                return response.IsSuccessStatusCode;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public async Task<bool> Update(BangLuongChot model)
-        {
-            try
-            {
-                string json =
-                    JsonConvert.SerializeObject(model);
-
-                StringContent content =
-                    new StringContent(
-                        json,
-                        Encoding.UTF8,
-                        "application/json"
-                    );
-
-                HttpResponseMessage response =
-                    await _httpClient.PutAsync(
-                        $"{baseUrl}/{model.id}",
-                        content
-                    );
-
-                return response.IsSuccessStatusCode;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public async Task<bool> Delete(int id)
-        {
-            try
-            {
-                HttpResponseMessage response =
-                    await _httpClient.DeleteAsync(
-                        $"{baseUrl}/{id}"
-                    );
-
-                return response.IsSuccessStatusCode;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public async Task<List<BangLuongChot>> GetByThangNam(
-            int thang,
-            int nam
-        )
-        {
-            try
-            {
-                HttpResponseMessage response =
-                    await _httpClient.GetAsync(
-                        $"{baseUrl}/thangnam?thang={thang}&nam={nam}"
-                    );
-
-                if (response.IsSuccessStatusCode)
-                {
-                    string json =
-                        await response.Content.ReadAsStringAsync();
-
-                    return JsonConvert.DeserializeObject<List<BangLuongChot>>(json);
-                }
-            }
-            catch
-            {
-            }
-
-            return new List<BangLuongChot>();
-        }
-
-        public async Task<List<BangLuongChot>> GetByNhanVien(
-            string nhanVienId
-        )
-        {
-            try
-            {
-                HttpResponseMessage response =
-                    await _httpClient.GetAsync(
-                        $"{baseUrl}/nhanvien/{nhanVienId}"
-                    );
-
-                if (response.IsSuccessStatusCode)
-                {
-                    string json =
-                        await response.Content.ReadAsStringAsync();
-
-                    return JsonConvert.DeserializeObject<List<BangLuongChot>>(json);
-                }
-            }
-            catch
-            {
-            }
-
-            return new List<BangLuongChot>();
-        }
-        public async Task<bool>
-    DaChotLuong(
-        int thang,
-        int nam
-    )
-        {
-            try
-            {
-                HttpResponseMessage response =
-                    await _httpClient.GetAsync(
-                        $"{baseUrl}/DaChotLuong?thang={thang}&nam={nam}"
-                    );
-
-                if (response.IsSuccessStatusCode)
-                {
                     string json =
                         await response.Content
-                            .ReadAsStringAsync();
-
-                    return JsonConvert
-                        .DeserializeObject<bool>(
-                            json
-                        );
-                }
-            }
-            catch
-            {
-            }
-
-            return false;
-        }
-
-        public async Task<DataTable>
-    LayBangLuongDaChot(
-        int thang,
-        int nam
-    )
-        {
-            try
-            {
-                HttpResponseMessage response =
-                    await _httpClient.GetAsync(
-                        $"{baseUrl}/LayBangLuongDaChot?thang={thang}&nam={nam}"
-                    );
-
-                if (response.IsSuccessStatusCode)
-                {
-                    string json =
-                        await response.Content
-                            .ReadAsStringAsync();
-
-                    return JsonConvert
-                        .DeserializeObject<DataTable>(
-                            json
-                        );
-                }
-            }
-            catch
-            {
-            }
-
-            return new DataTable();
-        }
-
-        public async Task<DataTable>
-    TinhLuongThang(
-        int thang,
-        int nam
-    )
-        {
-            try
-            {
-                HttpResponseMessage response =
-                    await _httpClient.GetAsync(
-                        $"{baseUrl}/TinhLuongThang?thang={thang}&nam={nam}"
-                    );
-
-                if (response.IsSuccessStatusCode)
-                {
-                    string json =
-                        await response.Content
-                            .ReadAsStringAsync();
-
-                    return JsonConvert
-                        .DeserializeObject<DataTable>(
-                            json
-                        );
-                }
-            }
-            catch
-            {
-            }
-
-            return new DataTable();
-        }
-
-        public async Task<bool>
-        ChotLuong(
-            BangLuongChot model
-        )
-        {
-            try
-            {
-                string json =
-                    JsonConvert.SerializeObject(
-                        model
-                    );
-
-                StringContent content =
-                    new StringContent(
-                        json,
-                        Encoding.UTF8,
-                        "application/json"
-                    );
-
-                HttpResponseMessage response =
-                    await _httpClient.PostAsync(
-                        baseUrl,
-                        content
-                    );
-
-                if (
-                    response.IsSuccessStatusCode
-                )
-                {
-                    return true;
-                }
-
-                string error =
-                    await response.Content
                         .ReadAsStringAsync();
 
-                throw new Exception(error);
+                    return JsonConvert
+                        .DeserializeObject<List<VwBangLuongChot>>(json)
+                        ?? new List<VwBangLuongChot>();
+                }
             }
             catch (Exception ex)
             {
-                throw new Exception(
-                    ex.Message
-                );
+                MessageBox.Show(ex.ToString());
+
+                return new List<VwBangLuongChot>();
+            }
+        }
+
+        /*
+         * GET DETAIL
+         */
+
+        public async Task<BangLuongChot>
+            GetById(int id)
+        {
+            try
+            {
+                using (HttpClient client = GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.GetAsync(
+                            $"{baseUrl}/{id}"
+                        );
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return null;
+                    }
+
+                    string json =
+                        await response.Content
+                        .ReadAsStringAsync();
+
+                    return JsonConvert
+                        .DeserializeObject<BangLuongChot>(
+                            json
+                        );
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return null;
+            }
+        }
+
+        /*
+         * INSERT
+         */
+
+        public async Task<bool>
+            Insert(BangLuongChot model)
+        {
+            try
+            {
+                using (HttpClient client = GetClient())
+                {
+                    string json =
+                        JsonConvert.SerializeObject(model);
+
+                    StringContent content =
+                        new StringContent(
+                            json,
+                            Encoding.UTF8,
+                            "application/json"
+                        );
+
+                    HttpResponseMessage response =
+                        await client.PostAsync(
+                            baseUrl,
+                            content
+                        );
+
+                    return response.IsSuccessStatusCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return false;
+            }
+        }
+
+        /*
+         * UPDATE
+         */
+
+        public async Task<bool>
+            Update(BangLuongChot model)
+        {
+            try
+            {
+                using (HttpClient client = GetClient())
+                {
+                    string json =
+                        JsonConvert.SerializeObject(model);
+
+                    StringContent content =
+                        new StringContent(
+                            json,
+                            Encoding.UTF8,
+                            "application/json"
+                        );
+
+                    HttpResponseMessage response =
+                        await client.PutAsync(
+                            $"{baseUrl}/{model.id}",
+                            content
+                        );
+
+                    return response.IsSuccessStatusCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return false;
+            }
+        }
+
+        /*
+         * DELETE
+         */
+
+        public async Task<bool>
+            Delete(int id)
+        {
+            try
+            {
+                using (HttpClient client = GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.DeleteAsync(
+                            $"{baseUrl}/{id}"
+                        );
+
+                    return response.IsSuccessStatusCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return false;
+            }
+        }
+
+        /*
+         * LỌC THÁNG NĂM
+         */
+
+        public async Task<List<VwBangLuongChot>>
+            GetByThangNam(
+                int thang,
+                int nam
+            )
+        {
+            try
+            {
+                using (HttpClient client = GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.GetAsync(
+                            $"{baseUrl}/loc?thang={thang}&nam={nam}"
+                        );
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new List<VwBangLuongChot>();
+                    }
+
+                    string json =
+                        await response.Content
+                        .ReadAsStringAsync();
+
+                    return JsonConvert
+                        .DeserializeObject<List<VwBangLuongChot>>(json)
+                        ?? new List<VwBangLuongChot>();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return new List<VwBangLuongChot>();
+            }
+        }
+
+        /*
+         * THEO NHÂN VIÊN
+         */
+
+        public async Task<List<VwBangLuongChot>>
+            GetByNhanVien(string nhanVienId)
+        {
+            try
+            {
+                using (HttpClient client = GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.GetAsync(
+                            $"{baseUrl}/nhanvien/{nhanVienId}"
+                        );
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new List<VwBangLuongChot>();
+                    }
+
+                    string json =
+                        await response.Content
+                        .ReadAsStringAsync();
+
+                    return JsonConvert
+                        .DeserializeObject<List<VwBangLuongChot>>(json)
+                        ?? new List<VwBangLuongChot>();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return new List<VwBangLuongChot>();
+            }
+        }
+
+        /*
+         * ĐÃ CHỐT LƯƠNG
+         */
+
+        public async Task<bool>
+            DaChotLuong(
+                int thang,
+                int nam
+            )
+        {
+            try
+            {
+                using (HttpClient client = GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.GetAsync(
+                            $"{baseUrl}/DaChotLuong?thang={thang}&nam={nam}"
+                        );
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return false;
+                    }
+
+                    string json =
+                        await response.Content
+                        .ReadAsStringAsync();
+
+                    return JsonConvert
+                        .DeserializeObject<bool>(json);
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /*
+         * TÍNH BẢNG LƯƠNG
+         */
+
+        public async Task<bool>
+            TinhBangLuong(
+                int thang,
+                int nam
+            )
+        {
+            try
+            {
+                using (HttpClient client = GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.PostAsync(
+                            $"{baseUrl}/tinh-luong?thang={thang}&nam={nam}",
+                            null
+                        );
+
+                    return response.IsSuccessStatusCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return false;
             }
         }
     }

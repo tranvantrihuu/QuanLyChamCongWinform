@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using QuanLyChamCong.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -21,82 +22,161 @@ namespace QuanLyChamCong.Services
             handler.ServerCertificateCustomValidationCallback =
                 (a, b, c, d) => true;
 
-            return new HttpClient(handler);
+            HttpClient client =
+                new HttpClient(handler);
+
+            client.Timeout =
+                TimeSpan.FromSeconds(30);
+
+            return client;
         }
 
-        public async Task<List<PhanCa>> GetAll()
+        public async Task<List<PhanCa>>
+            GetAll()
         {
-            using (HttpClient client = GetClient())
+            try
             {
-                var response =
-                    await client.GetAsync(baseUrl);
-
-                if (response.IsSuccessStatusCode)
+                using (HttpClient client =
+                    GetClient())
                 {
-                    string json =
-                        await response.Content.ReadAsStringAsync();
+                    HttpResponseMessage response =
+                        await client.GetAsync(
+                            baseUrl
+                        );
 
-                    return JsonConvert.DeserializeObject
+                    if (!response
+                        .IsSuccessStatusCode)
+                    {
+                        return new List<PhanCa>();
+                    }
+
+                    string json =
+                        await response.Content
+                        .ReadAsStringAsync();
+
+                    if (string.IsNullOrWhiteSpace(json))
+                    {
+                        return new List<PhanCa>();
+                    }
+
+                    List<PhanCa> data =
+                        JsonConvert.DeserializeObject
                         <List<PhanCa>>(json);
+
+                    return data ??
+                        new List<PhanCa>();
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(
+                    ex.Message
+                );
 
                 return new List<PhanCa>();
             }
         }
 
-        public async Task<bool> Add(PhanCa pc)
+        public async Task<bool>
+            Add(PhanCa pc)
         {
-            using (HttpClient client = GetClient())
+            try
             {
-                string json =
-                    JsonConvert.SerializeObject(pc);
+                using (HttpClient client =
+                    GetClient())
+                {
+                    string json =
+                        JsonConvert.SerializeObject(pc);
 
-                StringContent content =
-                    new StringContent(
-                        json,
-                        Encoding.UTF8,
-                        "application/json");
+                    StringContent content =
+                        new StringContent(
+                            json,
+                            Encoding.UTF8,
+                            "application/json"
+                        );
 
-                var response =
-                    await client.PostAsync(
-                        baseUrl,
-                        content);
+                    HttpResponseMessage response =
+                        await client.PostAsync(
+                            baseUrl,
+                            content
+                        );
 
-                return response.IsSuccessStatusCode;
+                    return response
+                        .IsSuccessStatusCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(
+                    ex.Message
+                );
+
+                return false;
             }
         }
 
-        public async Task<bool> Update(PhanCa pc)
+        public async Task<bool>
+            Update(PhanCa pc)
         {
-            using (HttpClient client = GetClient())
+            try
             {
-                string json =
-                    JsonConvert.SerializeObject(pc);
+                using (HttpClient client =
+                    GetClient())
+                {
+                    string json =
+                        JsonConvert.SerializeObject(pc);
 
-                StringContent content =
-                    new StringContent(
-                        json,
-                        Encoding.UTF8,
-                        "application/json");
+                    StringContent content =
+                        new StringContent(
+                            json,
+                            Encoding.UTF8,
+                            "application/json"
+                        );
 
-                var response =
-                    await client.PutAsync(
-                        $"{baseUrl}/{pc.id}",
-                        content);
+                    HttpResponseMessage response =
+                        await client.PutAsync(
+                            $"{baseUrl}/{pc.id}",
+                            content
+                        );
 
-                return response.IsSuccessStatusCode;
+                    return response
+                        .IsSuccessStatusCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(
+                    ex.Message
+                );
+
+                return false;
             }
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool>
+            Delete(int id)
         {
-            using (HttpClient client = GetClient())
+            try
             {
-                var response =
-                    await client.DeleteAsync(
-                        $"{baseUrl}/{id}");
+                using (HttpClient client =
+                    GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.DeleteAsync(
+                            $"{baseUrl}/{id}"
+                        );
 
-                return response.IsSuccessStatusCode;
+                    return response
+                        .IsSuccessStatusCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(
+                    ex.Message
+                );
+
+                return false;
             }
         }
     }

@@ -1,10 +1,11 @@
 ﻿using Newtonsoft.Json;
 using QuanLyChamCong.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net.Http;
-using System.Text;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -30,149 +31,145 @@ namespace QuanLyChamCong.Services
         public async Task<List<NhanVien>>
             GetAll()
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                var response =
-                    await client.GetAsync(url);
-
-                if (
-                    response.IsSuccessStatusCode
-                )
+                using (HttpClient client = GetClient())
                 {
+                    HttpResponseMessage response =
+                        await client.GetAsync(url);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new List<NhanVien>();
+                    }
+
                     string json =
                         await response.Content
                         .ReadAsStringAsync();
 
                     return JsonConvert
-                        .DeserializeObject
-                        <List<NhanVien>>(json);
+                        .DeserializeObject<List<NhanVien>>(json)
+                        ?? new List<NhanVien>();
                 }
-
+            }
+            catch
+            {
                 return new List<NhanVien>();
             }
         }
 
         public async Task<NhanVien>
-            GetNhanVien(
-            string input
-        )
+            GetNhanVien(string input)
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                var response =
-                    await client.GetAsync(
-                        $"{url}/timkiem/{input}"
-                    );
-
-                if (
-                    !response
-                    .IsSuccessStatusCode
-                )
+                using (HttpClient client = GetClient())
                 {
-                    return null;
+                    HttpResponseMessage response =
+                        await client.GetAsync(
+                            $"{url}/timkiem/{input}"
+                        );
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return null;
+                    }
+
+                    string json =
+                        await response.Content
+                        .ReadAsStringAsync();
+
+                    if (json.StartsWith("["))
+                    {
+                        List<NhanVien> list =
+                            JsonConvert.DeserializeObject
+                            <List<NhanVien>>(json);
+
+                        return list?
+                            .FirstOrDefault();
+                    }
+
+                    return JsonConvert
+                        .DeserializeObject<NhanVien>(json);
                 }
-
-                string json =
-                    await response.Content
-                    .ReadAsStringAsync();
-
-                return JsonConvert
-                    .DeserializeObject
-                    <NhanVien>(json);
+            }
+            catch
+            {
+                return null;
             }
         }
 
-        public async Task<NhanVien>
-            KiemTraAdminByPin(
-            string pin
-        )
+        public async Task<bool>
+    KiemTraAdminByPin(string pin)
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                var response =
-                    await client.GetAsync(
-                        $"{url}/adminpin/{pin}"
-                    );
-
-                if (
-                    !response
-                    .IsSuccessStatusCode
-                )
+                using (HttpClient client = GetClient())
                 {
-                    return null;
+                    HttpResponseMessage response =
+                        await client.GetAsync(
+                            $"{url}/adminpin/{pin}"
+                        );
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return false;
+                    }
+
+                    string json =
+                        await response.Content
+                        .ReadAsStringAsync();
+
+                    return JsonConvert
+                        .DeserializeObject<bool>(json);
                 }
-
-                string json =
-                    await response.Content
-                    .ReadAsStringAsync();
-
-                return JsonConvert
-                    .DeserializeObject
-                    <NhanVien>(json);
+            }
+            catch
+            {
+                return false;
             }
         }
-
 
         public async Task<List<NhanVien>>
-            Search(
-            string keyword
-        )
+            Search(string keyword)
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                var response =
-                    await client.GetAsync(
-                        $"{url}"
-                    );
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    return new List<NhanVien>();
-                }
-
-                string json =
-                    await response.Content
-                    .ReadAsStringAsync();
-
                 List<NhanVien> ds =
-                    JsonConvert.DeserializeObject
-                    <List<NhanVien>>(json);
+                    await GetAll();
 
                 return ds
                     .Where(x =>
                         (
-                            x.ho_ten != null
-                            && x.ho_ten
+                            !string.IsNullOrEmpty(x.ho_ten)
+                            &&
+                            x.ho_ten
                             .ToLower()
-                            .Contains(
-                                keyword.ToLower()
-                            )
+                            .Contains(keyword.ToLower())
                         )
                         ||
                         (
-                            x.id != null
-                            && x.id
+                            !string.IsNullOrEmpty(x.id)
+                            &&
+                            x.id
                             .ToLower()
-                            .Contains(
-                                keyword.ToLower()
-                            )
+                            .Contains(keyword.ToLower())
                         )
                     )
                     .ToList();
             }
+            catch
+            {
+                return new List<NhanVien>();
+            }
         }
-        public async Task<bool> Insert(
-            NhanVien nv
-        )
+
+        public async Task<bool>
+            Insert(NhanVien nv)
         {
             try
             {
-                using (HttpClient client =
-                    GetClient())
+                using (HttpClient client = GetClient())
                 {
                     string json =
                         JsonConvert.SerializeObject(nv);
@@ -190,85 +187,85 @@ namespace QuanLyChamCong.Services
                             content
                         );
 
-                    return response
-                        .IsSuccessStatusCode;
+                    return response.IsSuccessStatusCode;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                MessageBox.Show(
+                    ex.ToString()
+                );
+
                 return false;
             }
         }
 
-        public async Task<bool> Update(
-            NhanVien nv
-        )
+        public async Task<bool>
+            Update(NhanVien nv)
         {
             try
             {
-                using (HttpClient client =
-                    GetClient())
-                {
+                using (HttpClient client = GetClient())
+                {     
                     string json =
                         JsonConvert.SerializeObject(nv);
 
-                    StringContent content =
-                        new StringContent(
-                            json,
-                            Encoding.UTF8,
-                            "application/json"
+                StringContent content =
+                    new StringContent(
+                        json,
+                        Encoding.UTF8,
+                        "application/json"
                         );
-
-                    HttpResponseMessage response =
-                        await client.PutAsync(
-                            $"{url}/{nv.id}",
-                            content
+                HttpResponseMessage response =
+                    await client.PutAsync(
+                        $"{url}/{nv.id}",
+                        content
                         );
-
-                    return response
-                        .IsSuccessStatusCode;
+                return response.IsSuccessStatusCode;
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                 MessageBox.Show(ex.ToString());
+                 return false;
             }
+
         }
 
-        public async Task<bool> Delete(
-            string id
-        )
+        public async Task<bool>
+            Delete(string id)
         {
             try
             {
-                using (HttpClient client =
-                    GetClient())
+                using (HttpClient client = GetClient())
                 {
                     HttpResponseMessage response =
                         await client.DeleteAsync(
                             $"{url}/{id}"
                         );
 
-                    return response
-                        .IsSuccessStatusCode;
+                    return response.IsSuccessStatusCode;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                MessageBox.Show(
+                    ex.ToString()
+                );
+
                 return false;
             }
         }
-        public async Task<bool> DoiPin(
-            string id,
-            string pinMoi
-        )
+
+        public async Task<bool>
+            DoiPin(
+                string id,
+                string pinMoi
+            )
         {
             try
             {
-                using (
-                    HttpClient client =
-                        GetClient()
-                )
+                using (HttpClient client = GetClient())
                 {
                     var body =
                         new
@@ -277,9 +274,8 @@ namespace QuanLyChamCong.Services
                         };
 
                     string json =
-                        JsonConvert.SerializeObject(
-                            body
-                        );
+                        JsonConvert
+                        .SerializeObject(body);
 
                     StringContent content =
                         new StringContent(
@@ -294,27 +290,11 @@ namespace QuanLyChamCong.Services
                             content
                         );
 
-                    string responseText =
-                        await response.Content
-                        .ReadAsStringAsync();
-
-                    MessageBox.Show(
-                        "STATUS: "
-                        + response.StatusCode
-                        + "\n\n"
-                        + responseText
-                    );
-
-                    return response
-                        .IsSuccessStatusCode;
+                    return response.IsSuccessStatusCode;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show(
-                    ex.ToString()
-                );
-
                 return false;
             }
         }

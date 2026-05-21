@@ -182,11 +182,11 @@
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\FrmBangLuongChotChiTiet.cs">
+    <Compile Include="GUI\FrmBangLuongChotEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\FrmBangLuongChotChiTiet.Designer.cs">
-      <DependentUpon>FrmBangLuongChotChiTiet.cs</DependentUpon>
+    <Compile Include="GUI\FrmBangLuongChotEdit.Designer.cs">
+      <DependentUpon>FrmBangLuongChotEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\FrmCaLamEdit.cs">
       <SubType>Form</SubType>
@@ -194,11 +194,11 @@
     <Compile Include="GUI\FrmCaLamEdit.Designer.cs">
       <DependentUpon>FrmCaLamEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\FrmCauHinhLuong.cs">
+    <Compile Include="GUI\FrmCauHinhLuongEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\FrmCauHinhLuong.Designer.cs">
-      <DependentUpon>FrmCauHinhLuong.cs</DependentUpon>
+    <Compile Include="GUI\FrmCauHinhLuongEdit.Designer.cs">
+      <DependentUpon>FrmCauHinhLuongEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\FrmNghiPhepEdit.cs">
       <SubType>Form</SubType>
@@ -297,6 +297,7 @@
       <DependentUpon>UcThuongPhat.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\BangLuongChot.cs" />
+    <Compile Include="Models\BaoCaoChamCong.cs" />
     <Compile Include="Models\CaLam.cs" />
     <Compile Include="Models\CauHinhLuong.cs" />
     <Compile Include="Models\ChamCong.cs" />
@@ -305,6 +306,15 @@
     <Compile Include="Models\NhanVien.cs" />
     <Compile Include="Models\PhanCa.cs" />
     <Compile Include="Models\ThuongPhat.cs" />
+    <Compile Include="Models\ViewModels\VwBangLuongChot.cs" />
+    <Compile Include="Models\ViewModels\VwBaoCaoChamCong.cs" />
+    <Compile Include="Models\ViewModels\VwChiTietBangLuong.cs" />
+    <Compile Include="Models\ViewModels\VwDanhSachCaLam.cs" />
+    <Compile Include="Models\ViewModels\VwDanhSachCauHinhLuong.cs" />
+    <Compile Include="Models\ViewModels\VwDanhSachChamCong.cs" />
+    <Compile Include="Models\ViewModels\VwDanhSachNghiPhep.cs" />
+    <Compile Include="Models\ViewModels\VwDanhSachPhanCa.cs" />
+    <Compile Include="Models\ViewModels\VwDanhSachThuongPhat.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BangLuongChotService.cs" />
@@ -337,15 +347,15 @@
       <DependentUpon>frmMain.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\FrmBangLuongChotChiTiet.resx">
-      <DependentUpon>FrmBangLuongChotChiTiet.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\FrmBangLuongChotEdit.resx">
+      <DependentUpon>FrmBangLuongChotEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\FrmCaLamEdit.resx">
       <DependentUpon>FrmCaLamEdit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\FrmCauHinhLuong.resx">
-      <DependentUpon>FrmCauHinhLuong.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\FrmCauHinhLuongEdit.resx">
+      <DependentUpon>FrmCauHinhLuongEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\FrmNghiPhepEdit.resx">
@@ -363,6 +373,9 @@
     <EmbeddedResource Include="GUI\FrmQuanLyChamCongEdit.resx">
       <DependentUpon>FrmQuanLyChamCongEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\UcBangLuongChot.resx">
+      <DependentUpon>UcBangLuongChot.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\UcBaoCaoChamCong.resx">
       <DependentUpon>UcBaoCaoChamCong.cs</DependentUpon>

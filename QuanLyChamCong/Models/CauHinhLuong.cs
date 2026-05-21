@@ -1,4 +1,6 @@
-﻿namespace QuanLyChamCong.Models
+﻿using System;
+
+namespace QuanLyChamCong.Models
 {
     public class CauHinhLuong
     {
@@ -12,12 +14,12 @@
 
         public string loai_luong { get; set; }
 
-        public decimal luong_co_ban { get; set; }
+        public decimal? luong_co_ban { get; set; }
 
-        public decimal luong_theo_gio { get; set; }
+        public decimal? luong_theo_gio { get; set; }
 
-        public decimal luong_tang_ca { get; set; }
+        public decimal? luong_tang_ca { get; set; }
 
-        public decimal phu_cap_mac_dinh { get; set; }
+        public decimal? phu_cap_mac_dinh { get; set; }
     }
 }

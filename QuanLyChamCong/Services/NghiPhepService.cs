@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using QuanLyChamCong.Models;
+using QuanLyChamCong.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -25,55 +26,44 @@ namespace QuanLyChamCong.Services
             return new HttpClient(handler);
         }
 
-        public async Task<List<NghiPhep>> GetAll()
+        public async Task<List<VwDanhSachNghiPhep>>
+            GetAll()
         {
-            using (HttpClient client = GetClient())
+            try
             {
-                var response =
-                    await client.GetAsync(baseUrl);
-
-                if (response.IsSuccessStatusCode)
+                using (HttpClient client = GetClient())
                 {
+                    HttpResponseMessage response =
+                        await client.GetAsync(baseUrl);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new List<VwDanhSachNghiPhep>();
+                    }
+
                     string json =
                         await response.Content
                         .ReadAsStringAsync();
 
-                    return JsonConvert.DeserializeObject
-                        <List<NghiPhep>>(json);
+                    return JsonConvert
+                        .DeserializeObject<List<VwDanhSachNghiPhep>>(json)
+                        ?? new List<VwDanhSachNghiPhep>();
                 }
-
-                return new List<NghiPhep>();
             }
-        }
-        public async Task<bool> Add(
-            NghiPhep item)
-        {
-            using (HttpClient client = GetClient())
+            catch (Exception ex)
             {
-                string json =
-                    JsonConvert.SerializeObject(item);
+                MessageBox.Show(ex.ToString());
 
-                StringContent content =
-                    new StringContent(
-                        json,
-                        Encoding.UTF8,
-                        "application/json");
-
-                var response =
-                    await client.PostAsync(
-                        baseUrl,
-                        content);
-
-                return response.IsSuccessStatusCode;
+                return new List<VwDanhSachNghiPhep>();
             }
         }
 
-        public async Task<bool> Update(
-            NghiPhep item)
+        public async Task<bool>
+            Add(NghiPhep item)
         {
-            using (HttpClient client = GetClient())
+            try
             {
-                try
+                using (HttpClient client = GetClient())
                 {
                     string json =
                         JsonConvert.SerializeObject(item);
@@ -82,12 +72,14 @@ namespace QuanLyChamCong.Services
                         new StringContent(
                             json,
                             Encoding.UTF8,
-                            "application/json");
+                            "application/json"
+                        );
 
-                    var response =
-                        await client.PutAsync(
-                            $"{baseUrl}/{item.id}",
-                            content);
+                    HttpResponseMessage response =
+                        await client.PostAsync(
+                            baseUrl,
+                            content
+                        );
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -102,26 +94,104 @@ namespace QuanLyChamCong.Services
 
                     return response.IsSuccessStatusCode;
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(
-                        ex.ToString()
-                    );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
 
-                    return false;
-                }
+                return false;
             }
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool>
+            Update(NghiPhep item)
         {
-            using (HttpClient client = GetClient())
+            try
             {
-                var response =
-                    await client.DeleteAsync(
-                        $"{baseUrl}/{id}");
+                using (HttpClient client = GetClient())
+                {
+                    string json =
+                        JsonConvert.SerializeObject(item);
 
-                return response.IsSuccessStatusCode;
+                    StringContent content =
+                        new StringContent(
+                            json,
+                            Encoding.UTF8,
+                            "application/json"
+                        );
+
+                    HttpResponseMessage response =
+                        await client.PutAsync(
+                            $"{baseUrl}/{item.id}",
+                            content
+                        );
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        string err =
+                            await response.Content
+                            .ReadAsStringAsync();
+
+                        MessageBox.Show(
+                            "API ERROR:\n" + err
+                        );
+                    }
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return false;
+                    }
+
+                    string jsonResult =
+                        await response.Content
+                        .ReadAsStringAsync();
+
+                    return JsonConvert
+                        .DeserializeObject<bool>(
+                            jsonResult
+                        );
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return false;
+            }
+        }
+
+        public async Task<bool>
+            Delete(int id)
+        {
+            try
+            {
+                using (HttpClient client = GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.DeleteAsync(
+                            $"{baseUrl}/{id}"
+                        );
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return false;
+                    }
+
+                    string jsonResult =
+                        await response.Content
+                        .ReadAsStringAsync();
+
+                    return JsonConvert
+                        .DeserializeObject<bool>(
+                            jsonResult
+                        );
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return false;
             }
         }
     }

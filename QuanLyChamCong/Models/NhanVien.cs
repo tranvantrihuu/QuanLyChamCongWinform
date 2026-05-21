@@ -1,13 +1,14 @@
 ﻿using System;
+
 namespace QuanLyChamCong.Models
 {
     public class NhanVien
     {
-        public string id { get; set; }
+        public string id { get; set; } = string.Empty;
 
-        public string ma_van_tay { get; set; }
+        public string ma_van_tay { get; set; } = string.Empty;
 
-        public string ho_ten { get; set; }
+        public string ho_ten { get; set; } = string.Empty;
 
         public string so_dien_thoai { get; set; }
 

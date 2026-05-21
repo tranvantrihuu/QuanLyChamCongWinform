@@ -1,5 +1,4 @@
-﻿using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
-using QuanLyChamCong.Models;
+﻿using QuanLyChamCong.Models;
 using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
 using System;
@@ -9,9 +8,10 @@ using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
 {
-    public partial class UcThuongPhat : BaseUserControl
+    public partial class UcThuongPhat :
+        BaseUserControl
     {
-        ThuongPhatService service =
+        private readonly ThuongPhatService _service =
             new ThuongPhatService();
 
         public UcThuongPhat()
@@ -27,73 +27,148 @@ namespace QuanLyChamCong.GUI
             await LoadData();
         }
 
-        async Task LoadData()
+        private async Task LoadData()
         {
-            List<ThuongPhat> ds =
-                await service.GetAll();
-
-            dgvThuongPhat.DataSource =
-                ds;
-
-            if (!dgvThuongPhat.Columns.Contains("colCheck"))
+            try
             {
-                DataGridViewCheckBoxColumn chk =
-                    new DataGridViewCheckBoxColumn();
+                List<ThuongPhat> data =
+                    await _service.GetAll();
 
-                chk.Name = "colCheck";
-                chk.HeaderText = "Chọn";
-                chk.Width = 50;
+                dgvThuongPhat.DataSource = null;
 
-                dgvThuongPhat.Columns.Insert(0, chk);
+                dgvThuongPhat.DataSource = data;
+
+                FormatGrid();
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Lỗi load dữ liệu:\n" +
+                    ex.Message
+                );
+            }
+        }
 
-            dgvThuongPhat.Columns["id"].HeaderText =
-                "ID";
-
-            dgvThuongPhat.Columns["ho_ten"].HeaderText =
-                "NHÂN VIÊN";
-
-            dgvThuongPhat.Columns["loai"].HeaderText =
-                "LOẠI";
-
-            dgvThuongPhat.Columns["so_tien"].HeaderText =
-                "SỐ TIỀN";
-
-            dgvThuongPhat.Columns["so_tien"]
-                .DefaultCellStyle.Format = "N0";
-
-            dgvThuongPhat.Columns["so_tien"]
-                .DefaultCellStyle.Alignment =
-                DataGridViewContentAlignment.MiddleRight;
-
-            dgvThuongPhat.Columns["ly_do"].HeaderText =
-                "LÝ DO";
-
-            dgvThuongPhat.Columns["ngay"].HeaderText =
-                "NGÀY";
-
-            dgvThuongPhat.Columns["nhan_vien_id"].Visible =
+        private void FormatGrid()
+        {
+            dgvThuongPhat.AutoGenerateColumns =
                 false;
 
+            dgvThuongPhat.Columns.Clear();
+
+            dgvThuongPhat.Columns.Add(
+                new DataGridViewTextBoxColumn
+                {
+                    Name = "id",
+                    HeaderText = "ID",
+                    DataPropertyName = "id",
+                    AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill,
+                    FillWeight = 40
+                }
+            );
+
+            dgvThuongPhat.Columns.Add(
+                new DataGridViewTextBoxColumn
+                {
+                    Name = "ho_ten",
+                    HeaderText = "NHÂN VIÊN",
+                    DataPropertyName = "ho_ten",
+                    AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill,
+                    FillWeight = 150
+                }
+            );
+
+            dgvThuongPhat.Columns.Add(
+                new DataGridViewTextBoxColumn
+                {
+                    Name = "loai",
+                    HeaderText = "LOẠI",
+                    DataPropertyName = "loai",
+                    AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill,
+                    FillWeight = 80
+                }
+            );
+
+            dgvThuongPhat.Columns.Add(
+                new DataGridViewTextBoxColumn
+                {
+                    Name = "so_tien",
+                    HeaderText = "SỐ TIỀN",
+                    DataPropertyName = "so_tien",
+                    AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill,
+                    FillWeight = 100,
+                    DefaultCellStyle =
+                        new DataGridViewCellStyle
+                        {
+                            Format = "N0"
+                        }
+                }
+            );
+
+            dgvThuongPhat.Columns.Add(
+                new DataGridViewTextBoxColumn
+                {
+                    Name = "ly_do",
+                    HeaderText = "LÝ DO",
+                    DataPropertyName = "ly_do",
+                    AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill,
+                    FillWeight = 220
+                }
+            );
+
+            dgvThuongPhat.Columns.Add(
+                new DataGridViewTextBoxColumn
+                {
+                    Name = "ngay",
+                    HeaderText = "NGÀY",
+                    DataPropertyName = "ngay",
+                    AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill,
+                    FillWeight = 90,
+                    DefaultCellStyle =
+                        new DataGridViewCellStyle
+                        {
+                            Format = "dd/MM/yyyy"
+                        }
+                }
+            );
+
             dgvThuongPhat.SelectionMode =
-                DataGridViewSelectionMode.FullRowSelect;
+                DataGridViewSelectionMode
+                .FullRowSelect;
+
+            dgvThuongPhat.MultiSelect =
+                false;
+
+            dgvThuongPhat.ReadOnly =
+                true;
 
             dgvThuongPhat.AllowUserToAddRows =
                 false;
 
-            dgvThuongPhat.AutoSizeColumnsMode =
-                DataGridViewAutoSizeColumnsMode.Fill;
-
             dgvThuongPhat.RowHeadersVisible =
                 false;
+        }
 
-            foreach (DataGridViewColumn col in dgvThuongPhat.Columns)
+        private ThuongPhat GetCurrentRow()
+        {
+            if (
+                dgvThuongPhat.CurrentRow
+                == null
+            )
             {
-                col.ReadOnly = true;
+                return null;
             }
 
-            dgvThuongPhat.Columns["colCheck"].ReadOnly =
-                false;
+            return dgvThuongPhat
+                .CurrentRow
+                .DataBoundItem
+                as ThuongPhat;
         }
 
         private async void btnThem_Click(
@@ -101,12 +176,16 @@ namespace QuanLyChamCong.GUI
             EventArgs e
         )
         {
-            FrmThuongPhatEdit f =
+            FrmThuongPhatEdit frm =
                 new FrmThuongPhatEdit();
 
-            f.ShowDialog();
-
-            await LoadData();
+            if (
+                frm.ShowDialog()
+                == DialogResult.OK
+            )
+            {
+                await LoadData();
+            }
         }
 
         private async void btnSua_Click(
@@ -114,48 +193,32 @@ namespace QuanLyChamCong.GUI
             EventArgs e
         )
         {
-            if (dgvThuongPhat.CurrentRow == null)
+            ThuongPhat tp =
+                GetCurrentRow();
+
+            if (tp == null)
             {
                 MessageBox.Show(
-                    "Chọn dòng muốn sửa"
+                    "Vui lòng chọn dữ liệu"
                 );
 
                 return;
             }
 
-            DataGridViewRow row = dgvThuongPhat.CurrentRow;
+            FrmThuongPhatEdit frm =
+                new FrmThuongPhatEdit();
 
-            FrmThuongPhatEdit f = new FrmThuongPhatEdit();
+            frm.IsEdit = true;
 
-            f.id = Convert.ToInt32(
-                row.Cells["id"].Value
-            );
+            frm.ThuongPhatEdit = tp;
 
-            f.nhanVienId =
-                row.Cells["nhan_vien_id"]
-                .Value.ToString();
-
-            f.loai =
-                row.Cells["loai"]
-                .Value.ToString();
-
-            f.soTien =
-                Convert.ToDecimal(
-                    row.Cells["so_tien"].Value
-                );
-
-            f.lyDo =
-                row.Cells["ly_do"]
-                .Value.ToString();
-
-            f.ngay =
-                Convert.ToDateTime(
-                    row.Cells["ngay"].Value
-                );
-
-            f.ShowDialog();
-
-            await LoadData();
+            if (
+                frm.ShowDialog()
+                == DialogResult.OK
+            )
+            {
+                await LoadData();
+            }
         }
 
         private async void btnXoa_Click(
@@ -163,67 +226,46 @@ namespace QuanLyChamCong.GUI
             EventArgs e
         )
         {
-            List<int> ids =
-                new List<int>();
+            ThuongPhat tp =
+                GetCurrentRow();
 
-            foreach (DataGridViewRow row in dgvThuongPhat.Rows)
-            {
-                bool isChecked =
-                    row.Cells["colCheck"].Value != null
-                    && Convert.ToBoolean(
-                        row.Cells["colCheck"].Value
-                    );
-
-                if (isChecked)
-                {
-                    ids.Add(
-                        Convert.ToInt32(
-                            row.Cells["id"].Value
-                        )
-                    );
-                }
-            }
-
-            if (ids.Count == 0)
+            if (tp == null)
             {
                 MessageBox.Show(
-                    "Tick chọn dòng muốn xóa!"
+                    "Vui lòng chọn dữ liệu"
                 );
 
                 return;
             }
 
-            var result = MessageBox.Show(
-                "Bạn có chắc muốn xóa?",
-                "Xác nhận",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning
-            );
+            DialogResult rs =
+                MessageBox.Show(
+                    "Bạn có chắc muốn xóa?",
+                    "Xác nhận",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
 
-            if (result == DialogResult.No)
-                return;
-
-            foreach (int id in ids)
+            if (rs != DialogResult.Yes)
             {
-                await service.Delete(id);
+                return;
             }
 
-            MessageBox.Show(
-                "Xóa thành công!"
-            );
+            bool result =
+                await _service.Delete(tp.id);
 
-            await LoadData();
-        }
-
-        private void dgvThuongPhat_CurrentCellDirtyStateChanged(
-            object sender,
-            EventArgs e
-        )
-        {
-            if (dgvThuongPhat.IsCurrentCellDirty)
+            if (result)
             {
-                dgvThuongPhat.CommitEdit(
-                    DataGridViewDataErrorContexts.Commit
+                MessageBox.Show(
+                    "Xóa thành công"
+                );
+
+                await LoadData();
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Xóa thất bại"
                 );
             }
         }
@@ -234,43 +276,13 @@ namespace QuanLyChamCong.GUI
         )
         {
             if (e.RowIndex < 0)
+            {
                 return;
+            }
 
-            DataGridViewRow row =
-                dgvThuongPhat.Rows[e.RowIndex];
+            await Task.Delay(1);
 
-            FrmThuongPhatEdit f =
-                new FrmThuongPhatEdit();
-
-            f.id = Convert.ToInt32(
-                row.Cells["id"].Value
-            );
-
-            f.nhanVienId =
-                row.Cells["nhan_vien_id"]
-                .Value.ToString();
-
-            f.loai =
-                row.Cells["loai"]
-                .Value.ToString();
-
-            f.soTien =
-                Convert.ToDecimal(
-                    row.Cells["so_tien"].Value
-                );
-
-            f.lyDo =
-                row.Cells["ly_do"]
-                .Value.ToString();
-
-            f.ngay =
-                Convert.ToDateTime(
-                    row.Cells["ngay"].Value
-                );
-
-            f.ShowDialog();
-
-            await LoadData();
+            btnSua.PerformClick();
         }
     }
 }

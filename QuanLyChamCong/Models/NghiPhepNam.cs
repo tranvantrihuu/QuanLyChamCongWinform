@@ -8,6 +8,7 @@ namespace QuanLyChamCong.Models
 
         public string nhan_vien_id { get; set; }
 
+        // dùng cho VIEW/API hiển thị
         public string ho_ten { get; set; }
 
         public int nam { get; set; }

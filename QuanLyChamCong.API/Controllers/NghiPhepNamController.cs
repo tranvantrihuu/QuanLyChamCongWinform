@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Data.SqlClient;
-
-using QuanLyChamCong.API.Data;
+using QuanLyChamCong.API.BLL;
 using QuanLyChamCong.API.Models;
 
 namespace QuanLyChamCong.API.Controllers
@@ -10,332 +8,219 @@ namespace QuanLyChamCong.API.Controllers
     [Route("api/[controller]")]
     public class NghiPhepNamController : ControllerBase
     {
+        private readonly NghiPhepNamBLL _bll;
+
+        public NghiPhepNamController(
+            NghiPhepNamBLL bll
+        )
+        {
+            _bll = bll;
+        }
+
+        // =========================
+        // LẤY DANH SÁCH
+        // VIEW:
+        // vw_danh_sach_nghi_phep_nam
+        // =========================
         [HttpGet]
         public IActionResult Get()
         {
-            List<object> ds = new List<object>();
-
-            Db db = new Db();
-
-            using (SqlConnection conn = db.GetConnection())
+            try
             {
-                conn.Open();
+                List<NghiPhepNam> ds =
+                    _bll.GetAll();
 
-                string sql =
-                @"
-                SELECT
-                    npn.id,
-                    npn.nhan_vien_id,
-                    nv.ho_ten,
-                    npn.nam,
-                    npn.so_ca_duoc_nghi,
-
-                    ISNULL
-                    (
-                        (
-                            SELECT COUNT(*)
-                            FROM nghi_phep dxn
-                            WHERE
-                                dxn.nhan_vien_id =
-                                    npn.nhan_vien_id
-                                AND YEAR(dxn.ngay)
-                                    = npn.nam
-                                AND dxn.loai =
-                                    N'Có phép'
-                        ),
-                        0
-                    )
-                    AS so_ca_da_nghi_co_phep,
-                    ISNULL
-                    (
-                        (
-                            SELECT COUNT(*)
-                            FROM nghi_phep dxn
-                            WHERE
-                                dxn.nhan_vien_id =
-                                    npn.nhan_vien_id
-                                AND YEAR(dxn.ngay)
-                                    = npn.nam
-                                AND dxn.loai =
-                                    N'Không phép'
-                        ),
-                        0
-                    )
-                    AS so_ca_da_nghi_khong_phep
-                FROM nghi_phep_nam npn
-
-                LEFT JOIN nhan_vien nv
-                    ON npn.nhan_vien_id = nv.id
-
-                ORDER BY npn.id DESC
-            ";
-
-                SqlCommand cmd =
-                    new SqlCommand(sql, conn);
-
-                SqlDataReader reader =
-                    cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    ds.Add(new
+                return Ok(ds);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(
+                    new
                     {
-                        id = Convert.ToInt32(reader["id"]),
-                        nhan_vien_id =
-                            reader["nhan_vien_id"]
-                            .ToString(),
-
-                        ho_ten =
-                            reader["ho_ten"].ToString(),
-
-                        nam =
-                            reader["nam"],
-
-                        so_ca_duoc_nghi =
-                            reader["so_ca_duoc_nghi"],
-
-                        so_ca_da_nghi_co_phep =
-                            reader["so_ca_da_nghi_co_phep"],
-
-                        so_ca_da_nghi_khong_phep =
-                            reader["so_ca_da_nghi_khong_phep"]
-                    });
-                }
-            }
-
-            return Ok(ds);
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
-        {
-            Db db = new Db();
-
-            using (SqlConnection conn =
-                db.GetConnection())
-            {
-                conn.Open();
-
-                string sql = @"
-                    SELECT *
-                    FROM nghi_phep_nam
-                    WHERE id = @id";
-
-                SqlCommand cmd =
-                    new SqlCommand(sql, conn);
-
-                cmd.Parameters.AddWithValue(
-                    "@id",
-                    id
+                        message =
+                            ex.Message
+                    }
                 );
-
-                SqlDataReader reader =
-                    cmd.ExecuteReader();
-
-                if (reader.Read())
-                {
-                    NghiPhepNam item =
-                        new NghiPhepNam
-                        {
-                            id =
-                                Convert.ToInt32(
-                                    reader["id"]
-                                ),
-
-                            nhan_vien_id =
-                                reader["nhan_vien_id"]
-                                .ToString(),
-
-                            nam =
-                                Convert.ToInt32(
-                                    reader["nam"]
-                                ),
-
-                            so_ca_duoc_nghi =
-                                Convert.ToInt32(
-                                    reader["so_ca_duoc_nghi"]
-                                ),
-
-                            so_ca_da_nghi_co_phep =
-                                Convert.ToInt32(
-                                    reader["so_ca_da_nghi_co_phep"]
-                                ),
-
-                            so_ca_da_nghi_khong_phep =
-                                Convert.ToInt32(
-                                    reader["so_ca_da_nghi_khong_phep"]
-                                )
-                        };
-
-                    return Ok(item);
-                }
             }
-
-            return NotFound();
         }
 
+        // =========================
+        // LẤY THEO ID
+        // =========================
+        [HttpGet("{id}")]
+        public IActionResult GetById(
+            int id
+        )
+        {
+            try
+            {
+                var item =
+                    _bll.GetById(id);
+
+                if (item == null)
+                {
+                    return NotFound(
+                        new
+                        {
+                            message =
+                                "Không tìm thấy dữ liệu"
+                        }
+                    );
+                }
+
+                return Ok(item);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(
+                    new
+                    {
+                        message =
+                            ex.Message
+                    }
+                );
+            }
+        }
+
+        // =========================
+        // THÊM
+        // SP:
+        // sp_them_nghi_phep_nam
+        // =========================
         [HttpPost]
         public IActionResult Post(
             [FromBody] NghiPhepNam item
         )
         {
-            Db db = new Db();
-
-            using (SqlConnection conn =
-                db.GetConnection())
+            try
             {
-                conn.Open();
+                bool success =
+                    _bll.Insert(item);
 
-                string sql = @"
-                    INSERT INTO nghi_phep_nam
-                    (
-                        nhan_vien_id,
-                        nam,
-                        so_ca_duoc_nghi,
-                        so_ca_da_nghi_co_phep,
-                        so_ca_da_nghi_khong_phep,
-                        created_at
-                    )
-                    VALUES
-                    (
-                        @nhan_vien_id,
-                        @nam,
-                        @so_ca_duoc_nghi,
-                        @so_ca_da_nghi_co_phep,
-                        @so_ca_da_nghi_khong_phep,
-                        GETDATE()
-                    )";
+                if (success)
+                {
+                    return Ok(
+                        new
+                        {
+                            message =
+                                "Thêm thành công"
+                        }
+                    );
+                }
 
-                SqlCommand cmd =
-                    new SqlCommand(sql, conn);
-
-                cmd.Parameters.AddWithValue(
-                    "@nhan_vien_id",
-                    item.nhan_vien_id
+                return BadRequest(
+                    new
+                    {
+                        message =
+                            "Dữ liệu không hợp lệ"
+                    }
                 );
-
-                cmd.Parameters.AddWithValue(
-                    "@nam",
-                    item.nam
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@so_ca_duoc_nghi",
-                    item.so_ca_duoc_nghi
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@so_ca_da_nghi_co_phep",
-                    item.so_ca_da_nghi_co_phep
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@so_ca_da_nghi_khong_phep",
-                    item.so_ca_da_nghi_khong_phep
-                );
-
-                cmd.ExecuteNonQuery();
             }
-
-            return Ok();
+            catch (Exception ex)
+            {
+                return BadRequest(
+                    new
+                    {
+                        message =
+                            ex.Message
+                    }
+                );
+            }
         }
 
+        // =========================
+        // CẬP NHẬT
+        // SP:
+        // sp_cap_nhat_nghi_phep_nam
+        // =========================
         [HttpPut("{id}")]
         public IActionResult Put(
             int id,
             [FromBody] NghiPhepNam item
         )
         {
-            Db db = new Db();
-
-            using (SqlConnection conn =
-                db.GetConnection())
+            try
             {
-                conn.Open();
+                item.id = id;
 
-                string sql = @"
-                    UPDATE nghi_phep_nam
-                    SET
-                        nhan_vien_id =
-                            @nhan_vien_id,
+                bool success =
+                    _bll.Update(item);
 
-                        nam = @nam,
+                if (success)
+                {
+                    return Ok(
+                        new
+                        {
+                            message =
+                                "Cập nhật thành công"
+                        }
+                    );
+                }
 
-                        so_ca_duoc_nghi =
-                            @so_ca_duoc_nghi,
-
-                        so_ca_da_nghi_co_phep =
-                            @so_ca_da_nghi_co_phep,
-
-                        so_ca_da_nghi_khong_phep =
-                            @so_ca_da_nghi_khong_phep
-                    WHERE id = @id";
-
-                SqlCommand cmd =
-                    new SqlCommand(sql, conn);
-
-                cmd.Parameters.AddWithValue(
-                    "@id",
-                    id
+                return BadRequest(
+                    new
+                    {
+                        message =
+                            "Cập nhật thất bại"
+                    }
                 );
-
-                cmd.Parameters.AddWithValue(
-                    "@nhan_vien_id",
-                    item.nhan_vien_id
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@nam",
-                    item.nam
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@so_ca_duoc_nghi",
-                    item.so_ca_duoc_nghi
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@so_ca_da_nghi_co_phep",
-                    item.so_ca_da_nghi_co_phep
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@so_ca_da_nghi_khong_phep",
-                    item.so_ca_da_nghi_khong_phep
-                );
-
-                cmd.ExecuteNonQuery();
             }
-
-            return Ok();
+            catch (Exception ex)
+            {
+                return BadRequest(
+                    new
+                    {
+                        message =
+                            ex.Message
+                    }
+                );
+            }
         }
 
+        // =========================
+        // XÓA
+        // SP:
+        // sp_xoa_nghi_phep_nam
+        // =========================
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(
+            int id
+        )
         {
-            Db db = new Db();
-
-            using (SqlConnection conn =
-                db.GetConnection())
+            try
             {
-                conn.Open();
+                bool success =
+                    _bll.Delete(id);
 
-                string sql = @"
-                    DELETE FROM nghi_phep_nam
-                    WHERE id = @id";
+                if (success)
+                {
+                    return Ok(
+                        new
+                        {
+                            message =
+                                "Xóa thành công"
+                        }
+                    );
+                }
 
-                SqlCommand cmd =
-                    new SqlCommand(sql, conn);
-
-                cmd.Parameters.AddWithValue(
-                    "@id",
-                    id
+                return NotFound(
+                    new
+                    {
+                        message =
+                            "Không tìm thấy dữ liệu"
+                    }
                 );
-
-                cmd.ExecuteNonQuery();
             }
-
-            return Ok();
+            catch (Exception ex)
+            {
+                return BadRequest(
+                    new
+                    {
+                        message =
+                            ex.Message
+                    }
+                );
+            }
         }
     }
 }

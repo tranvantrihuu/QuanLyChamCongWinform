@@ -1,15 +1,25 @@
-﻿using System.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 
 namespace QuanLyChamCong.API.Data
 {
     public class Db
     {
-        private readonly string connectionString =
-            "Server=.;Database=ChamCongDB;Trusted_Connection=True;TrustServerCertificate=True";
+        private readonly IConfiguration _config;
+
+        public Db(
+            IConfiguration config
+        )
+        {
+            _config = config;
+        }
 
         public SqlConnection GetConnection()
         {
-            return new SqlConnection(connectionString);
+            return new SqlConnection(
+                _config.GetConnectionString(
+                    "DefaultConnection"
+                )
+            );
         }
     }
 }

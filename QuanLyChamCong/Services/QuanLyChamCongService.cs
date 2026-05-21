@@ -1,16 +1,18 @@
 ﻿using Newtonsoft.Json;
 using QuanLyChamCong.Models;
+using QuanLyChamCong.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace QuanLyChamCong.Services
 {
     public class QuanLyChamCongService
     {
-        private string url =
+        private readonly string url =
             "https://localhost:7133/api/ChamCong";
 
         private HttpClient GetClient()
@@ -24,137 +26,284 @@ namespace QuanLyChamCong.Services
             return new HttpClient(handler);
         }
 
-        public async Task<List<ChamCong>> GetAll()
+        public async Task<List<VwDanhSachChamCong>>
+        LocChamCong(
+             string nhanVienId,
+             DateTime tuNgay,
+             DateTime denNgay
+         )
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                string json =
-                    await client.GetStringAsync(url);
+                using (HttpClient client =
+                    GetClient())
+                {
+                    string api;
 
-                return JsonConvert.DeserializeObject
-                    <List<ChamCong>>(json);
+                    if (string.IsNullOrEmpty(nhanVienId))
+                    {
+                        api =
+                            $"{url}/loc?" +
+                            $"tuNgay={tuNgay:yyyy-MM-dd}" +
+                            $"&denNgay={denNgay:yyyy-MM-dd}";
+                    }
+                    else
+                    {
+                        api =
+                            $"{url}/loc?" +
+                            $"nhanVienId={nhanVienId}" +
+                            $"&tuNgay={tuNgay:yyyy-MM-dd}" +
+                            $"&denNgay={denNgay:yyyy-MM-dd}";
+                    }
+
+                    HttpResponseMessage response =
+                        await client.GetAsync(api);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new List<VwDanhSachChamCong>();
+                    }
+
+                    string json =
+                        await response.Content
+                        .ReadAsStringAsync();
+
+                    return JsonConvert
+                    .DeserializeObject<
+                        List<VwDanhSachChamCong>
+                    >(json)
+                    ?? new List<VwDanhSachChamCong>();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return new List<VwDanhSachChamCong>();
             }
         }
 
-        public async Task<ChamCong> GetById(
-            int id
-        )
+        public async Task<VwDanhSachChamCong>
+            GetById(int id)
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                string json =
-                    await client.GetStringAsync(
-                        $"{url}/{id}"
-                    );
+                using (HttpClient client =
+                    GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.GetAsync(
+                            $"{url}/{id}"
+                        );
 
-                return JsonConvert.DeserializeObject
-                    <ChamCong>(json);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return null;
+                    }
+
+                    string json =
+                        await response.Content
+                        .ReadAsStringAsync();
+
+                    return JsonConvert
+                    .DeserializeObject<VwDanhSachChamCong>(
+                        json
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return null;
             }
         }
 
-        public async Task<bool> Insert(
-            ChamCong item
-        )
+        public async Task<bool>
+            Insert(ChamCong item)
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                string json =
-                    JsonConvert.SerializeObject(item);
+                using (HttpClient client =
+                    GetClient())
+                {
+                    string json =
+                        JsonConvert.SerializeObject(item);
 
-                StringContent content =
-                    new StringContent(
-                        json,
-                        Encoding.UTF8,
-                        "application/json"
-                    );
+                    StringContent content =
+                        new StringContent(
+                            json,
+                            Encoding.UTF8,
+                            "application/json"
+                        );
 
-                HttpResponseMessage res =
-                    await client.PostAsync(
-                        url,
-                        content
-                    );
+                    HttpResponseMessage response =
+                        await client.PostAsync(
+                            url,
+                            content
+                        );
 
-                return res.IsSuccessStatusCode;
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        string err =
+                            await response.Content
+                            .ReadAsStringAsync();
+
+                        MessageBox.Show(
+                            "API ERROR:\n" + err
+                        );
+                    }
+
+                    return response.IsSuccessStatusCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return false;
             }
         }
 
-        public async Task<bool> Update(
-            ChamCong item
-        )
+        public async Task<bool>
+            Update(ChamCong item)
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                string json =
-                    JsonConvert.SerializeObject(item);
+                using (HttpClient client =
+                    GetClient())
+                {
+                    string json =
+                        JsonConvert.SerializeObject(item);
 
-                StringContent content =
-                    new StringContent(
-                        json,
-                        Encoding.UTF8,
-                        "application/json"
-                    );
+                    StringContent content =
+                        new StringContent(
+                            json,
+                            Encoding.UTF8,
+                            "application/json"
+                        );
 
-                HttpResponseMessage res =
-                    await client.PutAsync(
-                        $"{url}/{item.id}",
-                        content
-                    );
+                    HttpResponseMessage response =
+                        await client.PutAsync(
+                            $"{url}/{item.id}",
+                            content
+                        );
 
-                return res.IsSuccessStatusCode;
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        string err =
+                            await response.Content
+                            .ReadAsStringAsync();
+
+                        MessageBox.Show(
+                            "API ERROR:\n" + err
+                        );
+                    }
+
+                    return response.IsSuccessStatusCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return false;
             }
         }
 
-        public async Task<bool> Delete(
-            int id
-        )
+        public async Task<bool>
+            Delete(int id)
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                HttpResponseMessage res =
-                    await client.DeleteAsync(
-                        $"{url}/{id}"
-                    );
+                using (HttpClient client =
+                    GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.DeleteAsync(
+                            $"{url}/{id}"
+                        );
 
-                return res.IsSuccessStatusCode;
+                    return response.IsSuccessStatusCode;
+                }
             }
-        }
-        public async Task<bool> CheckIn(
-    string nhanVienId
-)
-        {
-            using (HttpClient client =
-                GetClient())
+            catch (Exception ex)
             {
-                var response =
-                    await client.PostAsync(
-                        $"{url}/checkin/{nhanVienId}",
-                        null
-                    );
+                MessageBox.Show(ex.ToString());
 
-                return response.IsSuccessStatusCode;
+                return false;
             }
         }
 
-        public async Task<bool> CheckOut(
-            string nhanVienId
-        )
+        public async Task<bool>
+       CheckIn(string nhanVienId)
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                var response =
-                    await client.PostAsync(
-                        $"{url}/checkout/{nhanVienId}",
-                        null
-                    );
+                using (HttpClient client =
+                    GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.PostAsync(
+                            $"{url}/checkin/{nhanVienId}",
+                            null
+                        );
 
-                return response.IsSuccessStatusCode;
+                    string result =
+                        await response.Content
+                        .ReadAsStringAsync();
+
+                    result =
+                        result
+                        .Replace("\"", "")
+                        .Trim()
+                        .ToLower();
+
+                    return result == "true";
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return false;
+            }
+        }
+
+        public async Task<bool>
+            CheckOut(string nhanVienId)
+        {
+            try
+            {
+                using (HttpClient client =
+                    GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.PostAsync(
+                            $"{url}/checkout/{nhanVienId}",
+                            null
+                        );
+
+                    string result =
+                        await response.Content
+                        .ReadAsStringAsync();
+
+                    result =
+                        result
+                        .Replace("\"", "")
+                        .Trim()
+                        .ToLower();
+
+                    return result == "true";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return false;
+            }
+
         }
     }
 }

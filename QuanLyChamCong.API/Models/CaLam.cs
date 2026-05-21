@@ -1,12 +1,14 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuanLyChamCong.API.Models
 {
     public class CaLam
     {
+        [Key]
         public int id { get; set; }
 
-        public string? ten_ca { get; set; }
+        public string ten_ca { get; set; }
 
         public TimeSpan? gio_bat_dau { get; set; }
 

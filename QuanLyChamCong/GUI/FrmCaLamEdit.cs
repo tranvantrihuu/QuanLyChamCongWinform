@@ -2,32 +2,24 @@
 using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
 using System;
-using System.Drawing;
 using System.Windows.Forms;
-using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
+
 namespace QuanLyChamCong.GUI
 {
-    public partial class FrmCaLamEdit : BaseForm
+    public partial class FrmCaLamEdit :
+        BaseForm
     {
-        CaLamService service =
+        private readonly CaLamService _service =
             new CaLamService();
 
-        public bool isEdit = false;
+        public bool IsEdit = false;
 
-        public int id = 0;
+        public CaLam CaLamEdit =
+            new CaLam();
 
-        public FrmCaLamEdit(
-            bool edit = false
-        )
+        public FrmCaLamEdit()
         {
             InitializeComponent();
-
-            numDiTre.Maximum = 1000;
-            numVeSom.Maximum = 1000;
-            numCheckinSom.Maximum = 1000;
-            numCheckoutTre.Maximum = 1000;
-
-            isEdit = edit;
         }
 
         private void FrmCaLamEdit_Load(
@@ -35,73 +27,92 @@ namespace QuanLyChamCong.GUI
             EventArgs e
         )
         {
-            FixUI();
+            SetupDateTimePicker();
 
+            if (IsEdit)
+            {
+                LoadDataEdit();
+            }
+        }
+
+        private void SetupDateTimePicker()
+        {
             dtBatDau.Format =
                 DateTimePickerFormat.Time;
 
-            dtBatDau.ShowUpDown = true;
+            dtBatDau.ShowUpDown =
+                true;
 
             dtKetThuc.Format =
                 DateTimePickerFormat.Time;
 
-            dtKetThuc.ShowUpDown = true;
+            dtKetThuc.ShowUpDown =
+                true;
         }
 
-        void FixUI()
+        private void LoadDataEdit()
         {
-            foreach (
-                Control c
-                in tableLayoutPanel1.Controls
-            )
+            try
             {
-                if (c is Label lb)
-                {
-                    lb.Font =
-                        new Font(
-                            "Segoe UI",
-                            10,
-                            FontStyle.Bold
-                        );
+                txtTenCa.Text =
+                    CaLamEdit.ten_ca;
 
-                    lb.BackColor =
-                        Color.FromArgb(
-                            240,
-                            240,
-                            240
+                if (
+                    CaLamEdit.gio_bat_dau
+                    != null
+                )
+                {
+                    dtBatDau.Value =
+                        DateTime.Today
+                        .Add(
+                            CaLamEdit
+                            .gio_bat_dau.Value
                         );
                 }
 
-                if (c is TextBox tb)
+                if (
+                    CaLamEdit.gio_ket_thuc
+                    != null
+                )
                 {
-                    tb.Font =
-                        new Font(
-                            "Segoe UI",
-                            10
+                    dtKetThuc.Value =
+                        DateTime.Today
+                        .Add(
+                            CaLamEdit
+                            .gio_ket_thuc.Value
                         );
                 }
 
-                if (c is NumericUpDown num)
-                {
-                    num.Font =
-                        new Font(
-                            "Segoe UI",
-                            10
-                        );
-                }
+                numDiTre.Value =
+                    CaLamEdit
+                    .phut_cho_phep_di_tre
+                    ?? 0;
 
-                if (c is DateTimePicker dt)
-                {
-                    dt.Font =
-                        new Font(
-                            "Segoe UI",
-                            10
-                        );
-                }
+                numVeSom.Value =
+                    CaLamEdit
+                    .phut_cho_phep_ve_som
+                    ?? 0;
+
+                numCheckinSom.Value =
+                    CaLamEdit
+                    .phut_cho_phep_checkin_som
+                    ?? 0;
+
+                numCheckoutTre.Value =
+                    CaLamEdit
+                    .phut_cho_phep_checkout_tre
+                    ?? 0;
+            }
+            catch
+            {
+
             }
         }
 
-        bool ValidateInput()
+        private async void btnOk_Click(
+            object sender,
+            EventArgs e
+        )
         {
             if (
                 string.IsNullOrWhiteSpace(
@@ -110,114 +121,73 @@ namespace QuanLyChamCong.GUI
             )
             {
                 MessageBox.Show(
-                    "Tên ca không được để trống"
+                    "Vui lòng nhập tên ca"
                 );
 
-                return false;
+                txtTenCa.Focus();
+
+                return;
             }
 
-            TimeSpan bd =
+            /*
+             * GÁN MODEL
+             */
+
+            CaLamEdit.ten_ca =
+                txtTenCa.Text.Trim();
+
+            CaLamEdit.gio_bat_dau =
                 dtBatDau.Value.TimeOfDay;
 
-            TimeSpan kt =
+            CaLamEdit.gio_ket_thuc =
                 dtKetThuc.Value.TimeOfDay;
 
-            if (bd == kt)
+            CaLamEdit.phut_cho_phep_di_tre =
+                (int)numDiTre.Value;
+
+            CaLamEdit.phut_cho_phep_ve_som =
+                (int)numVeSom.Value;
+
+            CaLamEdit.phut_cho_phep_checkin_som =
+                (int)numCheckinSom.Value;
+
+            CaLamEdit.phut_cho_phep_checkout_tre =
+                (int)numCheckoutTre.Value;
+
+            bool result = false;
+
+            if (IsEdit)
             {
-                MessageBox.Show(
-                    "Check In và Check Out không được trùng"
-                );
-
-                return false;
-            }
-
-            return true;
-        }
-
-        private async void btnOk_Click(
-            object sender,
-            EventArgs e
-        )
-        {
-            if (!ValidateInput())
-            {
-                return;
-            }
-
-            var result =
-                MessageBox.Show(
-                    "Xác nhận lưu ca làm?",
-                    "Xác nhận",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question
-                );
-
-            if (
-                result == DialogResult.No
-            )
-            {
-                return;
-            }
-
-            CaLam ca =
-                new CaLam
-                {
-                    id = id,
-
-                    ten_ca =
-                        txtTenCa.Text,
-
-                    gio_bat_dau =
-                        dtBatDau
-                        .Value
-                        .TimeOfDay,
-
-                    gio_ket_thuc =
-                        dtKetThuc
-                        .Value
-                        .TimeOfDay,
-
-                    phut_cho_phep_di_tre =
-                        (int)numDiTre.Value,
-
-                    phut_cho_phep_ve_som =
-                        (int)numVeSom.Value,
-
-                    phut_cho_phep_checkin_som =
-                        (int)numCheckinSom.Value,
-
-                    phut_cho_phep_checkout_tre =
-                        (int)numCheckoutTre.Value
-                };
-
-            bool success;
-
-            if (isEdit)
-            {
-                success =
-                    await service.Update(ca);
-
-                if (success)
-                {
-                    MessageBox.Show(
-                        "Sửa thành công"
+                result =
+                    await _service.Update(
+                        CaLamEdit
                     );
-                }
             }
             else
             {
-                success =
-                    await service.Add(ca);
-
-                if (success)
-                {
-                    MessageBox.Show(
-                        "Thêm thành công"
+                result =
+                    await _service.Add(
+                        CaLamEdit
                     );
-                }
             }
 
-            Close();
+            if (result)
+            {
+                MessageBox.Show(
+                    "Lưu thành công"
+                );
+
+                DialogResult =
+                    DialogResult.OK;
+
+                Close();
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Lưu thất bại"
+                );
+            }
         }
 
         private void btnCancel_Click(

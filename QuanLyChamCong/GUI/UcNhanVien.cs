@@ -3,322 +3,553 @@ using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Threading.Tasks;
-using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
+
 namespace QuanLyChamCong.GUI
 {
     public partial class UcNhanVien : BaseUserControl
     {
-        NhanVienService service = new NhanVienService();
-
+        private readonly NhanVienService service =
+            new NhanVienService();
+        private bool sortAscending = true;
         public UcNhanVien()
         {
             InitializeComponent();
-            this.Resize += (s, e) => AdjustGrid();
         }
-        void AdjustGrid()
-        {
-            if (dgvNhanVien.Columns.Count == 0) return;
 
-            if (this.Width > 1000)
-            {
-                dgvNhanVien.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-                dgvNhanVien.Columns["colCheck"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgvNhanVien.Columns["colCheck"].Width = 35;
-                dgvNhanVien.Columns["colCheck"].Resizable = DataGridViewTriState.False;
-               
-                dgvNhanVien.Columns["id"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgvNhanVien.Columns["id"].Width = 80;
-
-                dgvNhanVien.Columns["ma_van_tay"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgvNhanVien.Columns["ma_van_tay"].Width = 120;
-
-                dgvNhanVien.Columns["so_dien_thoai"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgvNhanVien.Columns["so_dien_thoai"].Width = 120;
-
-                dgvNhanVien.Columns["ngay_sinh"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgvNhanVien.Columns["ngay_sinh"].Width = 110;
-
-                dgvNhanVien.Columns["ngay_vao_lam"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgvNhanVien.Columns["ngay_vao_lam"].Width = 110;
-
-                dgvNhanVien.Columns["loai_luong"].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                dgvNhanVien.Columns["loai_luong"].Width = 80;
-
-               
-                dgvNhanVien.Columns["ho_ten"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dgvNhanVien.Columns["ho_ten"].FillWeight = 200;
-
-                dgvNhanVien.Columns["dia_chi"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dgvNhanVien.Columns["dia_chi"].FillWeight = 150;
-
-                dgvNhanVien.Columns["vi_tri"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dgvNhanVien.Columns["vi_tri"].FillWeight = 120;
-
-                dgvNhanVien.Columns["vai_tro"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dgvNhanVien.Columns["vai_tro"].FillWeight = 120;
-
-                dgvNhanVien.Columns["trang_thai"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dgvNhanVien.Columns["trang_thai"].FillWeight = 120;
-            }
-            else
-            {
-                
-                dgvNhanVien.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-
-                foreach (DataGridViewColumn col in dgvNhanVien.Columns)
-                {
-                    col.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                    col.Width = 120;
-                }
-
-                dgvNhanVien.Columns["ho_ten"].Width = 180;
-                dgvNhanVien.Columns["dia_chi"].Width = 200;
-            }
-        }
-        private async void UcNhanVien_Load(object sender, EventArgs e)
+        private async void UcNhanVien_Load(
+            object sender,
+            EventArgs e
+        )
         {
             await LoadData();
-            string placeholderSearch = "Nhập ID Nhân viên/Mã vân tay/tên";
-
-            txtSearch.Text = placeholderSearch;
-            txtSearch.ForeColor = Color.Gray;
-
-            txtSearch.Enter += (_, __) =>
-            {
-                if (txtSearch.Text == placeholderSearch)
-                {
-                    txtSearch.Text = "";
-                    txtSearch.ForeColor = Color.Black;
-                }
-            };
-
-            txtSearch.Leave += (_, __) =>
-            {
-                if (string.IsNullOrWhiteSpace(txtSearch.Text))
-                {
-                    txtSearch.Text = placeholderSearch;
-                    txtSearch.ForeColor = Color.Gray;
-                }
-            };
         }
 
         private async Task LoadData()
         {
-            NhanVienService service = new NhanVienService();
-
-            dgvNhanVien.DataSource = await service.GetAll();
-
-            
-            if (!dgvNhanVien.Columns.Contains("colCheck"))
+            try
             {
-                DataGridViewCheckBoxColumn chk = new DataGridViewCheckBoxColumn();
-                chk.Name = "colCheck";
-                chk.HeaderText = "";
-                chk.Width = 40;
-                dgvNhanVien.Columns.Insert(0, chk);
+                List<NhanVien> ds =
+                    (await service.GetAll())
+                    .OrderBy(x => x.id)
+                    .ToList();
+
+                dgvNhanVien.DataSource = null;
+
+                dgvNhanVien.DataSource = ds;
+                dgvNhanVien.MultiSelect = true;
+
+                dgvNhanVien.SelectionMode =
+                    DataGridViewSelectionMode
+                    .FullRowSelect;
+                dgvNhanVien.AutoSizeColumnsMode =
+                    DataGridViewAutoSizeColumnsMode
+                    .Fill;
+                dgvNhanVien.ColumnHeaderMouseClick -=
+                    dgvNhanVien_ColumnHeaderMouseClick;
+
+                dgvNhanVien.ColumnHeaderMouseClick +=
+                    dgvNhanVien_ColumnHeaderMouseClick;
+                dgvNhanVien.ReadOnly = true;
+
+                dgvNhanVien.AllowUserToAddRows =
+                    false;
+                FormatGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message
+                );
+            }
+        }
+        private void FormatGrid()
+        {
+            /*
+             * ẨN CỘT
+             */
+
+            if (
+                dgvNhanVien.Columns["pin_code"]
+                != null
+            )
+            {
+                dgvNhanVien.Columns["pin_code"]
+                    .Visible = false;
             }
 
-            
-            foreach (DataGridViewColumn col in dgvNhanVien.Columns)
-                col.ReadOnly = true;
+            /*
+             * ĐỔI TÊN CỘT
+             */
 
-            dgvNhanVien.Columns["colCheck"].ReadOnly = false;
-            dgvNhanVien.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-            dgvNhanVien.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dgvNhanVien.ScrollBars = ScrollBars.Both;
-
-            dgvNhanVien.Columns["id"].HeaderText = "ID";
-            dgvNhanVien.Columns["ma_van_tay"].HeaderText = "MÃ VÂN TAY";
-            dgvNhanVien.Columns["ho_ten"].HeaderText = "HỌ VÀ TÊN";
-            dgvNhanVien.Columns["so_dien_thoai"].HeaderText = "SỐ ĐIỆN THOẠI";
-            dgvNhanVien.Columns["ngay_sinh"].HeaderText = "NGÀY SINH";
-            dgvNhanVien.Columns["dia_chi"].HeaderText = "ĐỊA CHỈ";
-            dgvNhanVien.Columns["vi_tri"].HeaderText = "VỊ TRÍ";
-            dgvNhanVien.Columns["vai_tro"].HeaderText = "VAI TRÒ";
-            dgvNhanVien.Columns["trang_thai"].HeaderText = "TRẠNG THÁI";
-            dgvNhanVien.Columns["pin_code"].HeaderText = "PIN CODE";
-            dgvNhanVien.Columns["ngay_vao_lam"].HeaderText = "NGÀY VÀO LÀM";
-            dgvNhanVien.Columns["loai_luong"].HeaderText = "LOẠI LƯƠNG";
-            dgvNhanVien.Columns["created_at"].HeaderText = "NGÀY TẠO";
-            dgvNhanVien.Columns["updated_at"].HeaderText = "NGÀY CHỈNH SỬA";
-
-            if (dgvNhanVien.Columns.Contains("pin_code"))
-                dgvNhanVien.Columns["pin_code"].Visible = false;
-
-            dgvNhanVien.Columns["ngay_sinh"].DefaultCellStyle.Format = "dd/MM/yyyy";
-            dgvNhanVien.Columns["ngay_vao_lam"].DefaultCellStyle.Format = "dd/MM/yyyy";
-            dgvNhanVien.Columns["created_at"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
-            dgvNhanVien.Columns["updated_at"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
-
-            dgvNhanVien.EnableHeadersVisualStyles = false;
-
-            dgvNhanVien.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 120, 215);
-            dgvNhanVien.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgvNhanVien.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            dgvNhanVien.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            dgvNhanVien.RowHeadersVisible = false;
-
-            dgvNhanVien.DefaultCellStyle.Font = new Font("Segoe UI", 10);
-            dgvNhanVien.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 120, 215);
-            dgvNhanVien.DefaultCellStyle.SelectionForeColor = Color.White;
-
-            dgvNhanVien.RowsDefaultCellStyle.BackColor = Color.White;
-            dgvNhanVien.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(240, 240, 240);
-
-            dgvNhanVien.GridColor = Color.LightGray;
-            dgvNhanVien.BorderStyle = BorderStyle.None;
-
-            dgvNhanVien.RowTemplate.Height = 32;
-
-            dgvNhanVien.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvNhanVien.MultiSelect = false;
-            dgvNhanVien.AllowUserToAddRows = false;
-            dgvNhanVien.EditMode = DataGridViewEditMode.EditOnEnter;
-
-            foreach (DataGridViewColumn col in dgvNhanVien.Columns)
+            if (
+                dgvNhanVien.Columns["id"]
+                != null
+            )
             {
-                col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                dgvNhanVien.Columns["id"]
+                    .HeaderText = "Mã NV";
             }
 
-            dgvNhanVien.Columns["colCheck"].ReadOnly = false;
-
-            AdjustGrid();
-        }
-
-        private async void btnThem_Click(object sender, EventArgs e)
-        {
-            FrmNhanVienEdit f = new FrmNhanVienEdit(false);
-            f.ShowDialog();
-            LoadData();
-        }
-
-        private async void btnSearch_Click(object sender, EventArgs e)
-        {
-            string key = txtSearch.Text.Trim();
-
-            if (key == "" || key == "Nhập ID Nhân viên/Mã vân tay/tên")
+            if (
+                dgvNhanVien.Columns["ma_van_tay"]
+                != null
+            )
             {
-                LoadData();
+                dgvNhanVien.Columns["ma_van_tay"]
+                    .HeaderText = "Mã Vân Tay";
+            }
+
+            if (
+                dgvNhanVien.Columns["ho_ten"]
+                != null
+            )
+            {
+                dgvNhanVien.Columns["ho_ten"]
+                    .HeaderText = "Họ Tên";
+            }
+
+            if (
+                dgvNhanVien.Columns["ngay_sinh"]
+                != null
+            )
+            {
+                dgvNhanVien.Columns["ngay_sinh"]
+                    .HeaderText = "Ngày Sinh";
+            }
+
+            if (
+                dgvNhanVien.Columns["so_dien_thoai"]
+                != null
+            )
+            {
+                dgvNhanVien.Columns["so_dien_thoai"]
+                    .HeaderText = "Số Điện Thoại";
+            }
+
+            if (
+                dgvNhanVien.Columns["vi_tri"]
+                != null
+            )
+            {
+                dgvNhanVien.Columns["vi_tri"]
+                    .HeaderText = "Vị Trí";
+            }
+
+            if (
+                dgvNhanVien.Columns["dia_chi"]
+                != null
+            )
+            {
+                dgvNhanVien.Columns["dia_chi"]
+                    .HeaderText = "Địa Chỉ";
+            }
+
+            if (
+                dgvNhanVien.Columns["vai_tro"]
+                != null
+            )
+            {
+                dgvNhanVien.Columns["vai_tro"]
+                    .HeaderText = "Vai Trò";
+            }
+
+            if (
+                dgvNhanVien.Columns["trang_thai"]
+                != null
+            )
+            {
+                dgvNhanVien.Columns["trang_thai"]
+                    .HeaderText = "Trạng Thái";
+            }
+
+            if (
+                dgvNhanVien.Columns["ngay_vao_lam"]
+                != null
+            )
+            {
+                dgvNhanVien.Columns["ngay_vao_lam"]
+                    .HeaderText = "Ngày Vào Làm";
+            }
+
+            if (
+                dgvNhanVien.Columns["loai_luong"]
+                != null
+            )
+            {
+                dgvNhanVien.Columns["loai_luong"]
+                    .HeaderText = "Loại Lương";
+            }
+
+            if (
+                dgvNhanVien.Columns["created_at"]
+                != null
+            )
+            {
+                dgvNhanVien.Columns["created_at"]
+                    .HeaderText = "Ngày Tạo";
+            }
+
+            if (
+                dgvNhanVien.Columns["updated_at"]
+                != null
+            )
+            {
+                dgvNhanVien.Columns["updated_at"]
+                    .HeaderText = "Ngày Cập Nhật";
+            }
+        }
+        private NhanVien GetSelectedNhanVien()
+        {
+            if (
+                dgvNhanVien.CurrentRow == null
+            )
+            {
+                return null;
+            }
+
+            return dgvNhanVien
+                .CurrentRow
+                .DataBoundItem
+                as NhanVien;
+        }
+
+        private async void btnThem_Click(
+            object sender,
+            EventArgs e
+        )
+        {
+            FrmNhanVienEdit frm =
+                new FrmNhanVienEdit();
+
+            frm.IsEdit = false;
+
+            if (
+                frm.ShowDialog()
+                == DialogResult.OK
+            )
+            {
+                await LoadData();
+            }
+        }
+
+        private async void btnSua_Click(
+            object sender,
+            EventArgs e
+        )
+        {
+            NhanVien nv =
+                GetSelectedNhanVien();
+
+            if (nv == null)
+            {
+                MessageBox.Show(
+                    "Vui lòng chọn nhân viên"
+                );
+
                 return;
             }
 
-            dgvNhanVien.DataSource = await service.Search(key);
-        }
+            FrmNhanVienEdit frm =
+                new FrmNhanVienEdit();
 
-        private void dgvNhanVien_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
+            frm.IsEdit = true;
 
-        }
+            frm.NhanVienEdit = nv;
 
-        private void panel1_Resize(object sender, EventArgs e)
-        {
-            txtSearch.Left = (panel1.Width - txtSearch.Width - btnSearch.Width - 10) / 2;
-            btnSearch.Left = txtSearch.Right + 10;
-
-            txtSearch.Top = (panel1.Height - txtSearch.Height) / 2;
-            btnSearch.Top = (panel1.Height - btnSearch.Height) / 2;
-        }
-
-        private async void btnSua_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Double Click dòng bạn muốn sửa!");
-        }
-
-        private async void dgvNhanVien_CellDoubleClick_1(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0) return;
-
-            var row = dgvNhanVien.Rows[e.RowIndex];
-
-            FrmNhanVienEdit f = new FrmNhanVienEdit();
-            f.txtIDNhanVien.Text = row.Cells["id"].Value?.ToString();
-            f.txtMaVanTay.Text = row.Cells["ma_van_tay"].Value?.ToString();
-            f.txtHoTen.Text = row.Cells["ho_ten"].Value?.ToString();
-            f.txtSDT.Text = row.Cells["so_dien_thoai"].Value?.ToString();
-            f.txtDiaChi.Text = row.Cells["dia_chi"].Value?.ToString();
-            f.txtViTri.Text = row.Cells["vi_tri"].Value?.ToString();
-            f.txtPin.Text = row.Cells["pin_code"].Value?.ToString();
-
-            f.dtNgaySinh.Value = Convert.ToDateTime(row.Cells["ngay_sinh"].Value);
-            f.dtNgayVao.Value = Convert.ToDateTime(row.Cells["ngay_vao_lam"].Value);
-
-            f.cbVaiTro.Text = row.Cells["vai_tro"].Value?.ToString();
-            f.cbTrangThai.Text = row.Cells["trang_thai"].Value?.ToString();
-            f.cbLoaiLuong.Text = row.Cells["loai_luong"].Value?.ToString();
-            f.txtNgayTao.Text = row.Cells["created_at"].Value?.ToString();
-            f.txtNgaySua.Text = row.Cells["updated_at"].Value?.ToString();
-            f.ShowDialog();
-
-            LoadData();
-        }
-
-        private async void btnXoa_Click_1(object sender, EventArgs e)
-        {
-            List<string> ids = new List<string>();
-
-            foreach (DataGridViewRow row in dgvNhanVien.Rows)
+            if (
+                frm.ShowDialog()
+                == DialogResult.OK
+            )
             {
-                bool isChecked = row.Cells["colCheck"].Value != null
-                 && Convert.ToBoolean(row.Cells["colCheck"].Value);
+                await LoadData();
+            }
+        }
 
-                if (isChecked)
+        private async void btnXoa_Click_1(
+            object sender,
+            EventArgs e
+        )
+        {
+            try
+            {
+                if (
+                    dgvNhanVien.SelectedRows.Count
+                    <= 0
+                )
                 {
-                    ids.Add(row.Cells["id"].Value.ToString());
+                    MessageBox.Show(
+                        "Vui lòng chọn nhân viên"
+                    );
+
+                    return;
+                }
+
+                string message =
+                    "Xác nhận xóa những dòng:\n\n";
+
+                List<NhanVien> dsXoa =
+                    new List<NhanVien>();
+
+                foreach (
+                    DataGridViewRow row
+                    in dgvNhanVien.SelectedRows
+                )
+                {
+                    if (
+                        row.DataBoundItem
+                        is NhanVien nv
+                    )
+                    {
+                        dsXoa.Add(nv);
+
+                        message +=
+                            "- " +
+                            nv.ho_ten +
+                            "\n";
+                    }
+                }
+
+                DialogResult result =
+                    MessageBox.Show(
+                        message,
+                        "Xác nhận",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question
+                    );
+
+                if (
+                    result != DialogResult.Yes
+                )
+                {
+                    return;
+                }
+
+                bool hasError = false;
+
+                foreach (
+                    NhanVien nv
+                    in dsXoa
+                )
+                {
+                    bool success =
+                        await service.Delete(
+                            nv.id
+                        );
+
+                    if (!success)
+                    {
+                        hasError = true;
+                    }
+                }
+
+                if (hasError)
+                {
+                    MessageBox.Show(
+                        "Có dữ liệu xóa thất bại"
+                    );
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Xóa thành công"
+                    );
+                }
+
+                await LoadData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message
+                );
+            }
+        }
+
+        private async void btnSearch_Click(
+            object sender,
+            EventArgs e
+        )
+        {
+            try
+            {
+                string keyword =
+                    txtSearch.Text.Trim();
+
+                if (
+                    string.IsNullOrWhiteSpace(
+                        keyword
+                    )
+                )
+                {
+                    await LoadData();
+                    return;
+                }
+
+                List<NhanVien> ds =
+                    await service.Search(
+                        keyword
+                    );
+
+                dgvNhanVien.DataSource = null;
+                dgvNhanVien.DataSource = ds;
+                FormatGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message
+                );
+            }
+        }
+
+        private async void dgvNhanVien_CellDoubleClick_1(
+            object sender,
+            DataGridViewCellEventArgs e
+        )
+        {
+            if (e.RowIndex < 0)
+            {
+                return;
+            }
+
+            await Task.Run(() =>
+            {
+                Invoke(
+                    new Action(() =>
+                    {
+                        btnSua.PerformClick();
+                    })
+                );
+            });
+        }
+
+        private void panel1_Resize(
+            object sender,
+            EventArgs e
+        )
+        {
+
+        }
+
+        private void dgvNhanVien_CellContentClick(
+            object sender,
+            DataGridViewCellEventArgs e
+        )
+        {
+
+        }
+
+        private void dgvNhanVien_CellValueChanged(
+            object sender,
+            DataGridViewCellEventArgs e
+        )
+        {
+
+        }
+
+        private void dgvNhanVien_CurrentCellDirtyStateChanged(
+            object sender,
+            EventArgs e
+        )
+        {
+
+        }
+
+        private void dgvNhanVien_ColumnHeaderMouseClick(
+            object sender,
+            DataGridViewCellMouseEventArgs e
+        )
+        {
+            try
+            {
+                string columnName =
+                    dgvNhanVien.Columns[e.ColumnIndex]
+                    .DataPropertyName;
+
+                if (
+                    dgvNhanVien.DataSource
+                    is List<NhanVien> ds
+                )
+                {
+                    if (sortAscending)
+                    {
+                        ds = ds
+                            .OrderBy(
+                                x => x.GetType()
+                                .GetProperty(columnName)
+                                ?.GetValue(x, null)
+                            )
+                            .ToList();
+                    }
+                    else
+                    {
+                        ds = ds
+                            .OrderByDescending(
+                                x => x.GetType()
+                                .GetProperty(columnName)
+                                ?.GetValue(x, null)
+                            )
+                            .ToList();
+                    }
+
+                    sortAscending =
+                        !sortAscending;
+
+                    dgvNhanVien.DataSource = null;
+
+                    dgvNhanVien.DataSource = ds;
+                    FormatGrid();
                 }
             }
-
-            if (ids.Count == 0)
+            catch
             {
-                MessageBox.Show("Tick chọn dòng muốn xóa!");
-                return;
+
             }
-
-            var result = MessageBox.Show(
-                "Bạn có chắc muốn xóa các nhân viên đã chọn?",
-                "Xác nhận",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning
-            );
-
-            if (result == DialogResult.No) return;
-            NhanVienService service = new NhanVienService();
-
-            foreach (string id in ids)
-            {
-                await service.Delete(id);
-            }
-            MessageBox.Show("Xóa thành công!");
-
-            LoadData();
         }
 
-        private void dgvNhanVien_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        private async void txtSearch_TextChanged(
+            object sender,
+            EventArgs e
+        )
         {
-            if (dgvNhanVien.IsCurrentCellDirty)
+            try
             {
-                dgvNhanVien.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                string keyword =
+                    txtSearch.Text.Trim();
+
+                List<NhanVien> ds;
+
+                if (
+                    string.IsNullOrWhiteSpace(
+                        keyword
+                    )
+                )
+                {
+                    ds =
+                        await service.GetAll();
+                }
+                else
+                {
+                    ds =
+                        await service.Search(
+                            keyword
+                        );
+                }
+
+                dgvNhanVien.DataSource =
+                    ds;
+
+                FormatGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message
+                );
             }
         }
-
-        private void dgvNhanVien_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.ColumnIndex == dgvNhanVien.Columns["colCheck"].Index)
-            {
-                DataGridViewRow row = dgvNhanVien.Rows[e.RowIndex];
-
-                bool isChecked = Convert.ToBoolean(row.Cells["colCheck"].Value);
-
-                row.DefaultCellStyle.BackColor = isChecked ? Color.LightPink : Color.White;
-            }
-        }
-
     }
 }

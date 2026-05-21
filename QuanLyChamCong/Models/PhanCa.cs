@@ -1,9 +1,12 @@
 ﻿using System;
-
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace QuanLyChamCong.Models
 {
+    [Table("phan_ca")]
     public class PhanCa
     {
+        [Key]
         public int id { get; set; }
 
         public string nhan_vien_id { get; set; }

@@ -1,37 +1,29 @@
-﻿
-using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
-using QuanLyChamCong.Models;
+﻿using QuanLyChamCong.Models;
 using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
+
 using System;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
 {
-    public partial class FrmNghiPhepEdit : BaseForm
+    public partial class FrmNghiPhepEdit :
+        BaseForm
     {
-        NghiPhepService service =
+        private readonly NghiPhepService _service =
             new NghiPhepService();
 
-        NhanVienService nhanVienService =
+        private readonly NhanVienService _nvService =
             new NhanVienService();
 
-        CaLamService caLamService =
+        private readonly CaLamService _caLamService =
             new CaLamService();
 
-        public int id = 0;
+        public bool IsEdit = false;
 
-      
-        public string nhanVienId = "";
-
-        public int caLamId = 0;
-
-        public string loai = "";
-
-        public string lyDo = "";
-
-        public DateTime ngay;
+        public NghiPhep NghiPhepEdit =
+            new NghiPhep();
 
         public FrmNghiPhepEdit()
         {
@@ -47,63 +39,18 @@ namespace QuanLyChamCong.GUI
 
             await LoadCaLam();
 
-            // loại
-            cbLoai.Items.Clear();
+            LoadLoai();
 
-            cbLoai.Items.Add("Có phép");
-
-            cbLoai.Items.Add("Không phép");
-
-            cbLoai.FormattingEnabled = true;
-
-            if (id == 0)
+            if (IsEdit)
             {
-                cbLoai.SelectedIndex = 0;
-
-                dtNgay.Value =
-                    DateTime.Now;
-            }
-
-            else
-            {
-                // nhân viên
-                if (!string.IsNullOrEmpty(
-                    nhanVienId))
-                {
-                    cbNhanVien.SelectedValue =
-                        nhanVienId;
-                }
-
-                // ca làm
-                cbCaLam.SelectedValue =
-                    caLamId;
-
-                // loại
-                cbLoai.SelectedItem =
-                    loai;
-
-                // lý do
-                txtLyDo.Text =
-                    lyDo;
-
-                // ngày
-                if (ngay.Year > 1900)
-                {
-                    dtNgay.Value =
-                        ngay;
-                }
-                else
-                {
-                    dtNgay.Value =
-                        DateTime.Now;
-                }
+                LoadDataEdit();
             }
         }
 
-        async System.Threading.Tasks.Task LoadNhanVien()
+        private async Task LoadNhanVien()
         {
-            List<NhanVien> ds =
-                await nhanVienService.GetAll();
+            var ds =
+                await _nvService.GetAll();
 
             cbNhanVien.DataSource =
                 ds;
@@ -115,10 +62,10 @@ namespace QuanLyChamCong.GUI
                 "id";
         }
 
-        async System.Threading.Tasks.Task LoadCaLam()
+        private async Task LoadCaLam()
         {
-            List<CaLam> ds =
-                await caLamService.GetAll();
+            var ds =
+                await _caLamService.GetAll();
 
             cbCaLam.DataSource =
                 ds;
@@ -130,107 +77,138 @@ namespace QuanLyChamCong.GUI
                 "id";
         }
 
+        private void LoadLoai()
+        {
+            cbLoai.Items.Clear();
+
+            cbLoai.Items.Add(
+                "Có phép"
+            );
+
+            cbLoai.Items.Add(
+                "Không phép"
+            );
+
+            cbLoai.SelectedIndex = 0;
+        }
+
+        private void LoadDataEdit()
+        {
+            try
+            {
+                cbNhanVien.SelectedValue =
+                    NghiPhepEdit.nhan_vien_id;
+
+                if (
+                    NghiPhepEdit.ca_lam_id
+                    != null
+                )
+                {
+                    cbCaLam.SelectedValue =
+                        NghiPhepEdit.ca_lam_id;
+                }
+
+                if (
+                    NghiPhepEdit.ngay
+                    != null
+                )
+                {
+                    dtNgay.Value =
+                        NghiPhepEdit
+                        .ngay.Value;
+                }
+
+                txtLyDo.Text =
+                    NghiPhepEdit.ly_do;
+
+                cbLoai.Text =
+                    NghiPhepEdit.loai;
+            }
+            catch
+            {
+
+            }
+        }
+
         private async void btnLuu_Click(
             object sender,
             EventArgs e
         )
         {
-            if (cbNhanVien.SelectedValue == null)
+            if (
+                cbNhanVien.SelectedValue
+                == null
+            )
             {
                 MessageBox.Show(
-                    "Chọn nhân viên"
+                    "Vui lòng chọn nhân viên"
                 );
 
                 return;
             }
 
-            if (cbCaLam.SelectedValue == null)
-            {
-                MessageBox.Show(
-                    "Chọn ca làm"
-                );
+            /*
+             * MAP MODEL
+             */
 
-                return;
-            }
-
-            if (cbLoai.SelectedItem == null)
-            {
-                MessageBox.Show(
-                    "Chọn loại nghỉ"
-                );
-
-                return;
-            }
-
-            NghiPhep item =
-                new NghiPhep();
-
-            item.id = id;
-
-            item.nhan_vien_id =
+            NghiPhepEdit.nhan_vien_id =
                 cbNhanVien.SelectedValue
                 .ToString();
 
-            item.ca_lam_id =
-                Convert.ToInt32(
-                    cbCaLam.SelectedValue
-                );
-
-            item.ngay =
-                dtNgay.Value;
-
-            item.loai =
-                cbLoai.SelectedItem
-                .ToString();
-
-            item.ly_do =
-                txtLyDo.Text;
-
-            bool result;
-
-            if (id == 0)
+            if (
+                cbCaLam.SelectedValue
+                != null
+            )
             {
-                result =
-                    await service.Add(item);
-
-                if (result)
-                {
-                    MessageBox.Show(
-                        "Thêm thành công"
+                NghiPhepEdit.ca_lam_id =
+                    Convert.ToInt32(
+                        cbCaLam.SelectedValue
                     );
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Thêm thất bại"
-                    );
-
-                    return;
-                }
             }
 
+            NghiPhepEdit.ngay =
+                dtNgay.Value.Date;
+
+            NghiPhepEdit.loai =
+                cbLoai.Text;
+
+            NghiPhepEdit.ly_do =
+                txtLyDo.Text.Trim();
+
+            bool result = false;
+
+            if (IsEdit)
+            {
+                result =
+                    await _service.Update(
+                        NghiPhepEdit
+                    );
+            }
             else
             {
                 result =
-                    await service.Update(item);
-
-                if (result)
-                {
-                    MessageBox.Show(
-                        "Cập nhật thành công"
+                    await _service.Add(
+                        NghiPhepEdit
                     );
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Cập nhật thất bại"
-                    );
-
-                    return;
-                }
             }
 
-            this.Close();
+            if (result)
+            {
+                MessageBox.Show(
+                    "Lưu thành công"
+                );
+
+                DialogResult =
+                    DialogResult.OK;
+
+                Close();
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Lưu thất bại"
+                );
+            }
         }
 
         private void btnDong_Click(
@@ -238,7 +216,7 @@ namespace QuanLyChamCong.GUI
             EventArgs e
         )
         {
-            this.Close();
+            Close();
         }
     }
 }

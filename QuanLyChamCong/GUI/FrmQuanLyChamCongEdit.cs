@@ -3,30 +3,31 @@ using QuanLyChamCong.Services;
 using QuanLyChamCong.THEME;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
+
 namespace QuanLyChamCong.GUI
 {
-    public partial class FrmQuanLyChamCongEdit : BaseForm
+    public partial class FrmQuanLyChamCongEdit :
+        BaseForm
     {
-        private readonly bool isEdit;
+        private readonly
+            QuanLyChamCongService _service =
+                new QuanLyChamCongService();
 
-        private readonly int chamCongId;
+        private readonly
+            NhanVienService _nhanVienService =
+                new NhanVienService();
 
-        QuanLyChamCongService service =
-            new QuanLyChamCongService();
+        private readonly
+            CaLamService _caLamService =
+                new CaLamService();
 
-        NhanVienService nhanVienService =
-            new NhanVienService();
-
-        CaLamService caLamService =
-            new CaLamService();
+        private readonly int _id = 0;
 
         public FrmQuanLyChamCongEdit()
         {
             InitializeComponent();
-
-            isEdit = false;
         }
 
         public FrmQuanLyChamCongEdit(
@@ -35,98 +36,115 @@ namespace QuanLyChamCong.GUI
         {
             InitializeComponent();
 
-            isEdit = true;
-
-            chamCongId = id;
+            _id = id;
         }
 
         private async void
             FrmQuanLyChamCongEdit_Load(
-            object sender,
-            EventArgs e
-        )
+                object sender,
+                EventArgs e
+            )
         {
-
             await LoadNhanVien();
 
             await LoadCaLam();
 
-            if (isEdit)
+            if (_id > 0)
             {
-                await LoadData();
+                await LoadDetail();
             }
         }
 
-        private async System.Threading.Tasks.Task
-            LoadNhanVien()
+        private async Task LoadNhanVien()
         {
-            List<NhanVien> ds =
-                await nhanVienService
-                .GetAll();
+            try
+            {
+                var ds =
+                    await _nhanVienService.GetAll();
 
-            cboNhanVien.DataSource =
-                ds;
+                cboNhanVien.DataSource = ds;
 
-            cboNhanVien.DisplayMember =
-                "ho_ten";
+                cboNhanVien.DisplayMember =
+                    "ho_ten";
 
-            cboNhanVien.ValueMember =
-                "id";
-        }
-
-        private async System.Threading.Tasks.Task
-            LoadCaLam()
-        {
-            List<CaLam> ds =
-                await caLamService
-                .GetAll();
-
-            cboCaLam.DataSource =
-                ds;
-
-            cboCaLam.DisplayMember =
-                "ten_ca";
-
-            cboCaLam.ValueMember =
-                "id";
-        }
-
-        private async System.Threading.Tasks.Task
-            LoadData()
-        {
-            ChamCong item =
-                await service.GetById(
-                    chamCongId
-                );
-
-            if (item == null)
+                cboNhanVien.ValueMember =
+                    "id";
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Không tìm thấy dữ liệu"
+                    ex.Message
                 );
-
-                Close();
-
-                return;
             }
+        }
 
-            cboNhanVien.SelectedValue =
-                item.nhan_vien_id;
+        private async Task LoadCaLam()
+        {
+            try
+            {
+                var ds =
+                    await _caLamService.GetAll();
 
-            cboCaLam.SelectedValue =
-                item.ca_lam_id;
+                cboCaLam.DataSource = ds;
 
-            dtpNgayLam.Value =
-                item.ngay_lam
-                ?? DateTime.Now;
+                cboCaLam.DisplayMember =
+                    "ten_ca";
 
-            dtpCheckIn.Value =
-                item.check_in
-                ?? DateTime.Now;
+                cboCaLam.ValueMember =
+                    "id";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message
+                );
+            }
+        }
 
-            dtpCheckOut.Value =
-                item.check_out
-                ?? DateTime.Now;
+        private async Task LoadDetail()
+        {
+            try
+            {
+                var cc =
+                    await _service.GetById(
+                        _id
+                    );
+
+                if (cc == null)
+                {
+                    MessageBox.Show(
+                        "Không tìm thấy dữ liệu"
+                    );
+
+                    Close();
+
+                    return;
+                }
+
+                cboNhanVien.SelectedValue =
+                    cc.nhan_vien_id;
+
+                dtpNgayLam.Value =
+                    cc.ngay_lam
+                    ?? DateTime.Now;
+
+                cboCaLam.SelectedValue =
+                    cc.ca_lam_id;
+
+                dtpCheckIn.Value =
+                    cc.check_in
+                    ?? DateTime.Now;
+
+                dtpCheckOut.Value =
+                    cc.check_out
+                    ?? DateTime.Now;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message
+                );
+            }
         }
 
         private async void btnLuu_Click(
@@ -134,87 +152,96 @@ namespace QuanLyChamCong.GUI
             EventArgs e
         )
         {
-            if (
-                cboNhanVien.SelectedValue
-                == null
-            )
+            try
             {
-                MessageBox.Show(
-                    "Vui lòng chọn nhân viên"
-                );
+                if (
+                    cboNhanVien.SelectedValue
+                    == null
+                )
+                {
+                    MessageBox.Show(
+                        "Chọn nhân viên"
+                    );
 
-                return;
-            }
+                    return;
+                }
 
-            if (
-                cboCaLam.SelectedValue
-                == null
-            )
-            {
-                MessageBox.Show(
-                    "Vui lòng chọn ca làm"
-                );
-
-                return;
-            }
-
-            ChamCong item =
-                new ChamCong();
-
-            item.nhan_vien_id =
-                cboNhanVien
-                .SelectedValue
-                .ToString();
-
-            item.ca_lam_id =
-                Convert.ToInt32(
+                if (
                     cboCaLam.SelectedValue
-                );
-
-            item.ngay_lam =
-                dtpNgayLam.Value.Date;
-
-            item.check_in =
-                dtpCheckIn.Value;
-
-            item.check_out =
-                dtpCheckOut.Value;
-
-            bool result;
-
-            if (isEdit)
-            {
-                item.id =
-                    chamCongId;
-
-                result =
-                    await service.Update(
-                        item
+                    == null
+                )
+                {
+                    MessageBox.Show(
+                        "Chọn ca làm"
                     );
-            }
-            else
-            {
-                result =
-                    await service.Insert(
-                        item
-                    );
-            }
 
-            if (result)
+                    return;
+                }
+
+                ChamCong cc =
+                    new ChamCong();
+
+                cc.id = _id;
+
+                cc.nhan_vien_id =
+                    cboNhanVien
+                    .SelectedValue
+                    .ToString();
+
+                cc.ngay_lam =
+                    dtpNgayLam.Value.Date;
+
+                cc.ca_lam_id =
+                    Convert.ToInt32(
+                        cboCaLam
+                        .SelectedValue
+                    );
+
+                cc.check_in =
+                    dtpCheckIn.Value;
+
+                cc.check_out =
+                    dtpCheckOut.Value;
+
+                bool result;
+
+                if (_id == 0)
+                {
+                    result =
+                        await _service.Insert(
+                            cc
+                        );
+                }
+                else
+                {
+                    result =
+                        await _service.Update(
+                            cc
+                        );
+                }
+
+                if (result)
+                {
+                    MessageBox.Show(
+                        "Lưu thành công"
+                    );
+
+                    DialogResult =
+                        DialogResult.OK;
+
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Lưu thất bại"
+                    );
+                }
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Lưu thành công"
-                );
-
-                DialogResult =
-                    DialogResult.OK;
-
-                Close();
-            }
-            else
-            {
-                MessageBox.Show(
-                    "Lưu thất bại"
+                    ex.Message
                 );
             }
         }

@@ -1,34 +1,29 @@
-﻿using MessageBox = QuanLyChamCong.THEME.CustomMessageBox;
+﻿
 using QuanLyChamCong.Models;
 using QuanLyChamCong.Services;
-using QuanLyChamCong.THEME;
+
 using System;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuanLyChamCong.GUI
 {
-    public partial class FrmThuongPhatEdit : BaseForm
+    public partial class FrmThuongPhatEdit : Form
     {
-        ThuongPhatService service =
+        private readonly ThuongPhatService _service =
             new ThuongPhatService();
 
-        NhanVienService nhanVienService =
+        private readonly NhanVienService _nhanVienService =
             new NhanVienService();
 
-        public int id = 0;
+        public bool IsEdit = false;
 
-        
-        public string nhanVienId = "";
-        public string loai = "";
-        public decimal soTien = 0;
-        public string lyDo = "";
-        public DateTime ngay;
+        public ThuongPhat ThuongPhatEdit =
+            new ThuongPhat();
 
         public FrmThuongPhatEdit()
         {
             InitializeComponent();
-            txtSoTien.TextAlign = HorizontalAlignment.Right;
         }
 
         private async void FrmThuongPhatEdit_Load(
@@ -38,83 +33,105 @@ namespace QuanLyChamCong.GUI
         {
             await LoadNhanVien();
 
-            
+            LoadLoai();
+
+            SetupNumeric();
+
+            if (IsEdit)
+            {
+                LoadDataEdit();
+            }
+        }
+
+        private async Task LoadNhanVien()
+        {
+            try
+            {
+                var dsNhanVien =
+                    await _nhanVienService
+                    .GetAll();
+
+                cbNhanVien.DataSource =
+                    dsNhanVien;
+
+                cbNhanVien.DisplayMember =
+                    "ho_ten";
+
+                cbNhanVien.ValueMember =
+                    "id";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Lỗi load nhân viên:\n" +
+                    ex.Message
+                );
+            }
+        }
+
+        private void LoadLoai()
+        {
             cbLoai.Items.Clear();
 
             cbLoai.Items.Add("Thưởng");
+
             cbLoai.Items.Add("Phạt");
 
-            cbLoai.FormattingEnabled = true;
-
-            if (id == 0)
-            {
-                cbLoai.SelectedIndex = 0;
-
-                dtNgay.Value =
-                    DateTime.Now;
-            }
-
-            else
-            {
-                // nhân viên
-                if (!string.IsNullOrEmpty(
-                    nhanVienId))
-                {
-                    cbNhanVien.SelectedValue =
-                        nhanVienId;
-                }
-
-                // loại
-                if (loai == "Thuong")
-                {
-                    cbLoai.SelectedItem = "Thưởng";
-                }
-                else if (loai == "Phat")
-                {
-                    cbLoai.SelectedItem = "Phạt";
-                }
-                else
-                {
-                    cbLoai.SelectedItem = loai;
-                }
-
-                // số tiền
-                txtSoTien.Text =
-                soTien
-                    .ToString("N0")
-                    .Replace(",", ".");
-
-                // lý do
-                txtLyDo.Text =
-                    lyDo;
-
-                // ngày
-                if (ngay.Year > 1900)
-                {
-                    dtNgay.Value =
-                        ngay;
-                }
-                else
-                {
-                    dtNgay.Value =
-                        DateTime.Now;
-                }
-            }
+            cbLoai.SelectedIndex = 0;
         }
-        
-        async System.Threading.Tasks.Task LoadNhanVien()
+
+        private void SetupNumeric()
         {
-            List<NhanVien> ds =
-                await nhanVienService.GetAll();
+            nudSoTien.Minimum = 0;
 
-            cbNhanVien.DataSource =
-                ds;
+            nudSoTien.Maximum =
+                 decimal.MaxValue;
+            nudSoTien.Increment =
+                1;
 
-            cbNhanVien.DisplayMember =
-                "ho_ten";
+            nudSoTien.DecimalPlaces =
+                0;
 
-            cbNhanVien.ValueMember =
-                "id";
+            nudSoTien.ThousandsSeparator =
+                true;
+        }
+
+        private void LoadDataEdit()
+        {
+            try
+            {
+                cbNhanVien.SelectedValue =
+                    ThuongPhatEdit
+                    .nhan_vien_id;
+
+                cbLoai.Text =
+                    ThuongPhatEdit.loai;
+
+                nudSoTien.Value =
+                    Convert.ToDecimal(
+                        ThuongPhatEdit
+                        .so_tien ?? 0
+                    );
+
+                txtLyDo.Text =
+                    ThuongPhatEdit.ly_do;
+
+                if (
+                    ThuongPhatEdit.ngay
+                    != null
+                )
+                {
+                    dtNgay.Value =
+                        ThuongPhatEdit
+                        .ngay.Value;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message
+                );
+            }
         }
 
         private async void btnLuu_Click(
@@ -122,112 +139,94 @@ namespace QuanLyChamCong.GUI
             EventArgs e
         )
         {
-            if (cbNhanVien.SelectedValue == null)
+            try
             {
-                MessageBox.Show(
-                    "Chọn nhân viên"
-                );
-
-                return;
-            }
-
-            if (txtSoTien.Text.Trim() == "")
-            {
-                MessageBox.Show(
-                    "Nhập số tiền"
-                );
-
-                return;
-            }
-
-            decimal soTienValue;
-
-            if (!decimal.TryParse(
-                txtSoTien.Text,
-                out soTienValue
-            ))
-            {
-                MessageBox.Show(
-                    "Số tiền không hợp lệ"
-                );
-
-                return;
-            }
-
-            ThuongPhat tp =
-                new ThuongPhat();
-
-            tp.id = id;
-
-            tp.nhan_vien_id =
-                cbNhanVien.SelectedValue
-                .ToString();
-
-            if (cbLoai.SelectedItem == null)
-            {
-                MessageBox.Show("Chọn loại");
-
-                return;
-            }
-
-            tp.loai =
-                cbLoai.SelectedItem
-                .ToString();
-
-            tp.so_tien =
-                soTienValue;
-
-            tp.ly_do =
-                txtLyDo.Text;
-
-            tp.ngay =
-                dtNgay.Value;
-
-            bool result;
-
-            if (id == 0)
-            {
-                result =
-                    await service.Add(tp);
-
-                if (result)
+                if (
+                    cbNhanVien.SelectedValue
+                    == null
+                )
                 {
                     MessageBox.Show(
-                        "Thêm thành công"
-                    );
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Thêm thất bại"
+                        "Vui lòng chọn nhân viên"
                     );
 
                     return;
                 }
-            }
 
-            else
-            {
-                result =
-                    await service.Update(tp);
-
-                if (result)
+                if (
+                    string.IsNullOrWhiteSpace(
+                        txtLyDo.Text
+                    )
+                )
                 {
                     MessageBox.Show(
-                        "Cập nhật thành công"
-                    );
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Cập nhật thất bại"
+                        "Vui lòng nhập lý do"
                     );
 
                     return;
                 }
-            }
 
-            this.Close();
+                ThuongPhatEdit
+                    .nhan_vien_id =
+                    cbNhanVien
+                    .SelectedValue
+                    .ToString();
+
+                ThuongPhatEdit.loai =
+                    cbLoai.Text;
+
+                ThuongPhatEdit.so_tien =
+                    nudSoTien.Value;
+
+                ThuongPhatEdit.ly_do =
+                    txtLyDo.Text.Trim();
+
+                ThuongPhatEdit.ngay =
+                    dtNgay.Value.Date;
+
+                bool result = false;
+
+                if (IsEdit)
+                {
+                    result =
+                        await _service
+                        .Update(
+                            ThuongPhatEdit
+                        );
+                }
+                else
+                {
+                    result =
+                        await _service
+                        .Add(
+                            ThuongPhatEdit
+                        );
+                }
+
+                if (result)
+                {
+                    MessageBox.Show(
+                        "Lưu thành công"
+                    );
+
+                    DialogResult =
+                        DialogResult.OK;
+
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Lưu thất bại"
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.ToString()
+                );
+            }
         }
 
         private void btnDong_Click(
@@ -235,7 +234,7 @@ namespace QuanLyChamCong.GUI
             EventArgs e
         )
         {
-            this.Close();
+            Close();
         }
     }
 }

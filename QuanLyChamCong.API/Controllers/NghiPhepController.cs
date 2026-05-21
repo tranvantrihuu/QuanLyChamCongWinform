@@ -1,228 +1,92 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using QuanLyChamCong.API.Data;
+
+using QuanLyChamCong.API.BLL;
 using QuanLyChamCong.API.Models;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
 
 namespace QuanLyChamCong.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class NghiPhepController : ControllerBase
+    public class NghiPhepController :
+        ControllerBase
     {
-      
-        [HttpGet]
-        public IActionResult Get()
+        private readonly
+            NghiPhepBLL _bll;
+
+        public NghiPhepController(
+            NghiPhepBLL bll
+        )
         {
-            List<NghiPhep> ds =
-                new List<NghiPhep>();
+            _bll = bll;
+        }
 
-            Db db = new Db();
+        [HttpGet]
+        public async Task<IActionResult>
+            Get()
+        {
+            var data =
+                await _bll.GetAllAsync();
 
-            using (SqlConnection conn =
-                db.GetConnection())
+            return Ok(data);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult>
+            GetById(
+                int id
+            )
+        {
+            var data =
+                await _bll.GetByIdAsync(id);
+
+            if (data == null)
             {
-                conn.Open();
-
-                string sql = @"
-                    SELECT
-                        np.id,
-                        np.nhan_vien_id,
-                        nv.ho_ten,
-                        np.ca_lam_id,
-                        np.ngay,
-                        np.loai,
-                        np.ly_do,
-                        np.created_at
-                    FROM nghi_phep np
-                    LEFT JOIN nhan_vien nv
-                        ON np.nhan_vien_id = nv.id";
-
-                SqlCommand cmd =
-                    new SqlCommand(sql, conn);
-
-                SqlDataReader reader =
-                    cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    ds.Add(new NghiPhep
-                    {
-                        id =
-                            Convert.ToInt32(
-                                reader["id"]),
-
-                        nhan_vien_id =
-                            reader["nhan_vien_id"]
-                            .ToString(),
-
-                        ho_ten =
-                            reader["ho_ten"]
-                            .ToString(),
-
-                        ca_lam_id =
-                            Convert.ToInt32(
-                                reader["ca_lam_id"]),
-
-                        ngay =
-                            Convert.ToDateTime(
-                                reader["ngay"]),
-
-                        loai =
-                            reader["loai"]
-                            .ToString(),
-
-                        ly_do =
-                            reader["ly_do"]
-                            .ToString(),
-
-                        created_at =
-                            Convert.ToDateTime(
-                                reader["created_at"])
-                    });
-                }
+                return NotFound();
             }
 
-            return Ok(ds);
+            return Ok(data);
         }
 
         [HttpPost]
-        public IActionResult Add(
-            [FromBody] NghiPhep item)
+        public async Task<IActionResult>
+            Insert(
+                NghiPhep model
+            )
         {
-            Db db = new Db();
+            bool result =
+                await _bll.InsertAsync(
+                    model
+                );
 
-            using (SqlConnection conn =
-                db.GetConnection())
-            {
-                conn.Open();
-
-                string sql = @"
-                    INSERT INTO nghi_phep
-                    (
-                        nhan_vien_id,
-                        ca_lam_id,
-                        ngay,
-                        loai,
-                        ly_do
-                    )
-                    VALUES
-                    (
-                        @nhan_vien_id,
-                        @ca_lam_id,
-                        @ngay,
-                        @loai,
-                        @ly_do
-                    )";
-
-                SqlCommand cmd =
-                    new SqlCommand(sql, conn);
-
-                cmd.Parameters.AddWithValue(
-                    "@nhan_vien_id",
-                    item.nhan_vien_id);
-
-                cmd.Parameters.AddWithValue(
-                    "@ca_lam_id",
-                    item.ca_lam_id);
-
-                cmd.Parameters.AddWithValue(
-                    "@ngay",
-                    item.ngay);
-
-                cmd.Parameters.AddWithValue(
-                    "@loai",
-                    item.loai);
-
-                cmd.Parameters.AddWithValue(
-                    "@ly_do",
-                    item.ly_do);
-
-                cmd.ExecuteNonQuery();
-            }
-
-            return Ok();
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(
-            [FromBody] NghiPhep item)
+        public async Task<IActionResult>
+            Update(
+                int id,
+                NghiPhep model
+            )
         {
-            Db db = new Db();
+            bool result =
+                await _bll.UpdateAsync(
+                    id,
+                    model
+                );
 
-            using (SqlConnection conn =
-                db.GetConnection())
-            {
-                conn.Open();
-
-                string sql = @"
-                    UPDATE nghi_phep
-                    SET
-                        nhan_vien_id = @nhan_vien_id,
-                        ca_lam_id = @ca_lam_id,
-                        ngay = @ngay,
-                        loai = @loai,
-                        ly_do = @ly_do
-                    WHERE id = @id";
-
-                SqlCommand cmd =
-                    new SqlCommand(sql, conn);
-
-                cmd.Parameters.AddWithValue(
-                    "@id",
-                    item.id);
-
-                cmd.Parameters.AddWithValue(
-                    "@nhan_vien_id",
-                    item.nhan_vien_id);
-
-                cmd.Parameters.AddWithValue(
-                    "@ca_lam_id",
-                    item.ca_lam_id);
-
-                cmd.Parameters.AddWithValue(
-                    "@ngay",
-                    item.ngay);
-
-                cmd.Parameters.AddWithValue(
-                    "@loai",
-                    item.loai);
-
-                cmd.Parameters.AddWithValue(
-                    "@ly_do",
-                    item.ly_do);
-
-                cmd.ExecuteNonQuery();
-            }
-
-            return Ok();
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult>
+            Delete(
+                int id
+            )
         {
-            Db db = new Db();
+            bool result =
+                await _bll.DeleteAsync(id);
 
-            using (SqlConnection conn =
-                db.GetConnection())
-            {
-                conn.Open();
-
-                string sql =
-                    "DELETE FROM nghi_phep WHERE id = @id";
-
-                SqlCommand cmd =
-                    new SqlCommand(sql, conn);
-
-                cmd.Parameters.AddWithValue(
-                    "@id",
-                    id);
-
-                cmd.ExecuteNonQuery();
-            }
-
-            return Ok();
+            return Ok(result);
         }
     }
 }

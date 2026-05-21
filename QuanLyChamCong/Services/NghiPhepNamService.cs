@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using QuanLyChamCong.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -25,56 +26,42 @@ namespace QuanLyChamCong.Services
             return new HttpClient(handler);
         }
 
-        public async Task<List<NghiPhepNam>> GetAll()
+        public async Task<List<NghiPhepNam>>
+            GetAll()
         {
-            using (HttpClient client = GetClient())
+            try
             {
-                var response =
-                    await client.GetAsync(baseUrl);
-
-                if (response.IsSuccessStatusCode)
+                using (HttpClient client = GetClient())
                 {
+                    HttpResponseMessage response =
+                        await client.GetAsync(baseUrl);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new List<NghiPhepNam>();
+                    }
+
                     string json =
                         await response.Content
                         .ReadAsStringAsync();
 
-                    return JsonConvert.DeserializeObject
-                        <List<NghiPhepNam>>(json);
+                    return JsonConvert
+                        .DeserializeObject<List<NghiPhepNam>>(json)
+                        ?? new List<NghiPhepNam>();
                 }
-
+            }
+            catch
+            {
                 return new List<NghiPhepNam>();
             }
         }
 
-        public async Task<bool> Add(
-            NghiPhepNam item)
+        public async Task<bool>
+            Add(NghiPhepNam item)
         {
-            using (HttpClient client = GetClient())
+            try
             {
-                string json =
-                    JsonConvert.SerializeObject(item);
-
-                StringContent content =
-                    new StringContent(
-                        json,
-                        Encoding.UTF8,
-                        "application/json");
-
-                var response =
-                    await client.PostAsync(
-                        baseUrl,
-                        content);
-
-                return response.IsSuccessStatusCode;
-            }
-        }
-
-        public async Task<bool> Update(
-            NghiPhepNam item)
-        {
-            using (HttpClient client = GetClient())
-            {
-                try
+                using (HttpClient client = GetClient())
                 {
                     string json =
                         JsonConvert.SerializeObject(item);
@@ -83,12 +70,14 @@ namespace QuanLyChamCong.Services
                         new StringContent(
                             json,
                             Encoding.UTF8,
-                            "application/json");
+                            "application/json"
+                        );
 
-                    var response =
-                        await client.PutAsync(
-                            $"{baseUrl}/{item.id}",
-                            content);
+                    HttpResponseMessage response =
+                        await client.PostAsync(
+                            baseUrl,
+                            content
+                        );
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -103,26 +92,80 @@ namespace QuanLyChamCong.Services
 
                     return response.IsSuccessStatusCode;
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(
-                        ex.ToString()
-                    );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
 
-                    return false;
-                }
+                return false;
             }
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool>
+            Update(NghiPhepNam item)
         {
-            using (HttpClient client = GetClient())
+            try
             {
-                var response =
-                    await client.DeleteAsync(
-                        $"{baseUrl}/{id}");
+                using (HttpClient client = GetClient())
+                {
+                    string json =
+                        JsonConvert.SerializeObject(item);
 
-                return response.IsSuccessStatusCode;
+                    StringContent content =
+                        new StringContent(
+                            json,
+                            Encoding.UTF8,
+                            "application/json"
+                        );
+
+                    HttpResponseMessage response =
+                        await client.PutAsync(
+                            $"{baseUrl}/{item.id}",
+                            content
+                        );
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        string err =
+                            await response.Content
+                            .ReadAsStringAsync();
+
+                        MessageBox.Show(
+                            "API ERROR:\n" + err
+                        );
+                    }
+
+                    return response.IsSuccessStatusCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return false;
+            }
+        }
+
+        public async Task<bool>
+            Delete(int id)
+        {
+            try
+            {
+                using (HttpClient client = GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.DeleteAsync(
+                            $"{baseUrl}/{id}"
+                        );
+
+                    return response.IsSuccessStatusCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return false;
             }
         }
     }

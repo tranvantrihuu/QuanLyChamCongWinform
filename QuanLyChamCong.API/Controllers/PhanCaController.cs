@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-
-using QuanLyChamCong.API.Data;
+using QuanLyChamCong.API.BLL;
 using QuanLyChamCong.API.Models;
 
 namespace QuanLyChamCong.API.Controllers
@@ -12,187 +8,208 @@ namespace QuanLyChamCong.API.Controllers
     [Route("api/[controller]")]
     public class PhanCaController : ControllerBase
     {
+        private readonly PhanCaBLL _bll;
+
+        public PhanCaController(
+            PhanCaBLL bll
+        )
+        {
+            _bll = bll;
+        }
+
+        // =========================
+        // LẤY DANH SÁCH PHÂN CA
+        // =========================
         [HttpGet]
         public IActionResult Get()
         {
-            List<PhanCa> ds =
-                new List<PhanCa>();
-
-            Db db = new Db();
-
-            using (SqlConnection conn =
-                db.GetConnection())
+            try
             {
-                conn.Open();
+                List<PhanCa> ds =
+                    _bll.GetAll();
 
-                string sql = @"
-                    SELECT
-                        id,
-                        nhan_vien_id,
-                        ca_lam_id,
-                        ngay_lam
-                    FROM phan_ca";
-
-                SqlCommand cmd =
-                    new SqlCommand(sql, conn);
-
-                SqlDataReader reader =
-                    cmd.ExecuteReader();
-
-                while (reader.Read())
+                if (ds == null)
                 {
-                    DateTime tempDate;
-
-                    ds.Add(new PhanCa
-                    {
-                        id =
-                            int.TryParse(
-                                reader["id"].ToString(),
-                                out int idValue)
-                            ? idValue
-                            : 0,
-
-                        nhan_vien_id =
-                            reader["nhan_vien_id"]
-                            .ToString(),
-
-                        ca_lam_id =
-                            int.TryParse(
-                                reader["ca_lam_id"]
-                                .ToString(),
-                                out int caLamId)
-                            ? caLamId
-                            : 0,
-
-                        ngay_lam =
-                            DateTime.TryParse(
-                                reader["ngay_lam"]
-                                .ToString(),
-                                out tempDate)
-                            ? tempDate
-                            : DateTime.Now
-                    });
+                    ds = new List<PhanCa>();
                 }
-            }
 
-            return Ok(ds);
+                return Ok(ds);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(
+                    new
+                    {
+                        success = false,
+                        message = ex.Message
+                    }
+                );
+            }
         }
 
+        // =========================
+        // THÊM PHÂN CA
+        // =========================
         [HttpPost]
         public IActionResult Add(
-            [FromBody] PhanCa pc)
+            [FromBody] PhanCa pc
+        )
         {
-            Db db = new Db();
-
-            using (SqlConnection conn =
-                db.GetConnection())
+            try
             {
-                conn.Open();
+                if (pc == null)
+                {
+                    return BadRequest(
+                        new
+                        {
+                            success = false,
+                            message =
+                                "Dữ liệu không hợp lệ"
+                        }
+                    );
+                }
 
-                string sql = @"
-                    INSERT INTO phan_ca
-                    (
-                        nhan_vien_id,
-                        ca_lam_id,
-                        ngay_lam
-                    )
-                    VALUES
-                    (
-                        @nhan_vien_id,
-                        @ca_lam_id,
-                        @ngay_lam
-                    )";
+                bool success =
+                    _bll.Insert(pc);
 
-                SqlCommand cmd =
-                    new SqlCommand(sql, conn);
+                if (success)
+                {
+                    return Ok(
+                        new
+                        {
+                            success = true,
+                            message =
+                                "Phân ca thành công"
+                        }
+                    );
+                }
 
-                cmd.Parameters.AddWithValue(
-                    "@nhan_vien_id",
-                    pc.nhan_vien_id);
-
-                cmd.Parameters.AddWithValue(
-                    "@ca_lam_id",
-                    pc.ca_lam_id);
-
-                cmd.Parameters.AddWithValue(
-                    "@ngay_lam",
-                    pc.ngay_lam);
-
-                cmd.ExecuteNonQuery();
+                return BadRequest(
+                    new
+                    {
+                        success = false,
+                        message =
+                            "Ca làm đã tồn tại hoặc dữ liệu không hợp lệ"
+                    }
+                );
             }
-
-            return Ok();
+            catch (Exception ex)
+            {
+                return BadRequest(
+                    new
+                    {
+                        success = false,
+                        message = ex.Message
+                    }
+                );
+            }
         }
 
+        // =========================
+        // CẬP NHẬT PHÂN CA
+        // =========================
         [HttpPut("{id}")]
         public IActionResult Update(
             int id,
-            [FromBody] PhanCa pc)
+            [FromBody] PhanCa pc
+        )
         {
-            Db db = new Db();
-
-            using (SqlConnection conn =
-                db.GetConnection())
+            try
             {
-                conn.Open();
+                if (pc == null)
+                {
+                    return BadRequest(
+                        new
+                        {
+                            success = false,
+                            message =
+                                "Dữ liệu không hợp lệ"
+                        }
+                    );
+                }
 
-                string sql = @"
-                    UPDATE phan_ca
-                    SET
-                        nhan_vien_id = @nhan_vien_id,
-                        ca_lam_id = @ca_lam_id,
-                        ngay_lam = @ngay_lam
-                    WHERE id = @id";
+                pc.id = id;
 
-                SqlCommand cmd =
-                    new SqlCommand(sql, conn);
+                bool success =
+                    _bll.Update(pc);
 
-                cmd.Parameters.AddWithValue(
-                    "@id",
-                    id);
+                if (success)
+                {
+                    return Ok(
+                        new
+                        {
+                            success = true,
+                            message =
+                                "Cập nhật thành công"
+                        }
+                    );
+                }
 
-                cmd.Parameters.AddWithValue(
-                    "@nhan_vien_id",
-                    pc.nhan_vien_id);
-
-                cmd.Parameters.AddWithValue(
-                    "@ca_lam_id",
-                    pc.ca_lam_id);
-
-                cmd.Parameters.AddWithValue(
-                    "@ngay_lam",
-                    pc.ngay_lam);
-
-                cmd.ExecuteNonQuery();
+                return BadRequest(
+                    new
+                    {
+                        success = false,
+                        message =
+                            "Cập nhật thất bại"
+                    }
+                );
             }
-
-            return Ok();
+            catch (Exception ex)
+            {
+                return BadRequest(
+                    new
+                    {
+                        success = false,
+                        message = ex.Message
+                    }
+                );
+            }
         }
 
+        // =========================
+        // XÓA PHÂN CA
+        // =========================
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(
+            int id
+        )
         {
-            Db db = new Db();
-
-            using (SqlConnection conn =
-                db.GetConnection())
+            try
             {
-                conn.Open();
+                bool success =
+                    _bll.Delete(id);
 
-                string sql =
-                    "DELETE FROM phan_ca WHERE id = @id";
+                if (success)
+                {
+                    return Ok(
+                        new
+                        {
+                            success = true,
+                            message =
+                                "Xóa thành công"
+                        }
+                    );
+                }
 
-                SqlCommand cmd =
-                    new SqlCommand(sql, conn);
-
-                cmd.Parameters.AddWithValue(
-                    "@id",
-                    id);
-
-                cmd.ExecuteNonQuery();
+                return NotFound(
+                    new
+                    {
+                        success = false,
+                        message =
+                            "Không tìm thấy dữ liệu"
+                    }
+                );
             }
-
-            return Ok();
+            catch (Exception ex)
+            {
+                return BadRequest(
+                    new
+                    {
+                        success = false,
+                        message = ex.Message
+                    }
+                );
+            }
         }
     }
 }

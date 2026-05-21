@@ -40,7 +40,9 @@ namespace QuanLyChamCong.GUI
             ((System.ComponentModel.ISupportInitialize)(this.numKhongPhep)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
-         
+            // 
+            // tableLayoutPanel1
+            // 
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 202F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -68,7 +70,9 @@ namespace QuanLyChamCong.GUI
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(619, 503);
             this.tableLayoutPanel1.TabIndex = 0;
-           
+            // 
+            // label1
+            // 
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
@@ -76,7 +80,9 @@ namespace QuanLyChamCong.GUI
             this.label1.TabIndex = 0;
             this.label1.Text = "Nhân viên";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-         
+            // 
+            // cbNhanVien
+            // 
             this.cbNhanVien.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbNhanVien.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbNhanVien.Location = new System.Drawing.Point(205, 4);
@@ -84,7 +90,9 @@ namespace QuanLyChamCong.GUI
             this.cbNhanVien.Name = "cbNhanVien";
             this.cbNhanVien.Size = new System.Drawing.Size(411, 31);
             this.cbNhanVien.TabIndex = 1;
-         
+            // 
+            // label2
+            // 
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.Location = new System.Drawing.Point(3, 72);
             this.label2.Name = "label2";
@@ -92,7 +100,9 @@ namespace QuanLyChamCong.GUI
             this.label2.TabIndex = 2;
             this.label2.Text = "Năm";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-          
+            // 
+            // numNam
+            // 
             this.numNam.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numNam.Location = new System.Drawing.Point(205, 76);
             this.numNam.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -114,7 +124,9 @@ namespace QuanLyChamCong.GUI
             0,
             0,
             0});
-           
+            // 
+            // label3
+            // 
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.Location = new System.Drawing.Point(3, 144);
             this.label3.Name = "label3";
@@ -122,7 +134,9 @@ namespace QuanLyChamCong.GUI
             this.label3.TabIndex = 4;
             this.label3.Text = "Số ca được nghỉ";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-         
+            // 
+            // numDuocNghi
+            // 
             this.numDuocNghi.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numDuocNghi.Location = new System.Drawing.Point(205, 148);
             this.numDuocNghi.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -134,7 +148,9 @@ namespace QuanLyChamCong.GUI
             this.numDuocNghi.Name = "numDuocNghi";
             this.numDuocNghi.Size = new System.Drawing.Size(411, 30);
             this.numDuocNghi.TabIndex = 5;
-           
+            // 
+            // label4
+            // 
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label4.Location = new System.Drawing.Point(3, 216);
             this.label4.Name = "label4";
@@ -142,7 +158,9 @@ namespace QuanLyChamCong.GUI
             this.label4.TabIndex = 6;
             this.label4.Text = "Đã nghỉ có phép";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-          
+            // 
+            // numCoPhep
+            // 
             this.numCoPhep.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numCoPhep.Location = new System.Drawing.Point(205, 220);
             this.numCoPhep.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -154,7 +172,9 @@ namespace QuanLyChamCong.GUI
             this.numCoPhep.Name = "numCoPhep";
             this.numCoPhep.Size = new System.Drawing.Size(411, 30);
             this.numCoPhep.TabIndex = 7;
-           
+            // 
+            // label5
+            // 
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label5.Location = new System.Drawing.Point(3, 288);
             this.label5.Name = "label5";
@@ -162,7 +182,9 @@ namespace QuanLyChamCong.GUI
             this.label5.TabIndex = 8;
             this.label5.Text = "Đã nghỉ không phép";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-          
+            // 
+            // numKhongPhep
+            // 
             this.numKhongPhep.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numKhongPhep.Location = new System.Drawing.Point(205, 292);
             this.numKhongPhep.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -174,7 +196,9 @@ namespace QuanLyChamCong.GUI
             this.numKhongPhep.Name = "numKhongPhep";
             this.numKhongPhep.Size = new System.Drawing.Size(411, 30);
             this.numKhongPhep.TabIndex = 9;
-             
+            // 
+            // flowLayoutPanel1
+            // 
             this.flowLayoutPanel1.Controls.Add(this.btnLuu);
             this.flowLayoutPanel1.Controls.Add(this.btnHuy);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -183,7 +207,9 @@ namespace QuanLyChamCong.GUI
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(411, 135);
             this.flowLayoutPanel1.TabIndex = 10;
-           
+            // 
+            // btnLuu
+            // 
             this.btnLuu.BackColor = System.Drawing.Color.PaleGreen;
             this.btnLuu.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnLuu.Location = new System.Drawing.Point(3, 4);
@@ -194,7 +220,9 @@ namespace QuanLyChamCong.GUI
             this.btnLuu.Text = "LƯU";
             this.btnLuu.UseVisualStyleBackColor = false;
             this.btnLuu.Click += new System.EventHandler(this.btnLuu_Click);
-           
+            // 
+            // btnHuy
+            // 
             this.btnHuy.BackColor = System.Drawing.Color.LightCoral;
             this.btnHuy.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnHuy.Location = new System.Drawing.Point(144, 4);
@@ -205,15 +233,15 @@ namespace QuanLyChamCong.GUI
             this.btnHuy.Text = "HỦY";
             this.btnHuy.UseVisualStyleBackColor = false;
             this.btnHuy.Click += new System.EventHandler(this.btnHuy_Click);
-          
+            // 
+            // FrmNghiPhepNamEdit
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(619, 503);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "FrmNghiPhepNamEdit";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Nghỉ phép năm";
             this.Load += new System.EventHandler(this.FrmNghiPhepNamEdit_Load);
             this.tableLayoutPanel1.ResumeLayout(false);

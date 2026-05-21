@@ -7,8 +7,11 @@ namespace QuanLyChamCong.GUI
 
         public System.Windows.Forms.ComboBox cbNhanVien;
         public System.Windows.Forms.ComboBox cbLoai;
-        public System.Windows.Forms.TextBox txtSoTien;
+
+        public System.Windows.Forms.NumericUpDown nudSoTien;
+
         public System.Windows.Forms.TextBox txtLyDo;
+
         public System.Windows.Forms.DateTimePicker dtNgay;
 
         private System.Windows.Forms.Label label1;
@@ -20,10 +23,14 @@ namespace QuanLyChamCong.GUI
         private System.Windows.Forms.Button btnLuu;
         private System.Windows.Forms.Button btnDong;
 
-        protected override void Dispose(bool disposing)
+        protected override void Dispose(
+            bool disposing
+        )
         {
-            if (disposing &&
-                (components != null))
+            if (
+                disposing &&
+                (components != null)
+            )
             {
                 components.Dispose();
             }
@@ -54,8 +61,8 @@ namespace QuanLyChamCong.GUI
             this.cbLoai =
                 new System.Windows.Forms.ComboBox();
 
-            this.txtSoTien =
-                new System.Windows.Forms.TextBox();
+            this.nudSoTien =
+                new System.Windows.Forms.NumericUpDown();
 
             this.txtLyDo =
                 new System.Windows.Forms.TextBox();
@@ -69,85 +76,197 @@ namespace QuanLyChamCong.GUI
             this.btnDong =
                 new System.Windows.Forms.Button();
 
+            ((System.ComponentModel.ISupportInitialize)
+                (this.nudSoTien))
+                .BeginInit();
+
             this.SuspendLayout();
 
+            // label1
+
             this.label1.AutoSize = true;
+
             this.label1.Location =
-                new System.Drawing.Point(40, 40);
+                new System.Drawing.Point(
+                    40,
+                    40
+                );
+
             this.label1.Text =
                 "Nhân viên";
 
+            // cbNhanVien
+
             this.cbNhanVien.DropDownStyle =
-                System.Windows.Forms.ComboBoxStyle.DropDownList;
+                System.Windows.Forms
+                .ComboBoxStyle
+                .DropDownList;
 
             this.cbNhanVien.Location =
-                new System.Drawing.Point(170, 37);
+                new System.Drawing.Point(
+                    170,
+                    37
+                );
 
             this.cbNhanVien.Size =
-                new System.Drawing.Size(250, 24);
+                new System.Drawing.Size(
+                    250,
+                    24
+                );
+
+            // label2
 
             this.label2.AutoSize = true;
+
             this.label2.Location =
-                new System.Drawing.Point(40, 90);
+                new System.Drawing.Point(
+                    40,
+                    90
+                );
+
             this.label2.Text =
                 "Loại";
 
+            // cbLoai
+
             this.cbLoai.DropDownStyle =
-                System.Windows.Forms.ComboBoxStyle.DropDownList;
+                System.Windows.Forms
+                .ComboBoxStyle
+                .DropDownList;
 
             this.cbLoai.Location =
-                new System.Drawing.Point(170, 87);
+                new System.Drawing.Point(
+                    170,
+                    87
+                );
 
             this.cbLoai.Size =
-                new System.Drawing.Size(250, 24);
+                new System.Drawing.Size(
+                    250,
+                    24
+                );
+
+            // label3
 
             this.label3.AutoSize = true;
+
             this.label3.Location =
-                new System.Drawing.Point(40, 140);
+                new System.Drawing.Point(
+                    40,
+                    140
+                );
+
             this.label3.Text =
                 "Số tiền";
 
-            this.txtSoTien.Location =
-                new System.Drawing.Point(170, 137);
+            // nudSoTien
 
-            this.txtSoTien.Size =
-                new System.Drawing.Size(250, 22);
+            this.nudSoTien.Location =
+                new System.Drawing.Point(
+                    170,
+                    137
+                );
+
+            this.nudSoTien.Size =
+                new System.Drawing.Size(
+                    250,
+                    22
+                );
+
+            this.nudSoTien.Minimum =
+                0;
+            nudSoTien.Maximum =
+                decimal.MaxValue;
+
+            this.nudSoTien.Increment =
+                1;
+
+            this.nudSoTien.DecimalPlaces =
+                0;
+
+            this.nudSoTien.ThousandsSeparator =
+                true;
+
+            this.nudSoTien.TextAlign =
+                System.Windows.Forms
+                .HorizontalAlignment
+                .Right;
+
+            // label4
 
             this.label4.AutoSize = true;
+
             this.label4.Location =
-                new System.Drawing.Point(40, 190);
+                new System.Drawing.Point(
+                    40,
+                    190
+                );
+
             this.label4.Text =
                 "Lý do";
 
+            // txtLyDo
+
             this.txtLyDo.Location =
-                new System.Drawing.Point(170, 187);
+                new System.Drawing.Point(
+                    170,
+                    187
+                );
 
             this.txtLyDo.Multiline =
                 true;
 
             this.txtLyDo.Size =
-                new System.Drawing.Size(250, 90);
+                new System.Drawing.Size(
+                    250,
+                    90
+                );
+
+            // label5
 
             this.label5.AutoSize = true;
+
             this.label5.Location =
-                new System.Drawing.Point(40, 310);
+                new System.Drawing.Point(
+                    40,
+                    310
+                );
+
             this.label5.Text =
                 "Ngày";
 
+            // dtNgay
+
             this.dtNgay.Format =
-                System.Windows.Forms.DateTimePickerFormat.Short;
+                System.Windows.Forms
+                .DateTimePickerFormat
+                .Short;
 
             this.dtNgay.Location =
-                new System.Drawing.Point(170, 307);
+                new System.Drawing.Point(
+                    170,
+                    307
+                );
 
             this.dtNgay.Size =
-                new System.Drawing.Size(250, 22);
+                new System.Drawing.Size(
+                    250,
+                    22
+                );
+
+            // btnLuu
 
             this.btnLuu.Location =
-                new System.Drawing.Point(170, 360);
+                new System.Drawing.Point(
+                    170,
+                    360
+                );
 
             this.btnLuu.Size =
-                new System.Drawing.Size(100, 35);
+                new System.Drawing.Size(
+                    100,
+                    35
+                );
 
             this.btnLuu.Text =
                 "Lưu";
@@ -157,12 +276,19 @@ namespace QuanLyChamCong.GUI
                     this.btnLuu_Click
                 );
 
+            // btnDong
 
             this.btnDong.Location =
-                new System.Drawing.Point(320, 360);
+                new System.Drawing.Point(
+                    320,
+                    360
+                );
 
             this.btnDong.Size =
-                new System.Drawing.Size(100, 35);
+                new System.Drawing.Size(
+                    100,
+                    35
+                );
 
             this.btnDong.Text =
                 "Đóng";
@@ -172,39 +298,80 @@ namespace QuanLyChamCong.GUI
                     this.btnDong_Click
                 );
 
+            // FrmThuongPhatEdit
 
             this.AutoScaleDimensions =
-                new System.Drawing.SizeF(8F, 16F);
+                new System.Drawing.SizeF(
+                    8F,
+                    16F
+                );
 
             this.AutoScaleMode =
-                System.Windows.Forms.AutoScaleMode.Font;
+                System.Windows.Forms
+                .AutoScaleMode
+                .Font;
 
             this.ClientSize =
-                new System.Drawing.Size(500, 450);
+                new System.Drawing.Size(
+                    500,
+                    450
+                );
 
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.cbNhanVien);
+            this.Controls.Add(
+                this.label1
+            );
 
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.cbLoai);
+            this.Controls.Add(
+                this.cbNhanVien
+            );
 
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.txtSoTien);
+            this.Controls.Add(
+                this.label2
+            );
 
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.txtLyDo);
+            this.Controls.Add(
+                this.cbLoai
+            );
 
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.dtNgay);
+            this.Controls.Add(
+                this.label3
+            );
 
-            this.Controls.Add(this.btnLuu);
-            this.Controls.Add(this.btnDong);
+            this.Controls.Add(
+                this.nudSoTien
+            );
+
+            this.Controls.Add(
+                this.label4
+            );
+
+            this.Controls.Add(
+                this.txtLyDo
+            );
+
+            this.Controls.Add(
+                this.label5
+            );
+
+            this.Controls.Add(
+                this.dtNgay
+            );
+
+            this.Controls.Add(
+                this.btnLuu
+            );
+
+            this.Controls.Add(
+                this.btnDong
+            );
 
             this.Name =
                 "FrmThuongPhatEdit";
 
             this.StartPosition =
-                System.Windows.Forms.FormStartPosition.CenterScreen;
+                System.Windows.Forms
+                .FormStartPosition
+                .CenterScreen;
 
             this.Text =
                 "Thưởng Phạt";
@@ -214,8 +381,14 @@ namespace QuanLyChamCong.GUI
                     this.FrmThuongPhatEdit_Load
                 );
 
+            ((System.ComponentModel.ISupportInitialize)
+                (this.nudSoTien))
+                .EndInit();
+
             this.ResumeLayout(false);
+
             this.PerformLayout();
         }
     }
 }
+

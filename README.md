@@ -406,12 +406,23 @@ Data Access Layer
 ```text
 ChamCongSolution
 │
+├── .github
+│   └── workflows
+│
+├── .vscode
+│   ├── launch.json
+│   ├── settings.json
+│   └── tasks.json
+│
+├── img
+│   └── ERD.png
+│
 ├── QuanLyChamCong
 │   │
 │   ├── GUI
-│   │   ├── FrmBangLuongChotChiTiet
+│   │   ├── FrmBangLuongChotEdit
 │   │   ├── FrmCaLamEdit
-│   │   ├── FrmCauHinhLuong
+│   │   ├── FrmCauHinhLuongEdit
 │   │   ├── FrmNghiPhepEdit
 │   │   ├── FrmNghiPhepNamEdit
 │   │   ├── FrmNhanVienEdit
@@ -431,6 +442,7 @@ ChamCongSolution
 │   │
 │   ├── Models
 │   │   ├── BangLuongChot.cs
+│   │   ├── BaoCaoChamCong.cs
 │   │   ├── CaLam.cs
 │   │   ├── CauHinhLuong.cs
 │   │   ├── ChamCong.cs
@@ -438,7 +450,18 @@ ChamCongSolution
 │   │   ├── NghiPhepNam.cs
 │   │   ├── NhanVien.cs
 │   │   ├── PhanCa.cs
-│   │   └── ThuongPhat.cs
+│   │   ├── ThuongPhat.cs
+│   │   │
+│   │   └── ViewModels
+│   │       ├── VwBangLuongChot.cs
+│   │       ├── VwBaoCaoChamCong.cs
+│   │       ├── VwChiTietBangLuong.cs
+│   │       ├── VwDanhSachCaLam.cs
+│   │       ├── VwDanhSachCauHinhLuong.cs
+│   │       ├── VwDanhSachChamCong.cs
+│   │       ├── VwDanhSachNghiPhep.cs
+│   │       ├── VwDanhSachPhanCa.cs
+│   │       └── VwDanhSachThuongPhat.cs
 │   │
 │   ├── Services
 │   │   ├── BangLuongChotService.cs
@@ -461,9 +484,29 @@ ChamCongSolution
 │   │   ├── CustomMessageBox.cs
 │   │   └── frmMessageBox.cs
 │   │
-│   └── Properties
+│   ├── Properties
+│   │   ├── AssemblyInfo.cs
+│   │   ├── Resources.resx
+│   │   └── Settings.settings
+│   │
+│   ├── frmMain.cs
+│   ├── Program.cs
+│   ├── App.config
+│   └── QuanLyChamCong.csproj
 │
 ├── QuanLyChamCong.API
+│   │
+│   ├── BLL
+│   │   ├── BangLuongChotBLL.cs
+│   │   ├── CaLamBLL.cs
+│   │   ├── CauHinhLuongBLL.cs
+│   │   ├── ChamCongBLL.cs
+│   │   ├── NghiPhepBLL.cs
+│   │   ├── NghiPhepNamBLL.cs
+│   │   ├── NhanVienBLL.cs
+│   │   ├── PhanCaBLL.cs
+│   │   ├── QuanLyChamCongBLL.cs
+│   │   └── ThuongPhatBLL.cs
 │   │
 │   ├── Controllers
 │   │   ├── BangLuongChotController.cs
@@ -476,6 +519,25 @@ ChamCongSolution
 │   │   ├── PhanCaController.cs
 │   │   └── ThuongPhatController.cs
 │   │
+│   ├── DAL
+│   │   ├── BangLuongChotDAL.cs
+│   │   ├── CaLamDAL.cs
+│   │   ├── CauHinhLuongDAL.cs
+│   │   ├── ChamCongDAL.cs
+│   │   ├── NghiPhepDAL.cs
+│   │   ├── NghiPhepNamDAL.cs
+│   │   ├── NhanVienDAL.cs
+│   │   ├── PhanCaDAL.cs
+│   │   ├── QuanLyChamCongDAL.cs
+│   │   └── ThuongPhatDAL.cs
+│   │
+│   ├── Data
+│   │   ├── AppDbContext.cs
+│   │   └── Db.cs
+│   │
+│   ├── DTO
+│   │   └── DoiPinDTO.cs
+│   │
 │   ├── Models
 │   │   ├── BangLuongChot.cs
 │   │   ├── CaLam.cs
@@ -485,21 +547,34 @@ ChamCongSolution
 │   │   ├── NghiPhepNam.cs
 │   │   ├── NhanVien.cs
 │   │   ├── PhanCa.cs
-│   │   └── ThuongPhat.cs
+│   │   ├── ThuongPhat.cs
+│   │   │
+│   │   └── ViewModels
+│   │       ├── VwBangLuongChot.cs
+│   │       ├── VwBangLuongRealtime.cs
+│   │       ├── VwBaoCaoChamCong.cs
+│   │       ├── VwChiTietBangLuong.cs
+│   │       ├── VwDanhSachCaLam.cs
+│   │       ├── VwDanhSachCauHinhLuong.cs
+│   │       ├── VwDanhSachChamCong.cs
+│   │       ├── VwDanhSachNghiPhep.cs
+│   │       ├── VwDanhSachPhanCa.cs
+│   │       └── VwDanhSachThuongPhat.cs
 │   │
-│   ├── Data
-│   │   └── Db.cs
+│   ├── Properties
+│   │   └── launchSettings.json
 │   │
 │   ├── Program.cs
 │   ├── appsettings.json
-│   └── Web.config
+│   ├── appsettings.Development.json
+│   ├── Web.config
+│   └── QuanLyChamCong.API.csproj
 │
-└── Database
-    ├── SQL Scripts
-    ├── Stored Procedures
-    ├── Trigger
-    ├── Views
-    └── Functions
+├── packages
+│
+├── README.md
+├── ChamCongSolution.sln
+└── .gitignore
 ```
 ---
 

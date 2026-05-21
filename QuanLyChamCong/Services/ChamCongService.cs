@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using QuanLyChamCong.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -10,7 +11,7 @@ namespace QuanLyChamCong.Services
 {
     public class ChamCongService
     {
-        private string url =
+        private readonly string url =
             "https://localhost:7133/api/ChamCong";
 
         private HttpClient GetClient()
@@ -24,51 +25,88 @@ namespace QuanLyChamCong.Services
             return new HttpClient(handler);
         }
 
-        public async Task<List<ChamCong>> GetAll()
+        public async Task<List<BaoCaoChamCong>>
+            GetAll()
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                string json =
-                    await client.GetStringAsync(url);
+                using (HttpClient client =
+                    GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.GetAsync(url);
 
-                return JsonConvert.DeserializeObject
-                    <List<ChamCong>>(json);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new List<BaoCaoChamCong>();
+                    }
+
+                    string json =
+                        await response.Content
+                        .ReadAsStringAsync();
+
+                    return JsonConvert
+                        .DeserializeObject<List<BaoCaoChamCong>>(json)
+                        ?? new List<BaoCaoChamCong>();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return new List<BaoCaoChamCong>();
             }
         }
 
-        public async Task<List<dynamic>> BaoCaoTongHop(
-            string nhanVienId,
-            DateTime tuNgay,
-            DateTime denNgay
-        )
-        {
-            using (
-                HttpClient client =
-                    GetClient()
+        public async Task<List<dynamic>>
+            BaoCaoTongHop(
+                string nhanVienId,
+                DateTime tuNgay,
+                DateTime denNgay
             )
+        {
+            try
             {
-                string requestUrl =
-                    $"{url}/BaoCaoTongHop?" +
-                    $"nhanVienId={nhanVienId}" +
-                    $"&tuNgay={tuNgay:yyyy-MM-dd}" +
-                    $"&denNgay={denNgay:yyyy-MM-dd}";
+                using (HttpClient client =
+                    GetClient())
+                {
+                    string requestUrl =
+                        $"{url}/BaoCaoTongHop?" +
+                        $"nhanVienId={nhanVienId}" +
+                        $"&tuNgay={tuNgay:yyyy-MM-dd}" +
+                        $"&denNgay={denNgay:yyyy-MM-dd}";
 
-                HttpResponseMessage response =
-                    await client.GetAsync(
-                        requestUrl
-                    );
+                    HttpResponseMessage response =
+                        await client.GetAsync(
+                            requestUrl
+                        );
 
-                string responseText =
-                    await response.Content
-                    .ReadAsStringAsync();
+                    string responseText =
+                        await response.Content
+                        .ReadAsStringAsync();
 
-                
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show(
+                            "API ERROR:\n" +
+                            responseText
+                        );
 
-                response.EnsureSuccessStatusCode();
+                        return new List<dynamic>();
+                    }
 
-                return JsonConvert.DeserializeObject
-                    <List<dynamic>>(responseText);
+                    return JsonConvert
+                        .DeserializeObject<List<dynamic>>(
+                            responseText
+                        )
+                        ?? new List<dynamic>();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return new List<dynamic>();
             }
         }
     }

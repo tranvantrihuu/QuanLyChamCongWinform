@@ -1,6 +1,6 @@
 ﻿namespace QuanLyChamCong.GUI
 {
-    partial class FrmBangLuongChotChiTiet
+    partial class FrmBangLuongChotEdit
     {
         private System.ComponentModel.IContainer components = null;
 

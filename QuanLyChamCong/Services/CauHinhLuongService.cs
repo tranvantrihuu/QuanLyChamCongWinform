@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using QuanLyChamCong.Models;
 
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
@@ -11,7 +12,7 @@ namespace QuanLyChamCong.Services
 {
     public class CauHinhLuongService
     {
-        private string url =
+        private readonly string url =
             "https://localhost:7133/api/CauHinhLuong";
 
         private HttpClient GetClient()
@@ -25,89 +26,153 @@ namespace QuanLyChamCong.Services
             return new HttpClient(handler);
         }
 
-        public async Task<List<CauHinhLuong>> GetAll()
+        public async Task<List<CauHinhLuong>>
+            GetAll()
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                string json =
-                    await client.GetStringAsync(url);
+                using (HttpClient client =
+                    GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.GetAsync(url);
 
-                return JsonConvert.DeserializeObject
-                    <List<CauHinhLuong>>(json);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new List<CauHinhLuong>();
+                    }
+
+                    string json =
+                        await response.Content
+                        .ReadAsStringAsync();
+
+                    return JsonConvert
+                        .DeserializeObject
+                        <List<CauHinhLuong>>(json)
+                        ?? new List<CauHinhLuong>();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return new List<CauHinhLuong>();
             }
         }
 
-        public async Task<bool> Add(
-            CauHinhLuong model
-        )
+        public async Task<bool>
+            Add(CauHinhLuong model)
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                string json =
-                    JsonConvert.SerializeObject(model);
+                using (HttpClient client =
+                    GetClient())
+                {
+                    string json =
+                        JsonConvert.SerializeObject(model);
 
-                StringContent content =
-                    new StringContent(
-                        json,
-                        Encoding.UTF8,
-                        "application/json"
-                    );
+                    StringContent content =
+                        new StringContent(
+                            json,
+                            Encoding.UTF8,
+                            "application/json"
+                        );
 
-                HttpResponseMessage res =
-                    await client.PostAsync(
-                        url,
-                        content
-                    );
+                    HttpResponseMessage response =
+                        await client.PostAsync(
+                            url,
+                            content
+                        );
 
-                return res.IsSuccessStatusCode;
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        string err =
+                            await response.Content
+                            .ReadAsStringAsync();
+
+                        MessageBox.Show(
+                            "API ERROR:\n" + err
+                        );
+                    }
+
+                    return response.IsSuccessStatusCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return false;
             }
         }
 
-        public async Task<bool> Update(
-    CauHinhLuong model
-)
+        public async Task<bool>
+            Update(CauHinhLuong model)
         {
-            using (HttpClient client =
-                GetClient())
+            try
             {
-                string json =
-                    JsonConvert.SerializeObject(model);
+                using (HttpClient client =
+                    GetClient())
+                {
+                    string json =
+                        JsonConvert.SerializeObject(model);
 
-                StringContent content =
-                    new StringContent(
-                        json,
-                        Encoding.UTF8,
-                        "application/json"
-                    );
+                    StringContent content =
+                        new StringContent(
+                            json,
+                            Encoding.UTF8,
+                            "application/json"
+                        );
 
-                HttpResponseMessage res =
-                    await client.PutAsync(
-                        url + "/" + model.id,
-                        content
-                    );
+                    HttpResponseMessage response =
+                        await client.PutAsync(
+                            $"{url}/{model.id}",
+                            content
+                        );
 
-                string response =
-                    await res.Content
-                    .ReadAsStringAsync();
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        string err =
+                            await response.Content
+                            .ReadAsStringAsync();
 
-                return res.IsSuccessStatusCode;
+                        MessageBox.Show(
+                            "API ERROR:\n" + err
+                        );
+                    }
+
+                    return response.IsSuccessStatusCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return false;
             }
         }
-        public async Task<bool> Delete(
-            int id
-        )
-        {
-            using (HttpClient client =
-                GetClient())
-            {
-                HttpResponseMessage res =
-                    await client.DeleteAsync(
-                        url + "/" + id
-                    );
 
-                return res.IsSuccessStatusCode;
+        public async Task<bool>
+            Delete(int id)
+        {
+            try
+            {
+                using (HttpClient client =
+                    GetClient())
+                {
+                    HttpResponseMessage response =
+                        await client.DeleteAsync(
+                            $"{url}/{id}"
+                        );
+
+                    return response.IsSuccessStatusCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+                return false;
             }
         }
     }
