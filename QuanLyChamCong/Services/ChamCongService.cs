@@ -3,6 +3,7 @@ using QuanLyChamCong.Models;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -107,6 +108,85 @@ namespace QuanLyChamCong.Services
                 MessageBox.Show(ex.ToString());
 
                 return new List<dynamic>();
+            }
+        }
+
+        public async Task<
+        List<ThongKeChamCongNhanVien>
+        >
+        ThongKeChamCong(
+            string nhanVienId,
+            DateTime tuNgay,
+            DateTime denNgay
+        )
+        {
+            try
+            {
+                using (
+                    HttpClient client =
+                    GetClient()
+                )
+                {
+                    HttpResponseMessage response =
+                        await client.GetAsync(
+
+                        $"{url}/ThongKeChamCong?" +
+
+                        $"tuNgay={tuNgay:yyyy-MM-dd}" +
+
+                        $"&denNgay={denNgay:yyyy-MM-dd}"
+
+                    );
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new List<
+                            ThongKeChamCongNhanVien
+                        >();
+                    }
+
+                    string json =
+                        await response.Content
+                        .ReadAsStringAsync();
+
+                    var data =
+                        JsonConvert.DeserializeObject<
+                            List<
+                                ThongKeChamCongNhanVien
+                            >
+                        >(json)
+                        ??
+                        new List<
+                            ThongKeChamCongNhanVien
+                        >();
+
+                    /*
+                     * FILTER NHÂN VIÊN
+                     */
+
+                    if (
+                        !string.IsNullOrEmpty(
+                            nhanVienId
+                        )
+                    )
+                    {
+                        data =
+                            data.Where(x =>
+                                x.nhan_vien_id
+                                ==
+                                nhanVienId
+                            )
+                            .ToList();
+                    }
+
+                    return data;
+                }
+            }
+            catch
+            {
+                return new List<
+                    ThongKeChamCongNhanVien
+                >();
             }
         }
     }

@@ -6,15 +6,17 @@ namespace QuanLyChamCong.API.BLL
 {
     public class ChamCongBLL
     {
+        private readonly QuanLyChamCongDAL _QLCCdal;
         private readonly ChamCongDAL _dal;
         private readonly NhanVienDAL _nvDal;
         public ChamCongBLL(
             ChamCongDAL dal,
-            NhanVienDAL nvDal
+            NhanVienDAL nvDal,
+            QuanLyChamCongDAL QLCCdal
         )
         {
             _dal = dal;
-
+            _QLCCdal = QLCCdal;
             _nvDal = nvDal;
         }
 
@@ -24,9 +26,9 @@ namespace QuanLyChamCong.API.BLL
             return await _dal.GetAllAsync();
         }
 
-        public async Task<bool> CheckInAsync(
-            string nhanVienId
-        )
+        public async Task<string> CheckInAsync(
+    string nhanVienId
+)
         {
             if (
                 await _nvDal.NhanVienDaNghi(
@@ -34,7 +36,7 @@ namespace QuanLyChamCong.API.BLL
                 )
             )
             {
-                return false;
+                return "Nhân viên đã nghỉ việc";
             }
 
             return await _dal.CheckInAsync(
@@ -42,9 +44,9 @@ namespace QuanLyChamCong.API.BLL
             );
         }
 
-        public async Task<bool> CheckOutAsync(
-            string nhanVienId
-        )
+        public async Task<string> CheckOutAsync(
+    string nhanVienId
+)
         {
             if (
                 await _nvDal.NhanVienDaNghi(
@@ -52,7 +54,7 @@ namespace QuanLyChamCong.API.BLL
                 )
             )
             {
-                return false;
+                return "Nhân viên đã nghỉ việc";
             }
 
             return await _dal.CheckOutAsync(
@@ -91,6 +93,22 @@ namespace QuanLyChamCong.API.BLL
         )
         {
             return await _dal.DeleteAsync(id);
+        }
+        public async Task<
+        List<VwThongKeChamCongNhanVien>
+        >
+        ThongKeChamCongAsync(
+            string? nhanVienId,
+            DateTime tuNgay,
+            DateTime denNgay
+        )
+        {
+            return await _QLCCdal
+                .ThongKeChamCongAsync(
+                    nhanVienId,
+                    tuNgay,
+                    denNgay
+                );
         }
     }
 }

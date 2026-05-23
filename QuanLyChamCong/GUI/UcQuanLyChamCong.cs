@@ -13,6 +13,7 @@ namespace GUI
 {
     public partial class UcQuanLyChamCong : BaseUserControl
     {
+        private bool sortAscending = true;
         private readonly QuanLyChamCongService _service =
             new QuanLyChamCongService();
 
@@ -25,9 +26,9 @@ namespace GUI
         }
 
         private async void UcQuanLyChamCong_Load(
-    object sender,
-    EventArgs e
-)
+            object sender,
+            EventArgs e
+        )
         {
             dtTuNgay.Value =
                 DateTime.Now.AddMonths(-1);
@@ -303,9 +304,9 @@ namespace GUI
         }
 
         private async void btnLoc_Click(
-    object sender,
-    EventArgs e
-)
+            object sender,
+            EventArgs e
+        )
         {
             try
             {
@@ -398,9 +399,9 @@ namespace GUI
         }
 
         private async void btnXoa_Click(
-    object sender,
-    EventArgs e
-)
+            object sender,
+            EventArgs e
+        )
         {
             if (
                 dgvChamCong.SelectedRows.Count <= 0
@@ -497,7 +498,57 @@ namespace GUI
                     dtTuNgay.Value.Date;
             }
         }
+        private void dgvChamCong_ColumnHeaderMouseClick(
+            object sender,
+            DataGridViewCellMouseEventArgs e
+        )
+        {
+            string columnName =
+                dgvChamCong.Columns[e.ColumnIndex]
+                .DataPropertyName;
 
+            if (string.IsNullOrEmpty(columnName))
+            {
+                return;
+            }
+
+            List<VwDanhSachChamCong> data =
+                dgvChamCong.DataSource
+                as List<VwDanhSachChamCong>;
+
+            if (data == null)
+            {
+                return;
+            }
+
+            if (sortAscending)
+            {
+                data = data
+                    .OrderBy(x =>
+                        x.GetType()
+                        .GetProperty(columnName)
+                        .GetValue(x, null)
+                    )
+                    .ToList();
+            }
+            else
+            {
+                data = data
+                    .OrderByDescending(x =>
+                        x.GetType()
+                        .GetProperty(columnName)
+                        .GetValue(x, null)
+                    )
+                    .ToList();
+            }
+
+            sortAscending = !sortAscending;
+
+            dgvChamCong.DataSource = null;
+            dgvChamCong.DataSource = data;
+
+            FormatGrid();
+        }
         private void dtDenNgay_ValueChanged(
             object sender,
             EventArgs e

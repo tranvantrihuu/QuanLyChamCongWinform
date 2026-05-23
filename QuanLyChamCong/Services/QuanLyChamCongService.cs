@@ -28,59 +28,46 @@ namespace QuanLyChamCong.Services
 
         public async Task<List<VwDanhSachChamCong>>
         LocChamCong(
-             string nhanVienId,
-             DateTime tuNgay,
-             DateTime denNgay
-         )
+            string nhanVienId,
+            DateTime tuNgay,
+            DateTime denNgay
+        )
         {
             try
             {
-                using (HttpClient client =
-                    GetClient())
+                using (HttpClient client = GetClient())
                 {
-                    string api;
+                    string api =
+                        $"{url}/loc?" +
+                        $"tuNgay={tuNgay:yyyy-MM-dd}" +
+                        $"&denNgay={denNgay:yyyy-MM-dd}";
 
-                    if (string.IsNullOrEmpty(nhanVienId))
+                    if (!string.IsNullOrEmpty(nhanVienId))
                     {
-                        api =
-                            $"{url}/loc?" +
-                            $"tuNgay={tuNgay:yyyy-MM-dd}" +
-                            $"&denNgay={denNgay:yyyy-MM-dd}";
-                    }
-                    else
-                    {
-                        api =
-                            $"{url}/loc?" +
-                            $"nhanVienId={nhanVienId}" +
-                            $"&tuNgay={tuNgay:yyyy-MM-dd}" +
-                            $"&denNgay={denNgay:yyyy-MM-dd}";
+                        api +=
+                            $"&nhanVienId={nhanVienId}";
                     }
 
                     HttpResponseMessage response =
                         await client.GetAsync(api);
 
-                    if (!response.IsSuccessStatusCode)
+                    if (response.IsSuccessStatusCode)
                     {
-                        return new List<VwDanhSachChamCong>();
+                        string json =
+                            await response.Content
+                            .ReadAsStringAsync();
+
+                        return JsonConvert.DeserializeObject
+                            <List<VwDanhSachChamCong>>(json);
                     }
-
-                    string json =
-                        await response.Content
-                        .ReadAsStringAsync();
-
-                    return JsonConvert
-                    .DeserializeObject<
-                        List<VwDanhSachChamCong>
-                    >(json)
-                    ?? new List<VwDanhSachChamCong>();
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show(ex.ToString());
 
-                return new List<VwDanhSachChamCong>();
             }
+
+            return new List<VwDanhSachChamCong>();
         }
 
         public async Task<VwDanhSachChamCong>
@@ -235,13 +222,15 @@ namespace QuanLyChamCong.Services
             }
         }
 
-        public async Task<bool>
-       CheckIn(string nhanVienId)
+        public async Task<string>
+        CheckIn(string nhanVienId)
         {
             try
             {
-                using (HttpClient client =
-                    GetClient())
+                using (
+                    HttpClient client =
+                    GetClient()
+                )
                 {
                     HttpResponseMessage response =
                         await client.PostAsync(
@@ -253,30 +242,26 @@ namespace QuanLyChamCong.Services
                         await response.Content
                         .ReadAsStringAsync();
 
-                    result =
-                        result
+                    return result
                         .Replace("\"", "")
-                        .Trim()
-                        .ToLower();
-
-                    return result == "true";
+                        .Trim();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
-
-                return false;
+                return ex.Message;
             }
         }
 
-        public async Task<bool>
-            CheckOut(string nhanVienId)
+        public async Task<string>
+        CheckOut(string nhanVienId)
         {
             try
             {
-                using (HttpClient client =
-                    GetClient())
+                using (
+                    HttpClient client =
+                    GetClient()
+                )
                 {
                     HttpResponseMessage response =
                         await client.PostAsync(
@@ -288,22 +273,52 @@ namespace QuanLyChamCong.Services
                         await response.Content
                         .ReadAsStringAsync();
 
-                    result =
-                        result
+                    return result
                         .Replace("\"", "")
-                        .Trim()
-                        .ToLower();
-
-                    return result == "true";
+                        .Trim();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                return ex.Message;
+            }
+        }
+        public async Task<List<VwThongKeChamCongNhanVien>>
+        ThongKeChamCong(
+            DateTime tuNgay,
+            DateTime denNgay
+        )
+        {
+            try
+            {
+                using (HttpClient client = GetClient())
+                {
+                    string api =
+                        $"{url}/ThongKeChamCong?" +
+                        $"tuNgay={tuNgay:yyyy-MM-dd}" +
+                        $"&denNgay={denNgay:yyyy-MM-dd}";
 
-                return false;
+                    HttpResponseMessage response =
+                        await client.GetAsync(api);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string json =
+                            await response.Content
+                            .ReadAsStringAsync();
+
+                        return JsonConvert.DeserializeObject
+                            <List<VwThongKeChamCongNhanVien>>
+                            (json);
+                    }
+                }
+            }
+            catch
+            {
+
             }
 
+            return new List<VwThongKeChamCongNhanVien>();
         }
     }
 }

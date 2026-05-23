@@ -1,4 +1,5 @@
-﻿using QuanLyChamCong.API.DAL;
+﻿using Microsoft.AspNetCore.Mvc;
+using QuanLyChamCong.API.DAL;
 using QuanLyChamCong.API.Models;
 using QuanLyChamCong.API.Models.ViewModels;
 
@@ -61,14 +62,31 @@ namespace QuanLyChamCong.API.BLL
         }
 
         public async Task<List<VwDanhSachChamCong>>
-            LocChamCongAsync(
-                string? nhanVienId,
-                DateTime tuNgay,
-                DateTime denNgay
-            )
+        GetDanhSachChamCongAsync(
+            DateTime tuNgay,
+            DateTime denNgay,
+            string nhanVienId = null
+        )
         {
             return await _dal
-                .LocChamCongAsync(
+                .GetDanhSachChamCongAsync(
+                    tuNgay,
+                    denNgay,
+                    nhanVienId
+                );
+        }
+
+        public async Task<
+            List<VwThongKeChamCongNhanVien>
+        >
+        ThongKeChamCongAsync(
+            string? nhanVienId,
+            DateTime tuNgay,
+            DateTime denNgay
+        )
+        {
+            return await _dal
+                .ThongKeChamCongAsync(
                     nhanVienId,
                     tuNgay,
                     denNgay

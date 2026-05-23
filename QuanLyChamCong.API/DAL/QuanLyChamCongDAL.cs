@@ -205,41 +205,78 @@ namespace QuanLyChamCong.API.DAL
             }
         }
 
+
+        /*
+============================================
+LỌC DANH SÁCH CHẤM CÔNG
+============================================
+*/
+
         public async Task<List<VwDanhSachChamCong>>
-            LocChamCongAsync(
-                string? nhanVienId,
-                DateTime tuNgay,
-                DateTime denNgay
-            )
+        GetDanhSachChamCongAsync(
+            DateTime tuNgay,
+            DateTime denNgay,
+            string nhanVienId = null
+        )
         {
-            return await _context
+            var query =
+                _context
                 .VwDanhSachChamCongs
-                .FromSqlRaw(
-                    @"EXEC sp_loc_cham_cong
-                        @nhan_vien_id,
-                        @tu_ngay,
-                        @den_ngay",
+                .AsQueryable();
 
-                    new SqlParameter(
-                        "@nhan_vien_id",
-                        string.IsNullOrEmpty(
-                            nhanVienId
-                        )
-                        ? DBNull.Value
-                        : nhanVienId
-                    ),
+            query =
+                query.Where(x =>
+                    x.ngay_lam >= tuNgay &&
+                    x.ngay_lam <= denNgay);
 
-                    new SqlParameter(
-                        "@tu_ngay",
-                        tuNgay
-                    ),
+            if (!string.IsNullOrEmpty(nhanVienId))
+            {
+                query =
+                    query.Where(x =>
+                        x.nhan_vien_id == nhanVienId);
+            }
 
-                    new SqlParameter(
-                        "@den_ngay",
-                        denNgay
-                    )
-                )
+            return await query
+                .OrderByDescending(x => x.ngay_lam)
                 .ToListAsync();
+        }
+
+        /*
+        ============================================
+        THỐNG KÊ CHẤM CÔNG
+        ============================================
+        */
+
+        public async Task<
+            List<VwThongKeChamCongNhanVien>
+        >
+        ThongKeChamCongAsync(
+            string? nhanVienId,
+            DateTime tuNgay,
+            DateTime denNgay
+        )
+        {
+            var query =
+                _context
+                .VwThongKeChamCongNhanVien
+                .AsQueryable();
+
+            query =
+                query.Where(x =>
+
+                    x.tu_ngay <= denNgay &&
+                    x.den_ngay >= tuNgay
+
+                );
+
+            if (!string.IsNullOrEmpty(nhanVienId))
+            {
+                query =
+                    query.Where(x =>
+                        x.nhan_vien_id == nhanVienId);
+            }
+
+            return await query.ToListAsync();
         }
     }
 }

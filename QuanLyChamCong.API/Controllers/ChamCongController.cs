@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 using QuanLyChamCong.API.BLL;
+using QuanLyChamCong.API.DAL;
 using QuanLyChamCong.API.Models;
 
 namespace QuanLyChamCong.API.Controllers
@@ -12,8 +13,8 @@ namespace QuanLyChamCong.API.Controllers
     {
         private readonly
             ChamCongBLL _bll;
+        private readonly 
 
-        private readonly
             QuanLyChamCongBLL _quanLyBLL;
 
         public ChamCongController(
@@ -25,7 +26,7 @@ namespace QuanLyChamCong.API.Controllers
 
             _quanLyBLL = quanLyBLL;
         }
-
+      
         /*
          * =====================================
          * CHẤM CÔNG
@@ -38,7 +39,7 @@ namespace QuanLyChamCong.API.Controllers
                 string nhanVienId
             )
         {
-            bool result =
+            string result =
                 await _bll.CheckInAsync(
                     nhanVienId
                 );
@@ -52,7 +53,7 @@ namespace QuanLyChamCong.API.Controllers
                 string nhanVienId
             )
         {
-            bool result =
+            string result =
                 await _bll.CheckOutAsync(
                     nhanVienId
                 );
@@ -138,38 +139,56 @@ namespace QuanLyChamCong.API.Controllers
             return Ok(result);
         }
 
+
+
         /*
-         * =====================================
-         * LỌC CHẤM CÔNG
-         * =====================================
-         */
+============================================
+LỌC CHẤM CÔNG
+============================================
+*/
 
         [HttpGet("loc")]
         public async Task<IActionResult>
-    LocChamCong(
-        string? nhanVienId,
-        DateTime tuNgay,
-        DateTime denNgay
-    )
+        LocChamCong(
+            DateTime tuNgay,
+            DateTime denNgay,
+            string nhanVienId = null
+        )
         {
-            try
-            {
-                var data =
-                    await _quanLyBLL
-                    .LocChamCongAsync(
-                        nhanVienId,
-                        tuNgay,
-                        denNgay
-                    );
-
-                return Ok(data);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(
-                    ex.ToString()
+            var data =
+                await _quanLyBLL
+                .GetDanhSachChamCongAsync(
+                    tuNgay,
+                    denNgay,
+                    nhanVienId
                 );
-            }
+
+            return Ok(data);
         }
+        /*
+        ============================================
+        THỐNG KÊ CHẤM CÔNG
+        ============================================
+        */
+
+        [HttpGet("ThongKeChamCong")]
+        public async Task<IActionResult>
+        ThongKeChamCong(
+            string? nhanVienId,
+            DateTime tuNgay,
+            DateTime denNgay
+        )
+        {
+            var data =
+                await _bll
+                .ThongKeChamCongAsync(
+                    nhanVienId,
+                    tuNgay,
+                    denNgay
+                );
+
+            return Ok(data);
+        }
+
     }
 }

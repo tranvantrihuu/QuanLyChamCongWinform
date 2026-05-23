@@ -187,22 +187,13 @@ namespace QuanLyChamCong.GUI
                     return;
                 }
 
-                bool result =
+                string result =
                     await chamCongService
                     .CheckIn(nv.id);
 
-                if (result)
-                {
-                    MessageBox.Show(
-                        $"{nv.ho_ten} CHECK IN thành công"
-                    );
-                }
-                else
-                {
-                    MessageBox.Show(
-                        $"{nv.ho_ten} đã CHECK IN rồi " 
-                    );
-                }
+                MessageBox.Show(
+                    $"{nv.ho_ten}: {result}"
+                );
 
                 txtPin.Clear();
 
@@ -231,23 +222,13 @@ namespace QuanLyChamCong.GUI
                     return;
                 }
 
-                bool result =
+                string result =
                     await chamCongService
                     .CheckOut(nv.id);
 
-                if (result)
-                {
-                    MessageBox.Show(
-                        $"{nv.ho_ten} CHECK OUT thành công"
-                    );
-                }
-                else
-                {
-                    MessageBox.Show(
-                        $"{nv.ho_ten} chưa CHECK IN " +
-                        "hoặc đã CHECK OUT"
-                    );
-                }
+                MessageBox.Show(
+                    $"{nv.ho_ten}: {result}"
+                );
 
                 txtPin.Clear();
 

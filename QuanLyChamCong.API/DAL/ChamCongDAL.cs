@@ -27,16 +27,16 @@ namespace QuanLyChamCong.API.DAL
                 .ToListAsync();
         }
 
-        public async Task<bool> CheckInAsync(
-    string nhanVienId
-)
+        public async Task<string> CheckInAsync(
+            string nhanVienId
+        )
         {
             try
             {
                 await _context.Database
                     .ExecuteSqlRawAsync(
                         @"EXEC sp_check_in
-                    @nhan_vien_id",
+                @nhan_vien_id",
 
                         new SqlParameter(
                             "@nhan_vien_id",
@@ -44,15 +44,15 @@ namespace QuanLyChamCong.API.DAL
                         )
                     );
 
-                return true;
+                return "CHECK IN thành công";
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                return ex.Message;
             }
         }
 
-        public async Task<bool> CheckOutAsync(
+        public async Task<string> CheckOutAsync(
             string nhanVienId
         )
         {
@@ -61,7 +61,7 @@ namespace QuanLyChamCong.API.DAL
                 await _context.Database
                     .ExecuteSqlRawAsync(
                         @"EXEC sp_check_out
-                    @nhan_vien_id",
+                @nhan_vien_id",
 
                         new SqlParameter(
                             "@nhan_vien_id",
@@ -69,11 +69,11 @@ namespace QuanLyChamCong.API.DAL
                         )
                     );
 
-                return true;
+                return "CHECK OUT thành công";
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                return ex.Message;
             }
         }
 
@@ -135,7 +135,27 @@ namespace QuanLyChamCong.API.DAL
 
             return true;
         }
+        public async Task<
+        List<VwThongKeChamCongNhanVien>
+        >
+        ThongKeChamCongAsync(
+            DateTime tuNgay,
+            DateTime denNgay
+        )
+        {
+            return await _context
+                .VwThongKeChamCongNhanVien
+                .Where(x =>
 
+                    x.tu_ngay >= tuNgay.Date
+
+                    &&
+
+                    x.den_ngay <= denNgay.Date
+
+                )
+                .ToListAsync();
+        }
         public async Task<bool> DeleteAsync(
             int id
         )

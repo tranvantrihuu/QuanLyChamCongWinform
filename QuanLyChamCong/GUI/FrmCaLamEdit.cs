@@ -48,6 +48,13 @@ namespace QuanLyChamCong.GUI
 
             dtKetThuc.ShowUpDown =
                 true;
+            numDiTre.Maximum = 360;
+
+            numVeSom.Maximum = 360;
+
+            numCheckinSom.Maximum = 360;
+
+            numCheckoutTre.Maximum = 360;
         }
 
         private void LoadDataEdit()

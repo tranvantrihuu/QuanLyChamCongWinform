@@ -36,6 +36,9 @@ namespace QuanLyChamCong.API.Data
         public DbSet<VwChiTietBangLuong> VwChiTietBangLuongs { get; set; }
         public DbSet<VwDanhSachCaLam> VwDanhSachCaLams { get; set; }
         public DbSet<VwBangLuongRealtime>VwBangLuongRealtime{get;set; }
+        public DbSet<VwDanhSachChamCong>VwDanhSachChamCong { get; set; }
+
+        public DbSet<VwThongKeChamCongNhanVien> VwThongKeChamCongNhanVien { get; set; }
         // =========================
         // MODEL CONFIG
         // =========================
@@ -162,6 +165,13 @@ namespace QuanLyChamCong.API.Data
             modelBuilder
                 .Entity<VwBangLuongRealtime>()
                 .HasNoKey();
+            modelBuilder.Entity<VwDanhSachChamCong>()
+                .HasNoKey()
+                .ToView("vw_danh_sach_cham_cong");
+
+            modelBuilder.Entity<VwThongKeChamCongNhanVien>()
+                .HasNoKey()
+                .ToView("vw_thong_ke_cham_cong_nhan_vien");
         }
 
     }

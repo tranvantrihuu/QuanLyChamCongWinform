@@ -57,7 +57,7 @@
             this.lblID.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblID.Location = new System.Drawing.Point(3, 0);
             this.lblID.Name = "lblID";
-            this.lblID.Size = new System.Drawing.Size(127, 32);
+            this.lblID.Size = new System.Drawing.Size(143, 45);
             this.lblID.TabIndex = 0;
             this.lblID.Text = "ID Nhân viên";
             this.lblID.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -67,9 +67,9 @@
             this.lblMaNhanVien.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblMaNhanVien.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblMaNhanVien.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMaNhanVien.Location = new System.Drawing.Point(3, 51);
+            this.lblMaNhanVien.Location = new System.Drawing.Point(3, 73);
             this.lblMaNhanVien.Name = "lblMaNhanVien";
-            this.lblMaNhanVien.Size = new System.Drawing.Size(127, 32);
+            this.lblMaNhanVien.Size = new System.Drawing.Size(143, 45);
             this.lblMaNhanVien.TabIndex = 1;
             this.lblMaNhanVien.Text = "Mã vân tay";
             this.lblMaNhanVien.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -79,9 +79,9 @@
             this.lblHoTen.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblHoTen.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblHoTen.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHoTen.Location = new System.Drawing.Point(3, 102);
+            this.lblHoTen.Location = new System.Drawing.Point(3, 146);
             this.lblHoTen.Name = "lblHoTen";
-            this.lblHoTen.Size = new System.Drawing.Size(127, 32);
+            this.lblHoTen.Size = new System.Drawing.Size(143, 45);
             this.lblHoTen.TabIndex = 2;
             this.lblHoTen.Text = "Họ và Tên";
             this.lblHoTen.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -91,9 +91,9 @@
             this.lblSDT.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblSDT.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblSDT.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSDT.Location = new System.Drawing.Point(3, 153);
+            this.lblSDT.Location = new System.Drawing.Point(3, 219);
             this.lblSDT.Name = "lblSDT";
-            this.lblSDT.Size = new System.Drawing.Size(127, 32);
+            this.lblSDT.Size = new System.Drawing.Size(143, 45);
             this.lblSDT.TabIndex = 3;
             this.lblSDT.Text = "Số điện thoại";
             this.lblSDT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -103,9 +103,9 @@
             this.lvlNgaySinh.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lvlNgaySinh.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lvlNgaySinh.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lvlNgaySinh.Location = new System.Drawing.Point(3, 204);
+            this.lvlNgaySinh.Location = new System.Drawing.Point(3, 292);
             this.lvlNgaySinh.Name = "lvlNgaySinh";
-            this.lvlNgaySinh.Size = new System.Drawing.Size(127, 32);
+            this.lvlNgaySinh.Size = new System.Drawing.Size(143, 45);
             this.lvlNgaySinh.TabIndex = 4;
             this.lvlNgaySinh.Text = "Ngày sinh";
             this.lvlNgaySinh.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -115,9 +115,9 @@
             this.lblDiaChi.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblDiaChi.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblDiaChi.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDiaChi.Location = new System.Drawing.Point(3, 255);
+            this.lblDiaChi.Location = new System.Drawing.Point(3, 365);
             this.lblDiaChi.Name = "lblDiaChi";
-            this.lblDiaChi.Size = new System.Drawing.Size(127, 32);
+            this.lblDiaChi.Size = new System.Drawing.Size(143, 45);
             this.lblDiaChi.TabIndex = 5;
             this.lblDiaChi.Text = "Địa chỉ";
             this.lblDiaChi.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -127,9 +127,9 @@
             this.label1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(3, 306);
+            this.label1.Location = new System.Drawing.Point(3, 438);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(127, 32);
+            this.label1.Size = new System.Drawing.Size(143, 45);
             this.label1.TabIndex = 6;
             this.label1.Text = "Vị trí";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -139,9 +139,9 @@
             this.lblNgaySua.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblNgaySua.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblNgaySua.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNgaySua.Location = new System.Drawing.Point(398, 306);
+            this.lblNgaySua.Location = new System.Drawing.Point(448, 438);
             this.lblNgaySua.Name = "lblNgaySua";
-            this.lblNgaySua.Size = new System.Drawing.Size(127, 32);
+            this.lblNgaySua.Size = new System.Drawing.Size(143, 45);
             this.lblNgaySua.TabIndex = 13;
             this.lblNgaySua.Text = "Ngày sửa";
             this.lblNgaySua.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -151,9 +151,9 @@
             this.lblNgayTao.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblNgayTao.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblNgayTao.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNgayTao.Location = new System.Drawing.Point(398, 255);
+            this.lblNgayTao.Location = new System.Drawing.Point(448, 365);
             this.lblNgayTao.Name = "lblNgayTao";
-            this.lblNgayTao.Size = new System.Drawing.Size(127, 32);
+            this.lblNgayTao.Size = new System.Drawing.Size(143, 45);
             this.lblNgayTao.TabIndex = 12;
             this.lblNgayTao.Text = "Ngày tạo";
             this.lblNgayTao.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -163,9 +163,9 @@
             this.lblLoaiLuong.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblLoaiLuong.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblLoaiLuong.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLoaiLuong.Location = new System.Drawing.Point(398, 204);
+            this.lblLoaiLuong.Location = new System.Drawing.Point(448, 292);
             this.lblLoaiLuong.Name = "lblLoaiLuong";
-            this.lblLoaiLuong.Size = new System.Drawing.Size(127, 32);
+            this.lblLoaiLuong.Size = new System.Drawing.Size(143, 45);
             this.lblLoaiLuong.TabIndex = 11;
             this.lblLoaiLuong.Text = "Loại lương";
             this.lblLoaiLuong.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -175,9 +175,9 @@
             this.lblNgayVao.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblNgayVao.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblNgayVao.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNgayVao.Location = new System.Drawing.Point(398, 153);
+            this.lblNgayVao.Location = new System.Drawing.Point(448, 219);
             this.lblNgayVao.Name = "lblNgayVao";
-            this.lblNgayVao.Size = new System.Drawing.Size(127, 32);
+            this.lblNgayVao.Size = new System.Drawing.Size(143, 45);
             this.lblNgayVao.TabIndex = 10;
             this.lblNgayVao.Text = "Ngày vào làm";
             this.lblNgayVao.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -187,9 +187,9 @@
             this.lblPin.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblPin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblPin.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPin.Location = new System.Drawing.Point(398, 102);
+            this.lblPin.Location = new System.Drawing.Point(448, 146);
             this.lblPin.Name = "lblPin";
-            this.lblPin.Size = new System.Drawing.Size(127, 32);
+            this.lblPin.Size = new System.Drawing.Size(143, 45);
             this.lblPin.TabIndex = 9;
             this.lblPin.Text = "PIN";
             this.lblPin.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -199,9 +199,9 @@
             this.lblTrangThai.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblTrangThai.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblTrangThai.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTrangThai.Location = new System.Drawing.Point(398, 51);
+            this.lblTrangThai.Location = new System.Drawing.Point(448, 73);
             this.lblTrangThai.Name = "lblTrangThai";
-            this.lblTrangThai.Size = new System.Drawing.Size(127, 32);
+            this.lblTrangThai.Size = new System.Drawing.Size(143, 45);
             this.lblTrangThai.TabIndex = 8;
             this.lblTrangThai.Text = "Trạng thái";
             this.lblTrangThai.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -211,9 +211,9 @@
             this.lblVaiTro.BackColor = System.Drawing.SystemColors.ControlLight;
             this.lblVaiTro.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblVaiTro.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVaiTro.Location = new System.Drawing.Point(398, 0);
+            this.lblVaiTro.Location = new System.Drawing.Point(448, 0);
             this.lblVaiTro.Name = "lblVaiTro";
-            this.lblVaiTro.Size = new System.Drawing.Size(127, 32);
+            this.lblVaiTro.Size = new System.Drawing.Size(143, 45);
             this.lblVaiTro.TabIndex = 7;
             this.lblVaiTro.Text = "Vai trò";
             this.lblVaiTro.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -222,145 +222,131 @@
             // 
             this.txtIDNhanVien.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtIDNhanVien.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtIDNhanVien.Location = new System.Drawing.Point(168, 2);
-            this.txtIDNhanVien.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtIDNhanVien.Location = new System.Drawing.Point(189, 3);
             this.txtIDNhanVien.Name = "txtIDNhanVien";
-            this.txtIDNhanVien.Size = new System.Drawing.Size(224, 22);
+            this.txtIDNhanVien.Size = new System.Drawing.Size(253, 30);
             this.txtIDNhanVien.TabIndex = 14;
             // 
             // txtMaVanTay
             // 
             this.txtMaVanTay.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtMaVanTay.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtMaVanTay.Location = new System.Drawing.Point(168, 53);
-            this.txtMaVanTay.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtMaVanTay.Location = new System.Drawing.Point(189, 76);
             this.txtMaVanTay.Name = "txtMaVanTay";
-            this.txtMaVanTay.Size = new System.Drawing.Size(224, 22);
+            this.txtMaVanTay.Size = new System.Drawing.Size(253, 30);
             this.txtMaVanTay.TabIndex = 15;
             // 
             // txtHoTen
             // 
             this.txtHoTen.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtHoTen.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtHoTen.Location = new System.Drawing.Point(168, 104);
-            this.txtHoTen.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtHoTen.Location = new System.Drawing.Point(189, 149);
             this.txtHoTen.Name = "txtHoTen";
-            this.txtHoTen.Size = new System.Drawing.Size(224, 22);
+            this.txtHoTen.Size = new System.Drawing.Size(253, 30);
             this.txtHoTen.TabIndex = 16;
             // 
             // txtSDT
             // 
             this.txtSDT.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtSDT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtSDT.Location = new System.Drawing.Point(168, 155);
-            this.txtSDT.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtSDT.Location = new System.Drawing.Point(189, 222);
             this.txtSDT.Name = "txtSDT";
-            this.txtSDT.Size = new System.Drawing.Size(224, 22);
+            this.txtSDT.Size = new System.Drawing.Size(253, 30);
             this.txtSDT.TabIndex = 17;
             // 
             // txtDiaChi
             // 
             this.txtDiaChi.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtDiaChi.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtDiaChi.Location = new System.Drawing.Point(168, 257);
-            this.txtDiaChi.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtDiaChi.Location = new System.Drawing.Point(189, 368);
             this.txtDiaChi.Name = "txtDiaChi";
-            this.txtDiaChi.Size = new System.Drawing.Size(224, 22);
+            this.txtDiaChi.Size = new System.Drawing.Size(253, 30);
             this.txtDiaChi.TabIndex = 19;
             // 
             // txtNgaySua
             // 
             this.txtNgaySua.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtNgaySua.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtNgaySua.Location = new System.Drawing.Point(563, 308);
-            this.txtNgaySua.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtNgaySua.Location = new System.Drawing.Point(634, 441);
             this.txtNgaySua.Name = "txtNgaySua";
-            this.txtNgaySua.Size = new System.Drawing.Size(225, 22);
+            this.txtNgaySua.Size = new System.Drawing.Size(253, 30);
             this.txtNgaySua.TabIndex = 27;
             // 
             // txtNgayTao
             // 
             this.txtNgayTao.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtNgayTao.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtNgayTao.Location = new System.Drawing.Point(563, 257);
-            this.txtNgayTao.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtNgayTao.Location = new System.Drawing.Point(634, 368);
             this.txtNgayTao.Name = "txtNgayTao";
-            this.txtNgayTao.Size = new System.Drawing.Size(225, 22);
+            this.txtNgayTao.Size = new System.Drawing.Size(253, 30);
             this.txtNgayTao.TabIndex = 26;
             // 
             // txtPin
             // 
             this.txtPin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtPin.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtPin.Location = new System.Drawing.Point(563, 104);
-            this.txtPin.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtPin.Location = new System.Drawing.Point(634, 149);
             this.txtPin.Name = "txtPin";
-            this.txtPin.Size = new System.Drawing.Size(225, 22);
+            this.txtPin.Size = new System.Drawing.Size(253, 30);
             this.txtPin.TabIndex = 23;
             // 
             // dtNgaySinh
             // 
             this.dtNgaySinh.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dtNgaySinh.Location = new System.Drawing.Point(168, 206);
-            this.dtNgaySinh.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dtNgaySinh.Location = new System.Drawing.Point(189, 295);
             this.dtNgaySinh.Name = "dtNgaySinh";
-            this.dtNgaySinh.Size = new System.Drawing.Size(224, 22);
+            this.dtNgaySinh.Size = new System.Drawing.Size(253, 30);
             this.dtNgaySinh.TabIndex = 29;
             // 
             // dtNgayVao
             // 
             this.dtNgayVao.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dtNgayVao.Location = new System.Drawing.Point(563, 155);
-            this.dtNgayVao.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dtNgayVao.Location = new System.Drawing.Point(634, 222);
             this.dtNgayVao.Name = "dtNgayVao";
-            this.dtNgayVao.Size = new System.Drawing.Size(225, 22);
+            this.dtNgayVao.Size = new System.Drawing.Size(253, 30);
             this.dtNgayVao.TabIndex = 30;
             // 
             // cbVaiTro
             // 
             this.cbVaiTro.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbVaiTro.FormattingEnabled = true;
-            this.cbVaiTro.Location = new System.Drawing.Point(563, 2);
-            this.cbVaiTro.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbVaiTro.Location = new System.Drawing.Point(634, 3);
             this.cbVaiTro.Name = "cbVaiTro";
-            this.cbVaiTro.Size = new System.Drawing.Size(225, 24);
+            this.cbVaiTro.Size = new System.Drawing.Size(253, 31);
             this.cbVaiTro.TabIndex = 32;
             // 
             // cbTrangThai
             // 
             this.cbTrangThai.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbTrangThai.FormattingEnabled = true;
-            this.cbTrangThai.Location = new System.Drawing.Point(563, 53);
-            this.cbTrangThai.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbTrangThai.Location = new System.Drawing.Point(634, 76);
             this.cbTrangThai.Name = "cbTrangThai";
-            this.cbTrangThai.Size = new System.Drawing.Size(225, 24);
+            this.cbTrangThai.Size = new System.Drawing.Size(253, 31);
             this.cbTrangThai.TabIndex = 33;
             // 
             // txtViTri
             // 
             this.txtViTri.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtViTri.Location = new System.Drawing.Point(168, 308);
-            this.txtViTri.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtViTri.Location = new System.Drawing.Point(189, 441);
             this.txtViTri.Name = "txtViTri";
-            this.txtViTri.Size = new System.Drawing.Size(224, 22);
+            this.txtViTri.Size = new System.Drawing.Size(253, 30);
             this.txtViTri.TabIndex = 34;
             // 
             // cbLoaiLuong
             // 
             this.cbLoaiLuong.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbLoaiLuong.FormattingEnabled = true;
-            this.cbLoaiLuong.Location = new System.Drawing.Point(563, 206);
-            this.cbLoaiLuong.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbLoaiLuong.Location = new System.Drawing.Point(634, 295);
             this.cbLoaiLuong.Name = "cbLoaiLuong";
-            this.cbLoaiLuong.Size = new System.Drawing.Size(225, 24);
+            this.cbLoaiLuong.Size = new System.Drawing.Size(253, 31);
             this.cbLoaiLuong.TabIndex = 35;
             // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 4;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 165F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 186F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 165F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 186F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.cbLoaiLuong, 3, 4);
             this.tableLayoutPanel1.Controls.Add(this.txtNgaySua, 3, 6);
@@ -393,7 +379,6 @@
             this.tableLayoutPanel1.Controls.Add(this.pnlButton, 1, 7);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 8;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12F));
@@ -404,7 +389,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(791, 425);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(890, 611);
             this.tableLayoutPanel1.TabIndex = 36;
             this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
@@ -413,10 +398,9 @@
             this.pnlButton.Controls.Add(this.btnCancel);
             this.pnlButton.Controls.Add(this.btnOk);
             this.pnlButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlButton.Location = new System.Drawing.Point(168, 359);
-            this.pnlButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.pnlButton.Location = new System.Drawing.Point(189, 514);
             this.pnlButton.Name = "pnlButton";
-            this.pnlButton.Size = new System.Drawing.Size(224, 64);
+            this.pnlButton.Size = new System.Drawing.Size(253, 94);
             this.pnlButton.TabIndex = 37;
             // 
             // btnCancel
@@ -424,10 +408,9 @@
             this.btnCancel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnCancel.BackColor = System.Drawing.Color.LightCoral;
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(127, 15);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnCancel.Location = new System.Drawing.Point(143, 23);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(93, 47);
+            this.btnCancel.Size = new System.Drawing.Size(105, 68);
             this.btnCancel.TabIndex = 36;
             this.btnCancel.Text = "CANCEL";
             this.btnCancel.UseVisualStyleBackColor = false;
@@ -438,10 +421,9 @@
             this.btnOk.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnOk.BackColor = System.Drawing.Color.LightGreen;
             this.btnOk.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOk.Location = new System.Drawing.Point(3, 15);
-            this.btnOk.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnOk.Location = new System.Drawing.Point(3, 23);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(93, 47);
+            this.btnOk.Size = new System.Drawing.Size(105, 68);
             this.btnOk.TabIndex = 28;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = false;
@@ -449,11 +431,10 @@
             // 
             // FrmNhanVienEdit
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(791, 425);
+            this.ClientSize = new System.Drawing.Size(890, 611);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FrmNhanVienEdit";
             this.Text = "FrmNhanVienEdit";
             this.Load += new System.EventHandler(this.FrmNhanVienEdit_Load);

@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using QuanLyChamCong.Models.ViewModels;
 namespace QuanLyChamCong.GUI
 {
     public partial class UcBaoCaoChamCong :
         BaseUserControl
     {
+        private bool sortAscending = true;
         private readonly
             ChamCongService chamCongService =
                 new ChamCongService();
@@ -37,8 +38,8 @@ namespace QuanLyChamCong.GUI
                 DateTime.Now;
 
             await LoadNhanVien();
-
-            await LoadBaoCao();
+           
+            await LoadData();
         }
 
         private async Task LoadNhanVien()
@@ -76,36 +77,24 @@ namespace QuanLyChamCong.GUI
             }
         }
 
-        private async Task LoadBaoCao()
+        private async Task LoadData()
         {
             try
             {
-                List<BaoCaoChamCong> ds =
-                    await chamCongService
-                    .GetAll();
+                var data =
+                    await chamCongService.ThongKeChamCong(
+                    null,
+                    dtTuNgay.Value.Date,
+                    dtDenNgay.Value.Date
+                );
 
                 dgvBaoCao.DataSource =
-                    null;
-
-                dgvBaoCao.DataSource =
-                    ds;
-
-                dgvBaoCao.AutoSizeColumnsMode =
-                    DataGridViewAutoSizeColumnsMode
-                    .Fill;
-
-                dgvBaoCao.AllowUserToAddRows =
-                    false;
-
-                dgvBaoCao.ReadOnly = true;
-
+                    data;
                 FormatGrid();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    ex.Message
-                );
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -118,43 +107,34 @@ namespace QuanLyChamCong.GUI
                 return;
             }
 
-            dgvBaoCao.Columns["id"]
-                .HeaderText = "ID";
+            dgvBaoCao.Columns[
+                "nhan_vien_id"
+            ].HeaderText =
+                "Mã nhân viên";
 
-            dgvBaoCao.Columns["nhan_vien_id"]
-                .HeaderText = "Mã NV";
+            dgvBaoCao.Columns[
+                "ho_ten"
+            ].HeaderText =
+                "Họ tên";
 
-            dgvBaoCao.Columns["ho_ten"]
-                .HeaderText = "Họ tên";
+            dgvBaoCao.Columns[
+                "tong_so_ca_cong"
+            ].HeaderText =
+                "Tổng số ca công";
 
-            dgvBaoCao.Columns["ten_ca"]
-                .HeaderText = "Ca làm";
+            dgvBaoCao.Columns[
+                "tong_ca_di_tre"
+            ].HeaderText =
+                "Tổng ca đi trễ";
 
-            dgvBaoCao.Columns["ngay_lam"]
-                .HeaderText = "Ngày làm";
+            dgvBaoCao.Columns[
+                "tong_ca_vang"
+            ].HeaderText =
+                "Tổng ca vắng";
+            dgvBaoCao.Columns["tu_ngay"].Visible = false;
 
-            dgvBaoCao.Columns["check_in"]
-                .HeaderText = "Check In";
-
-            dgvBaoCao.Columns["check_out"]
-                .HeaderText = "Check Out";
-
-            dgvBaoCao.Columns["so_gio_lam"]
-                .HeaderText = "Số giờ làm";
-
-            dgvBaoCao.Columns["so_phut_di_tre"]
-                .HeaderText = "Đi trễ";
-
-            dgvBaoCao.Columns["so_phut_ve_som"]
-                .HeaderText = "Về sớm";
-
-            dgvBaoCao.Columns["so_phut_tang_ca"]
-                .HeaderText = "Tăng ca";
-
-            dgvBaoCao.Columns["trang_thai"]
-                .HeaderText = "Trạng thái";
+            dgvBaoCao.Columns["den_ngay"].Visible =  false;
         }
-
         private async void btnLoc_Click(
             object sender,
             EventArgs e
@@ -162,46 +142,23 @@ namespace QuanLyChamCong.GUI
         {
             try
             {
-                List<BaoCaoChamCong> ds =
-                    await chamCongService
-                    .GetAll();
-
                 string nhanVienId =
                     cboNhanVien.SelectedValue?
                     .ToString();
 
-                DateTime tuNgay = dtTuNgay.Value.Date;
-                DateTime denNgay = dtDenNgay.Value.Date;
-
-                var result =
-                    ds.Where(x =>
-                        (
-                            string.IsNullOrEmpty(
-                                nhanVienId
-                            )
-                            ||
-                            x.nhan_vien_id ==
-                            nhanVienId
-                        )
-                        &&
-                        x.ngay_lam.HasValue
-                        &&
-                        x.ngay_lam.Value.Date
-                        >= tuNgay
-                        &&
-                        x.ngay_lam.Value.Date
-                        <= denNgay
-                    )
-                    .OrderByDescending(
-                        x => x.ngay_lam
-                    )
-                    .ToList();
+                var data =
+                    await chamCongService
+                    .ThongKeChamCong(
+                        nhanVienId,
+                        dtTuNgay.Value.Date,
+                        dtDenNgay.Value.Date
+                    );
 
                 dgvBaoCao.DataSource =
                     null;
 
                 dgvBaoCao.DataSource =
-                    result;
+                    data;
 
                 FormatGrid();
             }
@@ -227,7 +184,7 @@ namespace QuanLyChamCong.GUI
             dtDenNgay.Value =
                 DateTime.Now;
 
-            await LoadBaoCao();
+            await LoadData();
         }
 
         private void cboNhanVien_SelectedIndexChanged(
@@ -236,7 +193,57 @@ namespace QuanLyChamCong.GUI
         {
 
         }
+        private void dgvBaoCao_ColumnHeaderMouseClick(
+            object sender,
+            DataGridViewCellMouseEventArgs e
+        )
+        {
+            string columnName =
+                dgvBaoCao.Columns[e.ColumnIndex]
+                .DataPropertyName;
 
+            if (string.IsNullOrEmpty(columnName))
+            {
+                return;
+            }
+
+            List<VwThongKeChamCongNhanVien> data =
+                dgvBaoCao.DataSource
+                as List<VwThongKeChamCongNhanVien>;
+
+            if (data == null)
+            {
+                return;
+            }
+
+            if (sortAscending)
+            {
+                data = data
+                    .OrderBy(x =>
+                        x.GetType()
+                        .GetProperty(columnName)
+                        .GetValue(x, null)
+                    )
+                    .ToList();
+            }
+            else
+            {
+                data = data
+                    .OrderByDescending(x =>
+                        x.GetType()
+                        .GetProperty(columnName)
+                        .GetValue(x, null)
+                    )
+                    .ToList();
+            }
+
+            sortAscending = !sortAscending;
+
+            dgvBaoCao.DataSource = null;
+            dgvBaoCao.DataSource = data;
+
+            FormatGrid();
+        }
         private void dtTuNgay_ValueChanged(
             object sender,
             EventArgs e)
